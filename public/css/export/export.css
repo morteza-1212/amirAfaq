@@ -1,0 +1,885 @@
+/* =========================================================
+   EXPORT LANDING PAGE - Amir Afaq Gostar Pars
+   Optimized for Performance
+========================================================= */
+
+.export-page {
+    overflow: hidden;
+    background: #f7f8f4;
+    color: #20362a;
+}
+
+.export-page *,
+.export-page *::before,
+.export-page *::after {
+    box-sizing: border-box;
+}
+
+.export-container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.export-hero {
+    position: relative;
+    min-height: 680px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background:
+        linear-gradient(90deg,
+        rgba(7, 35, 21, .98) 0%,
+        rgba(7, 35, 21, .88) 42%,
+        rgba(7, 35, 21, .45) 75%,
+        rgba(7, 35, 21, .18) 100%
+        ),
+        url('/img/header/hero.webp') center / cover no-repeat;
+}
+
+[dir="rtl"] .export-hero {
+    background:
+        linear-gradient(270deg,
+        rgba(7, 35, 21, .98) 0%,
+        rgba(7, 35, 21, .88) 42%,
+        rgba(7, 35, 21, .45) 75%,
+        rgba(7, 35, 21, .18) 100%
+        ),
+        url('/img/header/hero.webp') center / cover no-repeat;
+}
+
+.export-hero::after {
+    content: "";
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    border-radius: 50%;
+    border: 1px solid rgba(226, 193, 108, .22);
+    left: -220px;
+    bottom: -260px;
+}
+
+.export-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 820px;
+    padding: 100px 0;
+    color: #fff;
+}
+
+.export-hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 18px;
+    margin-bottom: 25px;
+    border: 1px solid rgba(226, 193, 108, .55);
+    border-radius: 50px;
+    background: rgba(0, 0, 0, .14);
+    color: #e2c16c;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.export-hero-label i {
+    font-size: 15px;
+}
+
+.export-hero h1 {
+    margin: 0 0 20px;
+    color: #fff;
+    font-size: clamp(44px, 6vw, 78px);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -1px;
+}
+
+.export-hero h1 span {
+    color: #e2c16c;
+}
+
+.export-hero h2 {
+    max-width: 750px;
+    margin: 0 0 24px;
+    color: #fff;
+    font-size: clamp(21px, 2.5vw, 31px);
+    font-weight: 500;
+    line-height: 1.65;
+}
+
+.export-hero-description {
+    max-width: 760px;
+    margin-bottom: 34px;
+    color: rgba(255, 255, 255, .82);
+    font-size: 17px;
+    line-height: 2.1;
+}
+
+.export-hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.export-btn-primary,
+.export-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 12px 27px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    transition: .3s ease;
+}
+
+.export-btn-primary {
+    background: #e2c16c;
+    color: #173c29;
+}
+
+.export-btn-primary:hover {
+    background: #fff;
+    color: #173c29;
+    transform: translateY(-3px);
+}
+
+.export-btn-outline {
+    border: 1px solid rgba(255, 255, 255, .4);
+    color: #fff;
+    background: rgba(255, 255, 255, .05);
+}
+
+.export-btn-outline:hover {
+    background: #fff;
+    border-color: #fff;
+    color: #173c29;
+    transform: translateY(-3px);
+}
+
+/* =========================================================
+   HERO STATS
+========================================================= */
+
+.export-hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 900px;
+    margin-top: 55px;
+    border-top: 1px solid rgba(255, 255, 255, .15);
+    padding-top: 28px;
+}
+
+.export-stat {
+    padding: 0 25px;
+    border-left: 1px solid rgba(255, 255, 255, .12);
+}
+
+.export-stat:first-child {
+    padding-right: 0;
+    border-left: 0;
+}
+
+.export-stat strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #e2c16c;
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.export-stat span {
+    color: rgba(255, 255, 255, .65);
+    font-size: 13px;
+}
+
+/* =========================================================
+   INTRO
+========================================================= */
+
+.export-intro {
+    position: relative;
+    padding: 100px 0;
+    background: #fff;
+}
+
+.export-intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.export-intro-label,
+.export-section-label {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #b18a32;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.export-intro h2 {
+    margin: 0 0 22px;
+    color: #173c29;
+    font-size: clamp(30px, 4vw, 45px);
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.export-intro p {
+    margin: 0 0 17px;
+    color: #68736c;
+    font-size: 16px;
+    line-height: 2.15;
+}
+
+.export-intro-card {
+    position: relative;
+    min-height: 390px;
+    overflow: hidden;
+    border-radius: 28px;
+    background: linear-gradient(135deg, rgba(23, 60, 41, .95), rgba(36, 85, 59, .86));
+    box-shadow: 0 25px 60px rgba(20, 55, 36, .15);
+}
+
+.export-intro-card::before {
+    content: "";
+    position: absolute;
+    width: 270px;
+    height: 270px;
+    border: 1px solid rgba(226, 193, 108, .3);
+    border-radius: 50%;
+    top: -100px;
+    left: -80px;
+}
+
+.export-intro-card-inner {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    min-height: 390px;
+    padding: 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.export-intro-card-icon {
+    width: 75px;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: auto;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, .08);
+    color: #e2c16c;
+    font-size: 30px;
+}
+
+.export-intro-card h3 {
+    margin: 0 0 10px;
+    color: #fff;
+    font-size: 25px;
+}
+
+.export-intro-card p {
+    margin: 0;
+    color: rgba(255, 255, 255, .7);
+    font-size: 14px;
+}
+
+/* =========================================================
+   SERVICES
+========================================================= */
+
+.export-services {
+    padding: 100px 0;
+    background: #f5f7f2;
+}
+
+.export-heading {
+    max-width: 780px;
+    margin: 0 auto 55px;
+    text-align: center;
+}
+
+.export-heading h2 {
+    margin: 0 0 15px;
+    color: #173c29;
+    font-size: clamp(30px, 4vw, 45px);
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.export-heading p {
+    margin: 0;
+    color: #707971;
+    font-size: 16px;
+    line-height: 2;
+}
+
+.export-services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.export-service-card {
+    position: relative;
+    min-height: 245px;
+    padding: 28px 25px;
+    overflow: hidden;
+    border: 1px solid #e4e9e1;
+    border-radius: 20px;
+    background: #fff;
+    transition: .3s ease;
+}
+
+.export-service-card:hover {
+    transform: translateY(-7px);
+    border-color: #d5b55b;
+    box-shadow: 0 20px 45px rgba(24, 59, 38, .09);
+}
+
+.export-service-number {
+    position: absolute;
+    top: 12px;
+    left: 18px;
+    color: #edf0eb;
+    font-size: 48px;
+    font-weight: 800;
+}
+
+.export-service-icon {
+    position: relative;
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 21px;
+    border-radius: 16px;
+    background: #173c29;
+    color: #e2c16c;
+    font-size: 21px;
+}
+
+.export-service-card h3 {
+    margin: 0 0 9px;
+    color: #173c29;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.export-service-card p {
+    margin: 0;
+    color: #737c76;
+    font-size: 13px;
+    line-height: 1.95;
+}
+
+/* =========================================================
+   TRANSPORT
+========================================================= */
+
+.export-transport {
+    padding: 100px 0;
+    background: #fff;
+}
+
+.export-transport-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.export-transport-card {
+    position: relative;
+    min-height: 290px;
+    padding: 32px;
+    overflow: hidden;
+    border-radius: 22px;
+    background: #173c29;
+    color: #fff;
+}
+
+.export-transport-card:nth-child(2) {
+    background: #24553b;
+}
+
+.export-transport-card:nth-child(3) {
+    background: #315f46;
+}
+
+.export-transport-card i {
+    margin-bottom: 45px;
+    color: #e2c16c;
+    font-size: 42px;
+}
+
+.export-transport-card h3 {
+    margin: 0 0 10px;
+    color: #fff;
+    font-size: 22px;
+}
+
+.export-transport-card p {
+    margin: 0;
+    color: rgba(255, 255, 255, .72);
+    font-size: 14px;
+    line-height: 2;
+}
+
+.export-transport-card::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 50%;
+    right: -70px;
+    bottom: -80px;
+}
+
+/* =========================================================
+   PROCESS
+========================================================= */
+
+.export-process {
+    padding: 100px 0;
+    background: #f1f4ef;
+}
+
+.export-process-wrapper {
+    position: relative;
+    max-width: 1150px;
+    margin: auto;
+}
+
+.export-process-line {
+    position: absolute;
+    top: 32px;
+    right: 5%;
+    left: 5%;
+    height: 2px;
+    background: #d7c27e;
+}
+
+.export-process-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 25px;
+}
+
+.export-process-item {
+    text-align: center;
+}
+
+.export-process-number {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    position: relative;
+    z-index: 2;
+    border: 5px solid #f1f4ef;
+    border-radius: 50%;
+    background: #173c29;
+    color: #e2c16c;
+    box-shadow: 0 0 0 2px #d7c27e;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.export-process-item h3 {
+    margin: 0;
+    color: #173c29;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.8;
+}
+
+/* =========================================================
+   WHY US
+========================================================= */
+
+.export-why {
+    padding: 100px 0;
+    background: #fff;
+}
+
+.export-why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 75px;
+    align-items: center;
+}
+
+.export-why-content h2 {
+    margin: 0 0 20px;
+    color: #173c29;
+    font-size: clamp(30px, 4vw, 44px);
+    line-height: 1.45;
+}
+
+.export-why-content > p {
+    margin: 0 0 28px;
+    color: #707971;
+    line-height: 2.1;
+}
+
+.export-benefits {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.export-benefit {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 17px;
+    border: 1px solid #e4e9e1;
+    border-radius: 14px;
+    background: #fafbf8;
+}
+
+.export-benefit-icon {
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #173c29;
+    color: #e2c16c;
+}
+
+.export-benefit h4 {
+    margin: 0 0 3px;
+    color: #173c29;
+    font-size: 14px;
+}
+
+.export-benefit p {
+    margin: 0;
+    color: #7a827c;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.export-why-visual {
+    position: relative;
+    min-height: 450px;
+    border-radius: 28px;
+    overflow: hidden;
+    background:
+        linear-gradient(135deg, rgba(12, 43, 27, .92), rgba(38, 86, 59, .76)),
+        url('/img/header/hero.webp') center / cover no-repeat;
+}
+
+.export-why-visual-content {
+    position: absolute;
+    right: 35px;
+    bottom: 35px;
+    left: 35px;
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 18px;
+    background: rgba(0, 0, 0, .22);
+    backdrop-filter: blur(7px);
+}
+
+.export-why-visual-content strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #e2c16c;
+    font-size: 27px;
+}
+
+.export-why-visual-content span {
+    color: rgba(255, 255, 255, .78);
+    font-size: 13px;
+}
+
+/* =========================================================
+   SUPPLY CHAIN
+========================================================= */
+
+.export-chain {
+    position: relative;
+    padding: 100px 0;
+    overflow: hidden;
+    background: #173c29;
+}
+
+.export-chain::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: -260px;
+    right: -150px;
+    border: 1px solid rgba(226, 193, 108, .14);
+    border-radius: 50%;
+}
+
+.export-chain-content {
+    position: relative;
+    z-index: 2;
+    max-width: 850px;
+    margin: 0 auto 55px;
+    text-align: center;
+}
+
+.export-chain-content .export-section-label {
+    color: #e2c16c;
+}
+
+.export-chain-content h2 {
+    margin: 0 0 18px;
+    color: #fff;
+    font-size: clamp(30px, 4vw, 46px);
+}
+
+.export-chain-content p {
+    margin: 0;
+    color: rgba(255, 255, 255, .72);
+    font-size: 16px;
+    line-height: 2.1;
+}
+
+.export-chain-flow {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+}
+
+.export-chain-step {
+    text-align: center;
+}
+
+.export-chain-icon {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    border: 1px solid rgba(226, 193, 108, .35);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .06);
+    color: #e2c16c;
+    font-size: 23px;
+}
+
+.export-chain-step span {
+    color: rgba(255, 255, 255, .8);
+    font-size: 12px;
+}
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.export-cta {
+    padding: 100px 0;
+    background: #f7f8f4;
+}
+
+.export-cta-box {
+    position: relative;
+    overflow: hidden;
+    max-width: 1100px;
+    margin: auto;
+    padding: 70px 40px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #173c29, #24553b);
+    text-align: center;
+    box-shadow: 0 25px 65px rgba(23, 60, 41, .15);
+}
+
+.export-cta-box::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border: 1px solid rgba(226, 193, 108, .15);
+    border-radius: 50%;
+    top: -180px;
+    left: -80px;
+}
+
+.export-cta-box > * {
+    position: relative;
+    z-index: 2;
+}
+
+.export-cta-box h2 {
+    margin: 0 0 15px;
+    color: #fff;
+    font-size: clamp(29px, 4vw, 43px);
+}
+
+.export-cta-box p {
+    max-width: 700px;
+    margin: 0 auto 30px;
+    color: rgba(255, 255, 255, .75);
+    font-size: 15px;
+    line-height: 2;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+    .export-services-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .export-chain-flow {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 35px 20px;
+    }
+
+    .export-hero-stats {
+        max-width: 750px;
+    }
+}
+
+@media (max-width: 900px) {
+    .export-intro-grid,
+    .export-why-grid {
+        grid-template-columns: 1fr;
+        gap: 45px;
+    }
+
+    .export-services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .export-transport-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .export-process-line {
+        display: none;
+    }
+
+    .export-process-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 35px 20px;
+    }
+
+    .export-hero {
+        min-height: 620px;
+    }
+}
+
+@media (max-width: 600px) {
+    .export-container {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .export-hero {
+        min-height: 680px;
+    }
+
+    .export-hero-content {
+        padding: 70px 0;
+    }
+
+    .export-hero h1 {
+        font-size: 43px;
+    }
+
+    .export-hero h2 {
+        font-size: 20px;
+    }
+
+    .export-hero-description {
+        font-size: 14px;
+    }
+
+    .export-hero-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .export-btn-primary,
+    .export-btn-outline {
+        width: 100%;
+    }
+
+    .export-hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px 0;
+    }
+
+    .export-stat {
+        border: 0;
+        padding: 0 10px;
+    }
+
+    .export-intro,
+    .export-services,
+    .export-transport,
+    .export-process,
+    .export-why,
+    .export-chain,
+    .export-cta {
+        padding: 65px 0;
+    }
+
+    .export-services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .export-process-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .export-benefits {
+        grid-template-columns: 1fr;
+    }
+
+    .export-chain-flow {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .export-intro-card,
+    .export-intro-card-inner {
+        min-height: 330px;
+    }
+
+    .export-intro-card-inner {
+        padding: 30px;
+    }
+
+    .export-why-visual {
+        min-height: 350px;
+    }
+
+    .export-cta-box {
+        padding: 50px 22px;
+    }
+}

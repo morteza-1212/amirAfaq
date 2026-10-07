@@ -1,4 +1,32 @@
 /* ============================================================
+   FONTS & ROOT VARIABLES
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap');
+
+:root {
+    --bs-primary: #2D5016;
+    --bs-secondary: #8BC34A;
+    --bs-light: #FAF8F3;
+    --bs-dark: #1B361E;
+    --bs-white: #ffffff;
+}
+
+body,
+h1, h2, h3, h4, h5, h6,
+.btn,
+.form-control,
+.nav-link,
+input,
+textarea,
+select {
+    font-family: 'Vazirmatn', Tahoma, sans-serif;
+}
+
+.text-primary { color: #2D5016 !important; }
+.bg-primary   { background-color: #2D5016 !important; }
+
+
+/* ============================================================
    SPINNER
    ============================================================ */
 #spinner {
@@ -183,7 +211,7 @@
 
 .navbar .navbar-nav .nav-item .nav-link {
     padding: 0;
-    color: #fff !important;
+    color: black !important;
     font-weight: 500;
 }
 
@@ -287,9 +315,250 @@
 
 
 /* ============================================================
-   ✅ CAROUSEL HERO HEADER - بدون هیچ تغییری
+   CAROUSEL HERO HEADER
+   ============================================================
+   ⚠️ نکته مهم:
+   هیچ direction روی .owl-carousel اعمال نکنید.
+   Owl Carousel خودش با گزینه rtl:true در JS جهت را مدیریت می‌کند.
+   فقط رنگ، سایز و چیدمان داخلی کپشن را در CSS تنظیم می‌کنیم.
    ============================================================ */
 /*** Carousel Hero Header Start ***/
+
+/*.header-carousel .header-carousel-item {*/
+/*    position: relative;*/
+/*    height: 700px;*/
+/*    background-color: #2D5016;*/
+/*    background-size: cover;*/
+/*    background-position: center center;*/
+/*    background-repeat: no-repeat;*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*!* لایه تاریک روی تصویر *!*/
+/*.header-carousel .header-carousel-item::before {*/
+/*    content: "";*/
+/*    position: absolute;*/
+/*    inset: 0;*/
+/*    background: rgba(0, 0, 0, .45);*/
+/*    z-index: 1;*/
+/*}*/
+
+/*!* دکمه‌های ناوبری *!*/
+/*.header-carousel .owl-nav .owl-prev,*/
+/*.header-carousel .owl-nav .owl-next {*/
+/*    position: absolute;*/
+/*    width: 60px;*/
+/*    height: 60px;*/
+/*    border-radius: 60px;*/
+/*    background: var(--bs-light);*/
+/*    color: var(--bs-primary);*/
+/*    font-size: 26px;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    transition: 0.5s;*/
+/*    z-index: 10;*/
+/*}*/
+
+/*.header-carousel .owl-nav .owl-prev {*/
+/*    bottom: 30px;*/
+/*    left: 50%;*/
+/*    transform: translateX(-50%);*/
+/*    margin-left: 30px;*/
+/*}*/
+
+/*.header-carousel .owl-nav .owl-next {*/
+/*    bottom: 30px;*/
+/*    right: 50%;*/
+/*    transform: translateX(-50%);*/
+/*    margin-right: 30px;*/
+/*}*/
+
+/*.header-carousel .owl-nav .owl-prev:hover,*/
+/*.header-carousel .owl-nav .owl-next:hover {*/
+/*    box-shadow: inset 0 0 100px 0 var(--bs-secondary);*/
+/*    color: var(--bs-white);*/
+/*}*/
+
+/*!* کپشن روی تصویر *!*/
+/*.header-carousel .header-carousel-item .carousel-caption {*/
+/*    position: absolute;*/
+/*    inset: 0;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    background: transparent;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    z-index: 2;*/
+/*    padding: 0 15px;*/
+/*}*/
+
+/*!* خوانایی متن *!*/
+/*.header-carousel .header-carousel-item .carousel-caption h1,*/
+/*.header-carousel .header-carousel-item .carousel-caption h4,*/
+/*.header-carousel .header-carousel-item .carousel-caption p {*/
+/*    color: #ffffff;*/
+/*    text-shadow: 0 2px 8px rgba(0, 0, 0, .5);*/
+/*}*/
+
+/*!* ============================================================*/
+/*   RTL: فقط برای راست‌چین کردن متن داخل کپشن*/
+/*   (بوت‌استرپ خودش flex-row و flex-row-reverse را مدیریت می‌کند)*/
+/*   ============================================================ *!*/
+
+/*!* در RTL، متنِ ستون‌ها راست‌چین شود *!*/
+/*html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption h1,*/
+/*html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption h4,*/
+/*html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption p {*/
+/*    direction: rtl;*/
+/*    text-align: inherit;   !* اجازه می‌دهیم کلاس text-md-start/end تعیین کند *!*/
+/*}*/
+
+/*!* ============================================================*/
+/*   Responsive*/
+/*   ============================================================ *!*/
+
+/*!* ===== دسکتاپ بزرگ ===== *!*/
+/*@media (max-width: 1399px) {*/
+/*    .header-carousel .header-carousel-item {*/
+/*        height: 650px;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption h1 {*/
+/*        font-size: calc(1.375rem + 1.5vw);*/
+/*    }*/
+/*}*/
+
+/*!* ===== لپ‌تاپ ===== *!*/
+/*@media (max-width: 1199px) {*/
+/*    .header-carousel .header-carousel-item {*/
+/*        height: 600px;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption h1 {*/
+/*        font-size: calc(1.3rem + 1.2vw);*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption p {*/
+/*        font-size: 1rem;*/
+/*    }*/
+/*}*/
+
+/*!* ===== تبلت افقی ===== *!*/
+/*@media (max-width: 991px) {*/
+/*    .header-carousel .header-carousel-item {*/
+/*        height: 800px;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption {*/
+/*        padding: 60px 15px;*/
+/*        text-align: center;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption .text-sm-center,*/
+/*    .header-carousel .header-carousel-item .carousel-caption .text-md-start,*/
+/*    .header-carousel .header-carousel-item .carousel-caption .text-md-end {*/
+/*        text-align: center !important;*/
+/*        width: auto !important;*/
+/*        margin-left: 0 !important;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption .d-flex {*/
+/*        justify-content: center !important;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption h1 {*/
+/*        font-size: 2.5rem;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption h4 {*/
+/*        font-size: 1.1rem;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption p {*/
+/*        font-size: 1rem;*/
+/*    }*/
+/*    .header-carousel .owl-nav .owl-prev,*/
+/*    .header-carousel .owl-nav .owl-next {*/
+/*        width: 50px;*/
+/*        height: 50px;*/
+/*        font-size: 22px;*/
+/*    }*/
+/*}*/
+
+/*!* ===== تبلت عمودی ===== *!*/
+/*@media (max-width: 767px) {*/
+/*    .header-carousel .header-carousel-item {*/
+/*        height: 750px;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption h1 {*/
+/*        font-size: 2rem;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption h4 {*/
+/*        font-size: 1rem;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption p {*/
+/*        font-size: 0.95rem;*/
+/*    }*/
+/*    .header-carousel .owl-nav .owl-prev,*/
+/*    .header-carousel .owl-nav .owl-next {*/
+/*        width: 45px;*/
+/*        height: 45px;*/
+/*        font-size: 20px;*/
+/*    }*/
+/*}*/
+
+/*!* ===== موبایل ===== *!*/
+/*@media (max-width: 575px) {*/
+/*    .header-carousel .header-carousel-item {*/
+/*        height: 700px;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption {*/
+/*        padding: 50px 12px;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption h1 {*/
+/*        font-size: 1.75rem;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption h4 {*/
+/*        font-size: 0.9rem;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption p {*/
+/*        font-size: 0.9rem;*/
+/*        margin-bottom: 1.5rem !important;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption .btn {*/
+/*        font-size: 0.85rem;*/
+/*        padding: 0.6rem 1rem !important;*/
+/*        margin: 0 4px !important;*/
+/*    }*/
+/*    .header-carousel .owl-nav .owl-prev,*/
+/*    .header-carousel .owl-nav .owl-next {*/
+/*        width: 40px;*/
+/*        height: 40px;*/
+/*        font-size: 18px;*/
+/*        bottom: 15px;*/
+/*    }*/
+/*    .header-carousel .owl-nav .owl-prev {*/
+/*        margin-left: -40px;*/
+/*    }*/
+/*    .header-carousel .owl-nav .owl-next {*/
+/*        margin-right: -40px;*/
+/*        margin-left: 40px;*/
+/*    }*/
+/*}*/
+
+/*!* ===== موبایل کوچک ===== *!*/
+/*@media (max-width: 375px) {*/
+/*    .header-carousel .header-carousel-item {*/
+/*        height: 680px;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption h1 {*/
+/*        font-size: 1.5rem;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption h4 {*/
+/*        font-size: 0.85rem;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption p {*/
+/*        font-size: 0.85rem;*/
+/*    }*/
+/*    .header-carousel .header-carousel-item .carousel-caption .btn {*/
+/*        font-size: 0.8rem;*/
+/*        padding: 0.5rem 0.85rem !important;*/
+/*    }*/
+/*}*/
+/*** Carousel Hero Header Start ***/
+
 .header-carousel .header-carousel-item {
     position: relative;
     height: 700px;
@@ -298,10 +567,9 @@
     background-position: center center;
     background-repeat: no-repeat;
     overflow: hidden;
-
 }
 
-/* لایه تاریک روی تصویر برای خوانایی متن */
+/* لایه تاریک روی تصویر */
 .header-carousel .header-carousel-item::before {
     content: "";
     position: absolute;
@@ -353,16 +621,17 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    left: 0;
-    bottom: 0;
     background: transparent;
     display: flex;
     align-items: center;
     z-index: 2;
     padding: 0 15px;
+    /* ⚠️ مهم: در RTL چیدمان داخلی کپشن را LTR می‌کنیم
+       تا جای متن‌ها مثل LTR باقی بماند */
+    direction: ltr;
 }
 
-/* خوانایی متن روی تصویر */
+/* خوانایی متن */
 .header-carousel .header-carousel-item .carousel-caption h1,
 .header-carousel .header-carousel-item .carousel-caption h4,
 .header-carousel .header-carousel-item .carousel-caption p {
@@ -370,13 +639,104 @@
     text-shadow: 0 2px 8px rgba(0, 0, 0, .5);
 }
 
-/* اصلاح عرض ثابت در اسلاید دوم */
-.header-carousel .header-carousel-item .carousel-caption .text-md-end {
-    width: auto;
+/* ============================================================
+   ✅ RTL FIX — حفظ چیدمان LTR داخل کپشن
+   ============================================================ */
+
+/*
+ * راهبرد:
+ *   1. کانتینر و row داخل کپشن را LTR نگه می‌داریم (direction: ltr)
+ *   2. فقط محتوای متنی (h1, h4, p, d-flex دکمه‌ها) را RTL می‌کنیم
+ *   3. این باعث می‌شود:
+ *      - ستون اسلاید اول در سمت چپ بماند (مثل LTR) ✅
+ *      - ستون اسلاید دوم در سمت راست بماند (مثل LTR) ✅
+ *      - اما متن‌ها فارسی و راست‌چین باشند ✅
+ */
+
+html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .container,
+html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .row {
+    direction: ltr;
+}
+
+/* اسلاید اول: ستون در سمت چپ (بدون تغییر) */
+html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-start {
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+}
+
+/* اسلاید دوم: ستون در سمت راست (بدون تغییر) */
+html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-end {
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+}
+
+/* حالا محتوای متنی داخل هر ستون را راست‌چین می‌کنیم */
+
+/* اسلاید اول: متن راست‌چین شود اما ستون در چپ بماند */
+html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-start .text-md-start {
+    direction: rtl;
+    text-align: right !important;
+}
+
+html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-start .d-flex.justify-content-md-start {
+    direction: rtl;
+    justify-content: flex-start !important;
+}
+
+/* اسلاید دوم: متن راست‌چین شود اما ستون در راست بماند */
+html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-end .text-md-end {
+    direction: rtl;
+    text-align: right !important;
+}
+
+html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-end .d-flex.justify-content-md-end {
+    direction: rtl;
+    justify-content: flex-start !important;
+}
+
+/* ✅ رفع معکوس‌شدن دکمه‌ها در RTL */
+html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .btn.me-2 {
+    margin-right: 0 !important;
+    margin-left: .5rem !important;
+}
+
+html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .btn.ms-2 {
+    margin-left: 0 !important;
+    margin-right: .5rem !important;
+}
+
+/* ✅ رفع معکوس‌شدن انیمیشن در RTL (اختیاری) */
+html[dir="rtl"] .header-carousel .animated.fadeInLeft {
+    animation-name: fadeInLeft;
+}
+
+html[dir="rtl"] .header-carousel .animated.fadeInRight {
+    animation-name: fadeInRight;
+}
+
+/* ----- آیکون‌های ناوبری در RTL ----- */
+html[dir="rtl"] .header-carousel .owl-nav .owl-prev {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 30px;
+    margin-right: 0;
+}
+
+html[dir="rtl"] .header-carousel .owl-nav .owl-next {
+    left: auto;
+    right: 50%;
+    transform: translateX(50%);
+    margin-right: 30px;
     margin-left: 0;
 }
 
-/* ===== ریسپانسیو: دسکتاپ بزرگ ===== */
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+
+/* ===== دسکتاپ بزرگ ===== */
 @media (max-width: 1399px) {
     .header-carousel .header-carousel-item {
         height: 650px;
@@ -386,7 +746,7 @@
     }
 }
 
-/* ===== ریسپانسیو: لپ‌تاپ ===== */
+/* ===== لپ‌تاپ ===== */
 @media (max-width: 1199px) {
     .header-carousel .header-carousel-item {
         height: 600px;
@@ -399,15 +759,23 @@
     }
 }
 
-/* ===== ریسپانسیو: تبلت افقی ===== */
+/* ===== تبلت افقی ===== */
 @media (max-width: 991px) {
     .header-carousel .header-carousel-item {
         height: 800px;
     }
     .header-carousel .header-carousel-item .carousel-caption {
         padding: 60px 15px;
-        text-align: center;
     }
+
+    /* در تبلت همه چیز وسط‌چین */
+    html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-start,
+    html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-end,
+    html[dir="ltr"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-start,
+    html[dir="ltr"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-end {
+        justify-content: center !important;
+    }
+
     .header-carousel .header-carousel-item .carousel-caption .text-sm-center,
     .header-carousel .header-carousel-item .carousel-caption .text-md-start,
     .header-carousel .header-carousel-item .carousel-caption .text-md-end {
@@ -415,9 +783,17 @@
         width: auto !important;
         margin-left: 0 !important;
     }
-    .header-carousel .header-carousel-item .carousel-caption .d-flex {
+
+    html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-start .text-md-start,
+    html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .row.justify-content-end .text-md-end {
+        text-align: center !important;
+    }
+
+    .header-carousel .header-carousel-item .carousel-caption .d-flex,
+    html[dir="rtl"] .header-carousel .header-carousel-item .carousel-caption .d-flex {
         justify-content: center !important;
     }
+
     .header-carousel .header-carousel-item .carousel-caption h1 {
         font-size: 2.5rem;
     }
@@ -435,7 +811,7 @@
     }
 }
 
-/* ===== ریسپانسیو: تبلت عمودی ===== */
+/* ===== تبلت عمودی ===== */
 @media (max-width: 767px) {
     .header-carousel .header-carousel-item {
         height: 750px;
@@ -457,7 +833,7 @@
     }
 }
 
-/* ===== ریسپانسیو: موبایل ===== */
+/* ===== موبایل ===== */
 @media (max-width: 575px) {
     .header-carousel .header-carousel-item {
         height: 700px;
@@ -496,7 +872,7 @@
     }
 }
 
-/* ===== ریسپانسیو: موبایل کوچک ===== */
+/* ===== موبایل کوچک ===== */
 @media (max-width: 375px) {
     .header-carousel .header-carousel-item {
         height: 680px;
@@ -515,6 +891,7 @@
         padding: 0.5rem 0.85rem !important;
     }
 }
+/*** Carousel Hero Header End ***/
 /*** Carousel Hero Header End ***/
 
 
@@ -872,7 +1249,7 @@
 
 
 /* ============================================================
-   MAP SECTION (نقشه گوگل)
+   MAP SECTION
    ============================================================ */
 .map-section {
     background: linear-gradient(135deg, #F0F5E8 0%, #FAF8F3 100%);
@@ -896,7 +1273,6 @@
     padding: 8px 18px;
 }
 
-/* پنل دستورات مسیر */
 #directions-text {
     max-height: 400px;
     overflow-y: auto;
@@ -920,7 +1296,6 @@
     border-radius: 3px;
 }
 
-/* خلاصه مسیر */
 #route-summary {
     background: linear-gradient(135deg, #F0F5E8 0%, #E8F0DE 100%) !important;
     border: 1px solid #8BC34A !important;
@@ -932,7 +1307,6 @@
     color: #2D5016 !important;
 }
 
-/* فرم نقشه */
 .map-section .form-control {
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -1074,7 +1448,6 @@
     color: #1B361E;
 }
 
-/* خبرنامه */
 .footer .form-control {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -1128,7 +1501,7 @@
 
 
 /* ============================================================
-   DIRECTIONS PANEL (پنل مسیریابی گوگل)
+   DIRECTIONS PANEL
    ============================================================ */
 #directions-text .adp-directions {
     width: 100%;
@@ -1151,51 +1524,3 @@
     padding: 4px 0;
     direction: rtl;
 }
-#!/usr/bin/env python3
-"""استفاده:  python3 recolor_style.py path/to/style.css
-فقط رنگ‌ها (و فونت فارسی) را تغییر می‌دهد. نسخه‌ی پشتیبان کنار فایل ذخیره می‌شود."""
-import re, sys, shutil
-
-path = sys.argv[1]
-shutil.copy(path, path + ".bak")
-css = open(path, encoding="utf-8").read()
-
-# 1) دو مورد خاص: پس‌زمینه ناوبار و پس‌زمینه پشت اسلایدر -> کشمشی
-                                                          css = re.sub(r"(\.nav-bar\s*\{[^}]*?background-color:\s*)#2D5016", r"\1#2B1B26", css, flags=re.I)
-css = re.sub(r"(\.header-carousel \.header-carousel-item\s*\{[^}]*?background-color:\s*)#2D5016", r"\1#2B1B26", css, flags=re.I)
-
-# 2) جایگزینی رنگ‌ها
-     hex_map = {
-"#2D5016": "#C2461E",  # سبز اصلی -> زعفرانی
-"#1B361E": "#2B1B26",  # سبز تیره -> کشمشی
-"#0F2412": "#1B0F17",  # سبز خیلی تیره -> کشمشی تیره
-"#8BC34A": "#8FA94B",  # سبز روشن -> پسته‌ای
-"#F0F5E8": "#F1F5E3",
-"#E8F0DE": "#E9EFD6",
-"#f0f7f0": "#E9EFD6",
-"#FAF8F3": "#F7F1E6",  # زمینه روشن -> شنی
-}
-for old, new in hex_map.items():
-                               css = re.sub(re.escape(old), new, css, flags=re.I)
-
-css = re.sub(r"rgba\(\s*45,\s*80,\s*22,", "rgba(194, 70, 30,", css)
-css = re.sub(r"rgba\(\s*27,\s*54,\s*30,", "rgba(43, 27, 38,", css)
-
-# 3) فونت + متغیرهای رنگی بوت‌استرپ (بالای فایل)
-header = """@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap');
-
-:root {
-    --bs-primary: #C2461E;
-    --bs-secondary: #8FA94B;
-    --bs-light: #F7F1E6;
-    --bs-dark: #2B1B26;
-}
-body, h1, h2, h3, h4, h5, h6, .btn, .form-control { font-family: 'Vazirmatn', Tahoma, sans-serif; }
-.text-primary { color: #C2461E !important; }
-.bg-primary { background-color: #C2461E !important; }
-.btn-outline-primary { color: #C2461E; border-color: #C2461E; }
-.btn-outline-primary:hover, .btn-outline-primary.active { background: #C2461E; border-color: #C2461E; color: #fff; }
-
-"""
-open(path, "w", encoding="utf-8").write(header + css)
-print("done. backup:", path + ".bak")

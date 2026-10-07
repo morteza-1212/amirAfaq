@@ -28,15 +28,53 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 
+//Route::prefix('{locale}')
+//    ->whereIn('locale', ['fa', 'en', 'ar'])
+//    ->middleware(\App\Http\Middleware\SetLocal::class)
+//    ->group(function () {
+//
+//        Route::get('/', [HomeController::class, 'index'])
+//            ->name('home');
+//        Route::get('/about', [HomeController::class, 'AbouteUs'])
+//            ->name('About');
+//
+//    });
+Route::get('/lang/{locale}', [\App\Http\Controllers\LocalController::class, 'switch'])
+    ->whereIn('locale', ['fa', 'en', 'ar'])
+    ->name('locale.switch');
+
+/*
+|--------------------------------------------------------------------------
+| Localized Routes
+|--------------------------------------------------------------------------
+*/
 Route::prefix('{locale}')
     ->whereIn('locale', ['fa', 'en', 'ar'])
-    ->middleware(\App\Http\Middleware\SetLocal::class)
+    ->middleware('setLocale')
     ->group(function () {
+        Route::get('/', [HomeController::class, 'index'])->name('home');
+        Route::get('/about', [HomeController::class, 'AbouteUs'])->name('about');
+        Route::get('/export', [HomeController::class, 'export'])->name('export');
+        Route::get('/import', [HomeController::class, 'import'])->name('import');
+        Route::get('/logistics', [HomeController::class, 'logistics'])->name('logistics');
+        Route::get('/markets', [HomeController::class, 'markets'])->name('markets');
+        Route::get('/suppliers', [HomeController::class, 'suppliers'])->name('suppliers');
 
-        Route::get('/', [HomeController::class, 'index'])
-            ->name('home');
+
+
+
+
 
     });
+
+Route::get('/', function () {
+    $locale = session('locale', config('app.locale', 'fa'));
+    return redirect("/{$locale}");
+});
+
+Route::get('/lang/{locale}', [\App\Http\Controllers\LocalController::class, 'switch'])
+    ->whereIn('locale', ['fa', 'en', 'ar'])
+    ->name('locale.switch');
 Route::prefix('panelAdmin')->group(function () {
  Route::prefix('productGroup')->group(function(){
      Route::get('/', [ProductGroupController::class, 'index'])->name('admin.productGroup.index');

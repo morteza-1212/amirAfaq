@@ -75,6 +75,9 @@
         name="viewport"
         content="width=device-width, initial-scale=1"
     >
+    <!-- در بخش head قالب -->
+    <link rel="stylesheet" href="https://static.neshan.org/sdk/mapboxgl/v1.13.2/neshan-sdk/v1.1.3/index.css" />
+    <script src="https://static.neshan.org/sdk/mapboxgl/v1.13.2/neshan-sdk/v1.1.3/index.js" defer></script>
 
     <meta
         name="description"

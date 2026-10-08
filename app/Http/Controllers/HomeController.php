@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBuyerRequest;
+use App\Models\Buyer;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -34,4 +37,40 @@ class HomeController extends Controller
  {
         return view('suppliers.index');
  }
+ public function buyer()
+ {
+     return view('buyers.index');
+ }
+    public function store(StoreBuyerRequest $request): RedirectResponse
+    {
+        // داده‌های اعتبارسنجی‌شده به‌صورت خودکار در دسترس هستند
+        Buyer::create($request->validated());
+
+        return redirect()
+            ->route('buyer', ['locale' => app()->getLocale()])
+            ->with('success', __('buyers.success_message'));
+    }
+    public function catalogs()
+    {
+        $locale = app()->getLocale();
+
+        // کاتالوگ‌های فعال + ترجمه‌ی زبان جاری
+        $catalogs = \App\Models\Catalog::query()
+            ->where('is_active', true)
+            ->with([
+                'translations' => function ($q) use ($locale) {
+                    $q->where('locale', $locale);
+                },
+            ])
+            ->orderBy('sort_order')
+            ->get()
+            // فقط کاتالوگ‌هایی که ترجمه‌ی این زبان را دارند
+            ->filter(fn ($catalog) => $catalog->translations->isNotEmpty());
+
+        return view('catalogs.index', compact('catalogs', 'locale'));
+    }
+    public function contact()
+    {
+        return view('contactUs.index');
+    }
 }

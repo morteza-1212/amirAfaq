@@ -13,6 +13,7 @@
           rel="stylesheet"
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
           crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
     {{-- استایل اختصاصی هر صفحه --}}
     @stack('styles')
@@ -758,10 +759,14 @@
         </li>
 
         <!-- رنگ‌ها -->
+        @inject('catalogs', 'App\Models\Catalog')
+
         <li class="nav-item">
-            <a href="" class="nav-link">
+            <a href="{{route('admin.catalog.index')}}" class="nav-link">
                 <i class="fas fa-palette"></i>
-                <span class="nav-text">رنگ ها</span>
+                <span class="nav-text"> کاتالوگ ها</span>
+                <span class="badge">{{ $catalogs->count() }}</span>
+
             </a>
         </li>
 

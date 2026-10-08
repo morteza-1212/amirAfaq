@@ -466,7 +466,7 @@
                     </p>
 
                     <a
-                        href="{{ route('panelAdmin.category-translations.create') }}"
+                        href="{{ route('admin.category.translation.index') }}"
                         class="btn-create"
                     >
                         <i class="fas fa-plus"></i>

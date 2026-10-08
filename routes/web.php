@@ -7,6 +7,9 @@ use \App\Http\Controllers\panelAdmin\CategoryController;
 use \App\Http\Controllers\panelAdmin\CategoryTranslationController;
 use \App\Http\Controllers\panelAdmin\ProductController;
 use \App\Http\Controllers\panelAdmin\ProductTranlationController;
+use \App\Http\Controllers\panelAdmin\CatalogController;
+use \App\Http\Controllers\panelAdmin\CatalogTranslationController;
+
 use \App\Http\Controllers\HomeController;
 
 
@@ -59,10 +62,10 @@ Route::prefix('{locale}')
         Route::get('/logistics', [HomeController::class, 'logistics'])->name('logistics');
         Route::get('/markets', [HomeController::class, 'markets'])->name('markets');
         Route::get('/suppliers', [HomeController::class, 'suppliers'])->name('suppliers');
-
-
-
-
+        Route::get('/buyer', [HomeController::class, 'buyer'])->name('buyer');
+        Route::post('/buyer', [HomeController::class, 'store'])->name('buyer.store');
+        Route::get('/catalogs', [HomeController::class, 'catalogs'])->name('catalogs');
+        Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
 
     });
@@ -144,22 +147,7 @@ Route::prefix('panelAdmin')->group(function () {
             Route::delete('/delete/{categoryTranslation}',[CategoryTranslationController::class,'destroy'])->name('admin.category.translation.delete');
         });
     });
-//    Route::prefix('products')->group(function(){
-//        Route::get('/',[ProductController::class,'index'])->name('admin.product.index');
-//        Route::get('/create',[ProductController::class,'create'])->name('admin.product.create');
-//        Route::post('/create',[ProductController::class,'store'])->name('admin.product.store');
-//        Route::get('/edit/{product}',[ProductController::class,'edit'])->name('admin.product.edit');
-//        Route::put('/update/{product}',[ProductController::class,'update'])->name('admin.product.update');
-//        Route::delete('/delete/{product}',[ProductController::class,'destroy'])->name('admin.product.delete');
-//        Route::prefix('productTranslation')->group(function (){
-//            Route::get('/',[ProductTranlationController::class,'index'])->name('admin.product.translation.index');
-//            Route::get('/create',[ProductTranlationController::class,'create'])->name('admin.product.translation.create');
-//            Route::post('/create',[ProductTranlationController::class,'store'])->name('admin.product.translation.store');
-//            Route::get('/edit/{translation}',[ProductTranlationController::class,'edit'])->name('admin.product.translation.edit');
-//            Route::put('update/{translation}',[ProductTranlationController::class,'update'])->name('admin.product.translation.update');
-//            Route::get('/delete/{translation}',[ProductTranlationController::class,'destroy'])->name('admin.product.translation.delete');
-//
-//        });
+
     Route::prefix('products')->group(function () {
 
         Route::get('/', [ProductController::class, 'index'])->name('admin.product.index');
@@ -192,9 +180,81 @@ Route::prefix('panelAdmin')->group(function () {
                 ->name('admin.product.translation.delete');
         });
 
+    });
+
+    Route::prefix('catalogs')->name('admin.catalog.')->group(function () {
+
+        // لیست کاتالوگ‌ها
+        Route::get('/', [CatalogController::class, 'index'])
+            ->name('index');
+
+        // فرم ایجاد
+        Route::get('/create', [CatalogController::class, 'create'])
+            ->name('create');
+
+        // ذخیره کاتالوگ جدید
+        Route::post('/create', [CatalogController::class, 'store'])
+            ->name('store');
+
+        // نمایش یک کاتالوگ (بر اساس slug)
+        Route::get('/{catalog}', [CatalogController::class, 'show'])
+            ->name('show');
+
+        // فرم ویرایش
+        Route::get('/{catalog}/edit', [CatalogController::class, 'edit'])
+            ->name('edit');
+
+        // به‌روزرسانی
+        Route::put('/{catalog}', [CatalogController::class, 'update'])
+            ->name('update');
+
+        // حذف
+        Route::delete('/{catalog}', [CatalogController::class, 'destroy'])
+            ->name('destroy');
+
+        // تغییر وضعیت فعال/غیرفعال (اختیاری)
+        Route::patch('/{catalog}/toggle-status', [CatalogController::class, 'toggleStatus'])
+            ->name('toggle-status');
 
 
     });
 
+    Route::prefix('{catalog}/catalogTranslation')->group(function () {
 
+        // لیست ترجمه‌های کاتالوگ
+        Route::get(
+            '/',
+            [CatalogTranslationController::class, 'index']
+        )->name('admin.catalog.translation.index');
+
+        // فرم ایجاد ترجمه
+        Route::get(
+            '/create',
+            [CatalogTranslationController::class, 'create']
+        )->name('admin.catalog.translation.create');
+
+        // ذخیره ترجمه
+        Route::post(
+            '/create',
+            [CatalogTranslationController::class, 'store']
+        )->name('admin.catalog.translation.store');
+
+        // فرم ویرایش ترجمه
+        Route::get(
+            '/edit/{translation}',
+            [CatalogTranslationController::class, 'edit']
+        )->name('admin.catalog.translation.edit');
+
+        // بروزرسانی ترجمه
+        Route::put(
+            '/update/{translation}',
+            [CatalogTranslationController::class, 'update']
+        )->name('admin.catalog.translation.update');
+
+        Route::delete(
+            '/translations/delete/{translation}',
+            [CatalogTranslationController::class, 'destroy']
+        )->name('admin.catalog.translation.delete');
+
+    });
 });

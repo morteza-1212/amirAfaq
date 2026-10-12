@@ -1,0 +1,821 @@
+/* =========================================================
+   PROJECTS PAGE
+   Amir Afaq Gostar Pars
+   RTL Support - Content on LEFT
+   ========================================================= */
+
+.projects-page {
+    background: #f7f8f4;
+    color: #20362a;
+    overflow: hidden;
+}
+
+.projects-page .container {
+    width: min(1280px, calc(100% - 60px));
+    margin-inline: auto;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.projects-hero {
+    position: relative;
+    min-height: 430px;
+
+    display: flex;
+    align-items: center;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(23, 60, 41, .97) 0%,
+            rgba(23, 60, 41, .88) 48%,
+            rgba(23, 60, 41, .50) 100%
+        ),
+        url('/img/header/hero.webp') center / cover no-repeat;
+
+    color: #fff;
+}
+
+/* RTL Hero - تیرگی سمت چپ تا متن روی آن خوانا باشد */
+[dir="rtl"] .projects-hero {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(23, 60, 41, .97) 0%,
+            rgba(23, 60, 41, .88) 48%,
+            rgba(23, 60, 41, .50) 100%
+        ),
+        url('/img/header/hero.webp') center / cover no-repeat;
+}
+
+.projects-hero-content {
+    max-width: 800px;
+    padding: 90px 0;
+}
+
+/* RTL: محتوا در سمت چپ */
+[dir="rtl"] .projects-hero-content {
+    margin-left: 0;
+    margin-right: auto;
+    text-align: left;
+}
+
+.projects-hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 22px;
+    padding: 8px 18px;
+
+    border: 1px solid rgba(226, 193, 108, .55);
+    border-radius: 50px;
+
+    color: #e2c16c;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.projects-hero-label::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #e2c16c;
+}
+
+.projects-hero h1 {
+    margin: 0 0 20px;
+
+    color: #fff;
+
+    font-size: clamp(40px, 6vw, 68px);
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+.projects-hero p {
+    max-width: 720px;
+
+    margin: 0;
+
+    color: rgba(255, 255, 255, .82);
+
+    font-size: 18px;
+    line-height: 2;
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+.projects-intro {
+    padding: 95px 0 70px;
+}
+
+.projects-intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    align-items: center;
+    gap: 70px;
+}
+
+/* RTL: ستون badge به چپ منتقل شود */
+[dir="rtl"] .projects-intro-grid {
+    grid-template-columns: 360px 1fr;
+}
+
+.projects-section-label {
+    display: inline-block;
+
+    margin-bottom: 12px;
+
+    color: #b18a32;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.projects-intro-content h2 {
+    max-width: 700px;
+
+    margin: 0 0 20px;
+
+    color: #173c29;
+
+    font-size: clamp(30px, 4vw, 46px);
+    line-height: 1.3;
+    font-weight: 800;
+}
+
+.projects-intro-content p {
+    max-width: 760px;
+
+    margin: 0;
+
+    color: #657067;
+
+    font-size: 16px;
+    line-height: 2.1;
+}
+
+.projects-intro-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    padding: 35px;
+
+    border-radius: 24px;
+
+    background: #fff;
+
+    border: 1px solid rgba(23, 60, 41, .08);
+
+    box-shadow: 0 18px 50px rgba(23, 60, 41, .08);
+}
+
+/* RTL: badge از راست */
+[dir="rtl"] .projects-intro-badge {
+    align-items: flex-start;
+    text-align: right;
+}
+
+.projects-badge-icon {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 22px;
+
+    border-radius: 18px;
+
+    background: #173c29;
+
+    color: #e2c16c;
+
+    font-size: 22px;
+}
+
+.projects-intro-badge strong {
+    margin-bottom: 8px;
+
+    color: #173c29;
+
+    font-size: 18px;
+}
+
+.projects-intro-badge span {
+    color: #6b756e;
+
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+
+/* =========================================================
+   PROJECTS
+   ========================================================= */
+
+.projects-section {
+    padding: 45px 0 100px;
+}
+
+.projects-heading {
+    max-width: 760px;
+
+    margin: 0 auto 55px;
+
+    text-align: center;
+}
+
+.projects-heading h2 {
+    margin: 0 0 18px;
+
+    color: #173c29;
+
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.25;
+    font-weight: 800;
+}
+
+.projects-heading p {
+    margin: 0;
+
+    color: #68736b;
+
+    font-size: 16px;
+    line-height: 2;
+}
+
+
+/* =========================================================
+   PROJECT GRID
+   ========================================================= */
+
+.projects-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 26px;
+}
+
+
+/* =========================================================
+   PROJECT CARD
+   ========================================================= */
+
+.project-card {
+    position: relative;
+
+    padding: 32px;
+
+    overflow: hidden;
+
+    border-radius: 24px;
+
+    background: #fff;
+
+    border: 1px solid rgba(23, 60, 41, .08);
+
+    box-shadow: 0 15px 45px rgba(23, 60, 41, .07);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+}
+
+.project-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    right: -100px;
+    bottom: -100px;
+
+    border-radius: 50%;
+
+    background: rgba(226, 193, 108, .10);
+
+    pointer-events: none;
+}
+
+/* RTL: دایره تزئینی به چپ */
+[dir="rtl"] .project-card::after {
+    right: auto;
+    left: -100px;
+}
+
+.project-card:hover {
+    transform: translateY(-7px);
+
+    border-color: rgba(226, 193, 108, .65);
+
+    box-shadow: 0 25px 60px rgba(23, 60, 41, .13);
+}
+
+
+/* =========================================================
+   CARD TOP
+   ========================================================= */
+
+.project-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 28px;
+}
+
+.project-number {
+    color: #b18a32;
+
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+[dir="rtl"] .project-number {
+    letter-spacing: 0;
+}
+
+.project-status {
+    padding: 7px 13px;
+
+    border-radius: 50px;
+
+    background: rgba(23, 60, 41, .08);
+
+    color: #24553b;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.project-card-icon {
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    border-radius: 19px;
+
+    background: #173c29;
+
+    color: #e2c16c;
+
+    font-size: 23px;
+
+    transition:
+        transform .3s ease,
+        background .3s ease;
+}
+
+.project-card:hover .project-card-icon {
+    transform: rotate(-4deg) scale(1.05);
+
+    background: #24553b;
+}
+
+.project-card h3 {
+    max-width: 500px;
+
+    margin: 0 0 12px;
+
+    color: #173c29;
+
+    font-size: 22px;
+    line-height: 1.5;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   DESTINATION
+   ========================================================= */
+
+.project-destination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 28px;
+
+    color: #b18a32;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* RTL: آیکون مقصد از راست */
+[dir="rtl"] .project-destination {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.project-destination i {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   DETAILS
+   ========================================================= */
+
+.project-details {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    border-top: 1px solid #edf0eb;
+}
+
+.project-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    padding: 17px 0;
+
+    border-bottom: 1px solid #edf0eb;
+}
+
+.project-detail:nth-child(odd) {
+    padding-inline-end: 18px;
+    border-inline-end: 1px solid #edf0eb;
+}
+
+.project-detail:nth-child(even) {
+    padding-inline-start: 18px;
+}
+
+.project-detail span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #7a837d;
+
+    font-size: 12px;
+}
+
+/* RTL: آیکون جزئیات از راست */
+[dir="rtl"] .project-detail span {
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.project-detail span i {
+    color: #b18a32;
+}
+
+.project-detail strong {
+    color: #20362a;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   CONFIDENTIALITY
+   ========================================================= */
+
+.projects-confidentiality {
+    padding: 0 0 100px;
+}
+
+.confidentiality-box {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+
+    padding: 40px;
+
+    border-radius: 26px;
+
+    background: #eef2ed;
+
+    border: 1px solid rgba(23, 60, 41, .08);
+}
+
+/* RTL: آیکون از راست */
+[dir="rtl"] .confidentiality-box {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
+.confidentiality-icon {
+    width: 68px;
+    height: 68px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background: #173c29;
+
+    color: #e2c16c;
+
+    font-size: 25px;
+}
+
+.confidentiality-content h2 {
+    margin: 0 0 8px;
+
+    color: #173c29;
+
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.confidentiality-content p {
+    max-width: 900px;
+
+    margin: 0;
+
+    color: #657067;
+
+    font-size: 14px;
+    line-height: 2;
+}
+
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.projects-cta {
+    padding: 0 0 100px;
+}
+
+.projects-cta-box {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+
+    padding: 55px 60px;
+
+    overflow: hidden;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #173c29 0%,
+            #24553b 100%
+        );
+
+    color: #fff;
+
+    box-shadow: 0 25px 60px rgba(23, 60, 41, .18);
+}
+
+/* RTL: چیدمان CTA برعکس */
+[dir="rtl"] .projects-cta-box {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
+.projects-cta-box::before {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    top: -160px;
+    right: -80px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(226, 193, 108, .25);
+}
+
+/* RTL: دایره تزئینی CTA به چپ */
+[dir="rtl"] .projects-cta-box::before {
+    right: auto;
+    left: -80px;
+}
+
+.projects-cta-box h2 {
+    position: relative;
+
+    margin: 0 0 12px;
+
+    color: #fff;
+
+    font-size: clamp(26px, 3vw, 38px);
+    line-height: 1.35;
+    font-weight: 800;
+}
+
+.projects-cta-box p {
+    position: relative;
+
+    max-width: 720px;
+
+    margin: 0;
+
+    color: rgba(255, 255, 255, .76);
+
+    font-size: 15px;
+    line-height: 2;
+}
+
+.projects-btn {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+
+    flex-shrink: 0;
+
+    padding: 15px 26px;
+
+    border-radius: 50px;
+
+    background: #e2c16c;
+
+    color: #173c29;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    text-decoration: none;
+
+    transition:
+        transform .25s ease,
+        background .25s ease;
+}
+
+.projects-btn:hover {
+    transform: translateY(-3px);
+
+    background: #fff;
+}
+
+[dir="rtl"] .projects-btn i {
+    transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .projects-intro-grid {
+        grid-template-columns: 1fr;
+
+        gap: 35px;
+    }
+
+    /* RTL: در تبلت هم تک‌ستونه */
+    [dir="rtl"] .projects-intro-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .projects-intro-badge {
+        max-width: 500px;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .projects-page .container {
+        width: min(100% - 36px, 1280px);
+    }
+
+    .projects-hero {
+        min-height: 390px;
+    }
+
+    .projects-hero-content {
+        padding: 70px 0;
+    }
+
+    .projects-hero h1 {
+        font-size: 42px;
+    }
+
+    .projects-hero p {
+        font-size: 15px;
+    }
+
+    .projects-intro {
+        padding: 70px 0 50px;
+    }
+
+    .projects-section {
+        padding: 30px 0 75px;
+    }
+
+    .projects-confidentiality,
+    .projects-cta {
+        padding-bottom: 75px;
+    }
+
+    .project-card {
+        padding: 25px;
+    }
+
+    .confidentiality-box {
+        align-items: flex-start;
+        padding: 30px;
+    }
+
+    /* RTL: در موبایل هم از راست */
+    [dir="rtl"] .confidentiality-box {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .projects-cta-box {
+        flex-direction: column;
+        align-items: flex-start;
+
+        padding: 40px 30px;
+    }
+
+    /* RTL: در موبایل هم ستونی */
+    [dir="rtl"] .projects-cta-box {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .projects-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    .project-details {
+        grid-template-columns: 1fr;
+    }
+
+    .project-detail:nth-child(odd) {
+        padding-inline-end: 0;
+        border-inline-end: none;
+    }
+
+    .project-detail:nth-child(even) {
+        padding-inline-start: 0;
+    }
+
+    .confidentiality-box {
+        flex-direction: column;
+    }
+
+    [dir="rtl"] .confidentiality-box {
+        flex-direction: column;
+    }
+
+    .projects-intro-badge {
+        padding: 28px;
+    }
+}

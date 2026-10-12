@@ -1,0 +1,770 @@
+/* =========================================================
+   IMPORT & EXPORT SERVICES
+   Amir Afaq Gostar Pars
+   ========================================================= */
+
+.import-export-page {
+    background: #f7f8f4;
+    color: #20362a;
+    overflow: hidden;
+}
+
+.import-export-page .container {
+    width: min(1280px, calc(100% - 60px));
+    margin-inline: auto;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.import-export-hero {
+    position: relative;
+
+    min-height: 520px;
+
+    display: flex;
+    align-items: center;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(23, 60, 41, .98) 0%,
+            rgba(23, 60, 41, .90) 42%,
+            rgba(23, 60, 41, .50) 100%
+        ),
+        url('/img/header/hero.webp') center / cover no-repeat;
+
+    color: #fff;
+}
+
+[dir="rtl"] .import-export-hero {
+    background:
+        linear-gradient(
+            270deg,
+            rgba(23, 60, 41, .98) 0%,
+            rgba(23, 60, 41, .90) 42%,
+            rgba(23, 60, 41, .50) 100%
+        ),
+        url('/img/header/hero.webp') center / cover no-repeat;
+}
+
+.import-export-hero-content {
+    max-width: 820px;
+
+    padding: 100px 0;
+}
+
+.import-export-hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 22px;
+    padding: 8px 18px;
+
+    border: 1px solid rgba(226, 193, 108, .55);
+    border-radius: 50px;
+
+    color: #e2c16c;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.import-export-hero-label::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #e2c16c;
+}
+
+.import-export-hero h1 {
+    margin: 0 0 22px;
+
+    color: #fff;
+
+    font-size: clamp(40px, 6vw, 70px);
+    line-height: 1.12;
+    font-weight: 800;
+}
+
+.import-export-hero p {
+    max-width: 720px;
+
+    margin: 0;
+
+    color: rgba(255, 255, 255, .84);
+
+    font-size: 18px;
+    line-height: 2;
+}
+
+.import-export-hero-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+
+    margin-top: 32px;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.import-export-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 11px;
+
+    padding: 15px 25px;
+
+    border-radius: 50px;
+
+    background: #e2c16c;
+
+    color: #173c29;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    text-decoration: none;
+
+    transition:
+        transform .25s ease,
+        background .25s ease,
+        color .25s ease;
+}
+
+.import-export-btn:hover {
+    transform: translateY(-3px);
+
+    background: #fff;
+
+    color: #173c29;
+}
+
+.import-export-btn-outline {
+    background: transparent;
+
+    border: 1px solid rgba(255, 255, 255, .35);
+
+    color: #fff;
+}
+
+.import-export-btn-outline:hover {
+    background: rgba(255, 255, 255, .10);
+
+    border-color: #e2c16c;
+
+    color: #e2c16c;
+}
+
+[dir="rtl"] .import-export-btn i {
+    transform: rotate(180deg);
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+.import-export-intro {
+    padding: 100px 0 70px;
+}
+
+.import-export-intro-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 360px;
+
+    align-items: center;
+
+    gap: 70px;
+}
+
+.import-export-section-label {
+    display: inline-block;
+
+    margin-bottom: 13px;
+
+    color: #b18a32;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.import-export-intro-content h2 {
+    max-width: 760px;
+
+    margin: 0 0 20px;
+
+    color: #173c29;
+
+    font-size: clamp(30px, 4vw, 46px);
+    line-height: 1.3;
+    font-weight: 800;
+}
+
+.import-export-intro-content p {
+    max-width: 780px;
+
+    margin: 0;
+
+    color: #667169;
+
+    font-size: 16px;
+    line-height: 2.1;
+}
+
+.import-export-stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    padding: 35px;
+
+    border-radius: 25px;
+
+    background: #fff;
+
+    border: 1px solid rgba(23, 60, 41, .08);
+
+    box-shadow: 0 20px 55px rgba(23, 60, 41, .08);
+}
+
+.import-export-stat-icon {
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    border-radius: 19px;
+
+    background: #173c29;
+
+    color: #e2c16c;
+
+    font-size: 24px;
+}
+
+.import-export-stat-box strong {
+    margin-bottom: 8px;
+
+    color: #173c29;
+
+    font-size: 19px;
+}
+
+.import-export-stat-box span {
+    color: #6b756e;
+
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+
+/* =========================================================
+   SERVICES
+   ========================================================= */
+
+.import-export-services {
+    padding: 45px 0 105px;
+}
+
+.import-export-heading {
+    max-width: 780px;
+
+    margin: 0 auto 55px;
+
+    text-align: center;
+}
+
+.import-export-heading h2 {
+    margin: 0 0 17px;
+
+    color: #173c29;
+
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.25;
+    font-weight: 800;
+}
+
+.import-export-heading p {
+    margin: 0;
+
+    color: #68736b;
+
+    font-size: 16px;
+    line-height: 2;
+}
+
+
+/* =========================================================
+   SERVICE GRID
+   ========================================================= */
+
+.import-export-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 24px;
+}
+
+
+/* =========================================================
+   SERVICE CARD
+   ========================================================= */
+
+.import-export-card {
+    position: relative;
+
+    padding: 32px;
+
+    overflow: hidden;
+
+    border-radius: 24px;
+
+    background: #fff;
+
+    border: 1px solid rgba(23, 60, 41, .08);
+
+    box-shadow: 0 15px 45px rgba(23, 60, 41, .06);
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+.import-export-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 170px;
+    height: 170px;
+
+    right: -90px;
+    bottom: -90px;
+
+    border-radius: 50%;
+
+    background: rgba(226, 193, 108, .09);
+
+    pointer-events: none;
+}
+
+.import-export-card:hover {
+    transform: translateY(-8px);
+
+    border-color: rgba(226, 193, 108, .65);
+
+    box-shadow: 0 25px 60px rgba(23, 60, 41, .13);
+}
+
+.import-export-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 27px;
+}
+
+.import-export-card-number {
+    color: #b18a32;
+
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.import-export-card-icon {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background: #173c29;
+
+    color: #e2c16c;
+
+    font-size: 21px;
+
+    transition:
+        transform .3s ease,
+        background .3s ease;
+}
+
+.import-export-card:hover .import-export-card-icon {
+    transform: scale(1.06) rotate(-4deg);
+
+    background: #24553b;
+}
+
+.import-export-card h3 {
+    margin: 0 0 13px;
+
+    color: #173c29;
+
+    font-size: 22px;
+    line-height: 1.45;
+    font-weight: 800;
+}
+
+.import-export-card > p {
+    min-height: 75px;
+
+    margin: 0 0 22px;
+
+    color: #68736b;
+
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.import-export-card ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    margin: 0;
+    padding: 20px 0 0;
+
+    list-style: none;
+
+    border-top: 1px solid #edf0eb;
+}
+
+.import-export-card li {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+
+    color: #405047;
+
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.import-export-card li i {
+    flex-shrink: 0;
+
+    margin-top: 4px;
+
+    color: #b18a32;
+
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   PROCESS
+   ========================================================= */
+
+.import-export-process {
+    padding: 100px 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            #173c29 0%,
+            #24553b 100%
+        );
+
+    color: #fff;
+}
+
+.import-export-heading-light h2 {
+    color: #fff;
+}
+
+.import-export-heading-light p {
+    color: rgba(255, 255, 255, .72);
+}
+
+.import-export-heading-light .import-export-section-label {
+    color: #e2c16c;
+}
+
+.import-export-process-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+.import-export-process-item {
+    position: relative;
+
+    min-height: 245px;
+
+    padding: 28px;
+
+    border: 1px solid rgba(255, 255, 255, .12);
+
+    border-radius: 22px;
+
+    background: rgba(255, 255, 255, .055);
+
+    transition:
+        transform .3s ease,
+        background .3s ease;
+}
+
+.import-export-process-item:hover {
+    transform: translateY(-7px);
+
+    background: rgba(255, 255, 255, .09);
+}
+
+.import-export-process-item > span {
+    display: block;
+
+    margin-bottom: 28px;
+
+    color: #e2c16c;
+
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.import-export-process-item i {
+    display: block;
+
+    margin-bottom: 18px;
+
+    color: #e2c16c;
+
+    font-size: 25px;
+}
+
+.import-export-process-item h3 {
+    margin: 0 0 10px;
+
+    color: #fff;
+
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.import-export-process-item p {
+    margin: 0;
+
+    color: rgba(255, 255, 255, .67);
+
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.import-export-cta {
+    padding: 100px 0;
+}
+
+.import-export-cta-box {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 40px;
+
+    padding: 55px 60px;
+
+    overflow: hidden;
+
+    border-radius: 30px;
+
+    background: #fff;
+
+    border: 1px solid rgba(23, 60, 41, .08);
+
+    box-shadow: 0 20px 55px rgba(23, 60, 41, .08);
+}
+
+.import-export-cta-box::after {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    right: -130px;
+    top: -130px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(226, 193, 108, .35);
+}
+
+.import-export-cta-box h2 {
+    position: relative;
+
+    max-width: 760px;
+
+    margin: 0 0 12px;
+
+    color: #173c29;
+
+    font-size: clamp(26px, 3vw, 38px);
+    line-height: 1.4;
+    font-weight: 800;
+}
+
+.import-export-cta-box p {
+    position: relative;
+
+    max-width: 700px;
+
+    margin: 0;
+
+    color: #69736c;
+
+    font-size: 15px;
+    line-height: 2;
+}
+
+.import-export-cta-box .import-export-btn {
+    position: relative;
+
+    flex-shrink: 0;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .import-export-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .import-export-process-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .import-export-intro-grid {
+        grid-template-columns: 1fr 320px;
+
+        gap: 40px;
+    }
+}
+
+
+@media (max-width: 850px) {
+
+    .import-export-intro-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .import-export-stat-box {
+        max-width: 500px;
+    }
+
+    .import-export-cta-box {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .import-export-page .container {
+        width: min(100% - 36px, 1280px);
+    }
+
+    .import-export-hero {
+        min-height: 450px;
+    }
+
+    .import-export-hero-content {
+        padding: 75px 0;
+    }
+
+    .import-export-hero h1 {
+        font-size: 40px;
+    }
+
+    .import-export-hero p {
+        font-size: 15px;
+    }
+
+    .import-export-hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .import-export-hero-actions .import-export-btn {
+        width: 100%;
+    }
+
+    .import-export-intro {
+        padding: 70px 0 50px;
+    }
+
+    .import-export-services {
+        padding: 35px 0 75px;
+    }
+
+    .import-export-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .import-export-card > p {
+        min-height: auto;
+    }
+
+    .import-export-process {
+        padding: 75px 0;
+    }
+
+    .import-export-process-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .import-export-process-item {
+        min-height: auto;
+    }
+
+    .import-export-cta {
+        padding: 75px 0;
+    }
+
+    .import-export-cta-box {
+        padding: 38px 28px;
+    }
+
+    .import-export-cta-box .import-export-btn {
+        width: 100%;
+    }
+}

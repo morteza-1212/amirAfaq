@@ -232,9 +232,9 @@
 
                 @php
                     $posts = [
-                        ['img' => 'blog-1.png', 'cat_key' => 'export',    'date' => '۳۰ آذر ۱۴۰۴', 'comments' => '۶', 'key' => 'post1'],
-                        ['img' => 'blog-2.png', 'cat_key' => 'import',    'date' => '۲۵ آذر ۱۴۰۴', 'comments' => '۴', 'key' => 'post2'],
-                        ['img' => 'blog-3.png', 'cat_key' => 'market',    'date' => '۲۰ آذر ۱۴۰۴', 'comments' => '۸', 'key' => 'post3'],
+                        ['img' => 'export.webp', 'cat_key' => 'export', 'date' => '۳۰ آذر ۱۴۰۴', 'comments' => '۶', 'key' => 'post1', 'route' => 'blog.export'],
+                        ['img' => 'hmport2.webp', 'cat_key' => 'import', 'date' => '۲۵ آذر ۱۴۰۴', 'comments' => '۴', 'key' => 'post2', 'route' => 'blog.import'],
+                        ['img' => 'market.webp', 'cat_key' => 'market', 'date' => '۲۰ آذر ۱۴۰۴', 'comments' => '۸', 'key' => 'post3', 'route' => 'blog.markets'],
                     ];
                 @endphp
 
@@ -242,7 +242,7 @@
                     <div class="col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="{{ 0.2 * ($i + 1) }}s">
                         <div class="blog-item">
                             <div class="blog-img">
-                                <img src="{{ asset('img/' . $p['img']) }}" class="img-fluid rounded-top w-100"
+                                <img src="{{ asset('/img/blog/' . $p['img']) }}" class="img-fluid rounded-top w-100"
                                      loading="lazy" alt="{{ __('home.blog.posts.' . $p['key'] . '.title') }}">
                                 <div class="blog-categiry py-2 px-4">
                                     <span>{{ __('home.blog.categories.' . $p['cat_key']) }}</span>
@@ -263,11 +263,15 @@
                                         {{ $p['comments'] }} {{ __('home.blog.comments') }}
                                     </div>
                                 </div>
-                                <a href="{{ $blogUrl }}" class="h4 d-inline-block mb-3">
+
+                                <a href="{{ route($p['route'], ['locale' => app()->getLocale()]) }}"
+                                   class="h4 d-inline-block mb-3">
                                     {{ __('home.blog.posts.' . $p['key'] . '.title') }}
                                 </a>
+
                                 <p class="mb-3">{{ __('home.blog.posts.' . $p['key'] . '.text') }}</p>
-                                <a href="{{ $blogUrl }}" class="btn p-0">
+
+                                <a href="{{ route($p['route'], ['locale' => app()->getLocale()]) }}" class="btn p-0">
                                     {{ __('home.blog.read_more') }}
                                     <i class="fa fa-arrow-right"></i>
                                 </a>
@@ -283,7 +287,7 @@
 
 
     <!-- Team Start -->
-    <div class="container-fluid team py-5">
+    <div class="container-fluid team py-5" id="team">
         <div class="container py-5">
             <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
                 <h4 class="text-primary">{{ __('home.team.badge') }}</h4>

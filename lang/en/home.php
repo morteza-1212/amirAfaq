@@ -40,6 +40,10 @@ return [
         'cooperation'      => 'Request Cooperation',
         'experts'          => 'Our Experts',
         'call'             => 'Call Us',
+        'catalogs' => 'Catalogs',
+        'buyer'    => 'Buyer',
+        'gallery'  => 'Gallery',
+        'projects' => 'Projects',
     ],
 
     'carousel' => [

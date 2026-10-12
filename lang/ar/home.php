@@ -40,6 +40,10 @@ return [
         'cooperation'      => 'طلب التعاون',
         'experts'          => 'خبراؤنا',
         'call'             => 'اتصل بنا',
+        'catalogs' => 'الكتالوجات',
+        'buyer'    => 'المشتري',
+        'gallery'  => 'معرض الصور',
+        'projects' => 'المشاريع',
     ],
 
     'carousel' => [

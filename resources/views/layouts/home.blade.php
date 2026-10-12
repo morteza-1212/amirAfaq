@@ -20,8 +20,9 @@
 
     $homeUrl     = url($locale);
     $aboutUrl    = url($locale . '/about');
+    $blogExportUrl     =url($locale . '/blog/export');
     $servicesUrl = url($locale . '/services');
-    $productsUrl = url($locale . '/products');
+    $productsUrl = url($locale . '/product-export');
     $exportUrl   = url($locale . '/export');
     $importUrl   = url($locale . '/import');
     $logisticsUrl= url($locale . '/logistics');
@@ -29,6 +30,13 @@
     $contactUrl  = url($locale . '/contact');
     $suppliersUrl = url($locale . '/suppliers');
     $marketsUrl = url($locale  . '/markets');
+        $catalogs = url($locale  . '/catalogs');
+    $contact = url($locale  . '/contact');
+    $buyer = url($locale  . '/buyer');
+        $gallery = url($locale  . '/gallery');
+        $projectsUrl = url($locale  . '/projects');
+
+
 
 
     /*
@@ -2104,11 +2112,11 @@
      NAVBAR
 ========================================================== --}}
 
-<div class="container-fluid nav-bar px-0">
+<div class="container-fluid nav-bar px-0" style="background-color: #0F1C05 ">
 
-    <div class="container">
+    <div class="container" >
 
-        <nav class="navbar navbar-expand-lg navbar-light">
+        <nav class="navbar navbar-expand-lg " style="color: white">
 
 
             {{-- Logo --}}
@@ -2118,7 +2126,7 @@
             >
 
                 <img
-                    src="{{ asset('img/logo/Duck-ai-image-2026-09-27-13-54.jpeg') }}"
+                    src="{{ asset('img/logo2/logo.jpg') }}"
                     alt="{{ __('home.navbar.logo_alt') }}"
                     width="180"
                     height="70"
@@ -2138,6 +2146,7 @@
                 aria-controls="navbarCollapse"
                 aria-expanded="false"
                 aria-label="{{ __('home.navbar.toggle_menu') }}"
+                style="color: white"
             >
 
                 <span class="fa fa-bars"></span>
@@ -2174,10 +2183,10 @@
 
                     {{-- Services --}}
                     <a
-                        href="{{ $servicesUrl }}"
-                        class="nav-item nav-link {{ request()->is($locale . '/services') ? 'active' : '' }}"
+                        href="{{ $projectsUrl }}"
+                        class="nav-item nav-link {{ request()->is($locale . '/project') ? 'active' : '' }}"
                     >
-                        {{ __('home.navbar.services') }}
+                        {{ __('home.navbar.projects') }}
                     </a>
 
 
@@ -2237,11 +2246,32 @@
                                 {{ __('home.navbar.logistics') }}
                             </a>
 
+                            <a href="{{ $homeUrl }}#team" class="dropdown-item">
+                                {{ __('home.navbar.team') }}
+                            </a>
                             <a
-                                href="{{ $teamUrl }}"
+                                href="{{ $catalogs }}"
                                 class="dropdown-item"
                             >
-                                {{ __('home.navbar.team') }}
+                                {{ __('home.navbar.catalogs') }}
+                            </a>
+                            <a
+                                href="{{ $buyer }}"
+                                class="dropdown-item"
+                            >
+                                {{ __('home.navbar.buyer') }}
+                            </a>
+{{--                            <a--}}
+{{--                                href="{{ $contact }}"--}}
+{{--                                class="dropdown-item"--}}
+{{--                            >--}}
+{{--                                {{ __('home.navbar.contact') }}--}}
+{{--                            </a>--}}
+                            <a
+                                href="{{ $gallery }}"
+                                class="dropdown-item"
+                            >
+                                {{ __('home.navbar.gallery') }}
                             </a>
 
                         </div>
@@ -2251,7 +2281,7 @@
 
                     {{-- Contact --}}
                     <a
-                        href="{{ $contactUrl }}"
+                        href="{{ $contact }}"
                         class="nav-item nav-link {{ request()->is($locale . '/contact') ? 'active' : '' }}"
                     >
                         {{ __('home.navbar.contact') }}
@@ -2309,7 +2339,7 @@
                         dir="ltr"
                     >
 
-                        <span class="text-dark fw-semibold">
+                        <span class=" fw-semibold">
                             {{ __('home.topbar.phone') }}
                         </span>
 

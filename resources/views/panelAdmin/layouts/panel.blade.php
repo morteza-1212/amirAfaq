@@ -769,6 +769,16 @@
 
             </a>
         </li>
+        @inject('gallery', 'App\Models\Gallery')
+
+        <li class="nav-item">
+            <a href="{{route('admin.gallery.index')}}" class="nav-link">
+                <i class="fas fa-palette"></i>
+                <span class="nav-text">  گالری</span>
+                <span class="badge">{{ $gallery->count() }}</span>
+
+            </a>
+        </li>
 
         <!-- سایزها -->
         <li class="nav-item">

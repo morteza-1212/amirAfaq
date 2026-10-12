@@ -3,404 +3,221 @@
 namespace App\Http\Controllers\panelAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    /* ============================================================
+     |  Index
+     ============================================================ */
+    public function index(Request $request): View
     {
-        $query = Product::with([
-            'category',
-            'translations',
-        ]);
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-
-            $query->where(function ($q) use ($search) {
-
-                $q->where('code', 'like', "%{$search}%")
-                    ->orWhere('sku', 'like', "%{$search}%")
-                    ->orWhereHas('translations', function ($translation) use ($search) {
-                        $translation
-                            ->where('name', 'like', "%{$search}%")
-                            ->orWhere('slug', 'like', "%{$search}%");
-                    });
-            });
-        }
-
-        if ($request->filled('type')) {
-            $query->where('type', $request->type);
-        }
-
-        if ($request->filled('status')) {
-            $query->where(
-                'is_active',
-                $request->status === 'active'
-            );
-        }
-
-        $products = $query
-            ->orderBy('sort_order')
-            ->latest()
+        $products = Product::query()
+            ->with(['translations', 'category.translations'])
+            ->when($request->filled('search'),
+                fn ($q) => $q->search($request->string('search')))
+            ->when($request->filled('type'),
+                fn ($q) => $q->ofType($request->string('type')))
+            ->when($request->filled('status'), function ($q) use ($request) {
+                $q->where('is_active', $request->string('status') === 'active');
+            })
+            ->ordered()
             ->paginate(15)
             ->withQueryString();
 
         return view('panelAdmin.product.index', compact('products'));
     }
 
-    public function create()
+    /* ============================================================
+     |  Create
+     ============================================================ */
+    public function create(): View
     {
-        $categories = Category::with('translations')
-            ->orderBy('id')
-            ->get();
+        $categories = Category::with('translations')->get();
 
-        return view(
-            'panelAdmin.product.create',
-            compact('categories')
-        );
+        return view('panelAdmin.product.create', compact('categories'));
     }
 
-    public function store(Request $request)
+    /* ============================================================
+     |  Store
+     ============================================================ */
+    public function store(StoreProductRequest $request ,Product $product): RedirectResponse
     {
-        $validated = $request->validate([
+        $data = $request->validated();
 
-            'category_id' => [
-                'required',
-                'exists:categories,id',
-            ],
+        // code خودکار در مدل ساخته می‌شود
+        unset($data['code']);
 
-//            'code' => [
-//                'required',
-//                'string',
-//                'max:100',
-//                'unique:products,code',
-//            ],
-
-            'sku' => [
-                'nullable',
-                'string',
-                'max:100',
-                'unique:products,sku',
-            ],
-
-            'type' => [
-                'required',
-                'in:export,import,both',
-            ],
-
-            'image' => [
-                'nullable',
-                'image',
-                'mimes:jpg,jpeg,png,webp',
-                'max:2048',
-            ],
-
-            'gallery.*' => [
-                'nullable',
-                'image',
-                'mimes:jpg,jpeg,png,webp',
-                'max:2048',
-            ],
-
-            'unit' => [
-                'nullable',
-                'string',
-                'max:50',
-            ],
-
-            'weight' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'origin_country' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
-
-            'minimum_order' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'preparation_days' => [
-                'nullable',
-                'integer',
-                'min:0',
-            ],
-
-            'stock_status' => [
-                'required',
-                'in:in_stock,out_of_stock,on_request',
-            ],
-
-            'sort_order' => [
-                'nullable',
-                'integer',
-                'min:0',
-            ],
-
-            'is_active' => [
-                'nullable',
-                'boolean',
-            ],
-
-            'is_featured' => [
-                'nullable',
-                'boolean',
-            ],
-        ]);
-        $validated['code'] = $this->generateUniqueCode();
-
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request
-                ->file('image')
-                ->store('products', 'public');
-        }
-
-        $gallery = [];
-
-        if ($request->hasFile('gallery')) {
-            foreach ($request->file('gallery') as $image) {
-                $gallery[] = $image->store(
-                    'products/gallery',
-                    'public'
-                );
-            }
-        }
-
-        $validated['gallery'] = $gallery;
-
-        $validated['is_active'] =
-            $request->boolean('is_active');
-
-        $validated['is_featured'] =
-            $request->boolean('is_featured');
-
-        $product = Product::create($validated);
-
-        return redirect()
-            ->route('admin.product.index', $product)
-            ->with(
-                'success',
-                'محصول با موفقیت ایجاد شد. اکنون ترجمه‌های محصول را اضافه کنید.'
-            );
-    }
-
-    public function show(Product $product)
-    {
-        $product->load([
-            'category',
-            'translations',
-        ]);
-
-        return view(
-            'panelAdmin.products.show',
-            compact('product')
-        );
-    }
-
-    public function edit(Product $product)
-    {
-        $product->load('translations');
-
-        $categories = Category::with('translations')
-            ->orderBy('id')
-            ->get();
-
-        return view(
-            'panelAdmin.product.edit',
-            compact('product', 'categories')
-        );
-    }
-
-    public function update(Request $request, Product $product)
-    {
-        $validated = $request->validate([
-
-            'category_id' => [
-                'required',
-                'exists:categories,id',
-            ],
-
-//            'code' => [
-//                'required',
-//                'string',
-//                'max:100',
-//                'unique:products,code,' . $product->id,
-//            ],
-
-            'sku' => [
-                'nullable',
-                'string',
-                'max:100',
-                'unique:products,sku,' . $product->id,
-            ],
-
-            'type' => [
-                'required',
-                'in:export,import,both',
-            ],
-
-            'image' => [
-                'nullable',
-                'image',
-                'mimes:jpg,jpeg,png,webp',
-                'max:2048',
-            ],
-
-            'gallery.*' => [
-                'nullable',
-                'image',
-                'mimes:jpg,jpeg,png,webp',
-                'max:2048',
-            ],
-
-            'unit' => [
-                'nullable',
-                'string',
-                'max:50',
-            ],
-
-            'weight' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'origin_country' => [
-                'nullable',
-                'string',
-                'max:100',
-            ],
-
-            'minimum_order' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'preparation_days' => [
-                'nullable',
-                'integer',
-                'min:0',
-            ],
-
-            'stock_status' => [
-                'required',
-                'in:in_stock,out_of_stock,on_request',
-            ],
-
-            'sort_order' => [
-                'nullable',
-                'integer',
-                'min:0',
-            ],
-
-            'is_active' => [
-                'nullable',
-                'boolean',
-            ],
-
-            'is_featured' => [
-                'nullable',
-                'boolean',
-            ],
-        ]);
-        $validated['code'] = $this->generateUniqueCode();
-
-        if ($request->hasFile('image')) {
-
-            if ($product->image) {
-                Storage::disk('public')
-                    ->delete($product->image);
+        DB::transaction(function () use ($request, &$data) {
+            // تصویر
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('products', 'public');
             }
 
-            $validated['image'] = $request
-                ->file('image')
-                ->store('products', 'public');
-        }
-
-        $gallery = $product->gallery ?? [];
-
-        if ($request->hasFile('gallery')) {
-
-            foreach ($request->file('gallery') as $image) {
-                $gallery[] = $image->store(
-                    'products/gallery',
-                    'public'
-                );
+            // گالری
+            if ($request->hasFile('gallery')) {
+                $galleryPaths = [];
+                foreach ($request->file('gallery') as $file) {
+                    $galleryPaths[] = $file->store('products/gallery', 'public');
+                }
+                $data['gallery'] = $galleryPaths;
             }
-        }
 
-        $validated['gallery'] = $gallery;
+            $translations = $data['translations'] ?? [];
+            unset($data['translations']);
 
-        $validated['is_active'] =
-            $request->boolean('is_active');
+            $product = Product::create($data);   // ← code اینجا خودکار تولید می‌شود
 
-        $validated['is_featured'] =
-            $request->boolean('is_featured');
-
-        $product->update($validated);
-
-        return redirect()
-            ->route('admin.product.edit', $product)
-            ->with(
-                'success',
-                'اطلاعات محصول با موفقیت بروزرسانی شد.'
-            );
-    }
-
-    public function destroy(Product $product)
-    {
-        if ($product->image) {
-            Storage::disk('public')
-                ->delete($product->image);
-        }
-
-        if ($product->gallery) {
-            foreach ($product->gallery as $image) {
-                Storage::disk('public')
-                    ->delete($image);
-            }
-        }
-
-        $product->delete();
+            $this->saveTranslations($product, $translations);
+        });
 
         return redirect()
             ->route('admin.product.index')
-            ->with(
-                'success',
-                'محصول با موفقیت حذف شد.'
-            );
+            ->with('success', 'محصول با موفقیت ایجاد شد. کد محصول: ' . $product->code);
     }
-    /**
-     * تولید کد عددی یکتا در بازه ۱۰ تا ۱,۰۰۰,۰۰۰
-     */
-    private function generateUniqueCode(): string
+
+    /* ============================================================
+     |  Show
+     ============================================================ */
+    public function show(Product $product): View
     {
-        $min = 10;
+        $product->load(['translations', 'category.translations']);
 
-        // بیشترین کد عددی موجود در دیتابیس
-        $maxCode = Product::max('code');
+        return view('panelAdmin.products.show', compact('product'));
+    }
 
-        if ($maxCode === null) {
-            // اگر هیچ محصولی وجود ندارد، از min شروع کن
-            return (string) $min;
+    /* ============================================================
+     |  Edit
+     ============================================================ */
+    public function edit(Product $product): View
+    {
+        $product->load(['translations', 'category.translations']);
+        $categories = Category::with('translations')->get();
+
+        return view('panelAdmin.product.edit', compact('product', 'categories'));
+    }
+
+    /* ============================================================
+     |  Update
+     ============================================================ */
+    public function update(UpdateProductRequest $request, Product $product): RedirectResponse
+    {
+        $data = $request->validated();
+
+        DB::transaction(function () use ($request, $product, &$data) {
+            // تصویر اصلی
+            if ($request->hasFile('image')) {
+                if ($product->image && Storage::disk('public')->exists($product->image)) {
+                    Storage::disk('public')->delete($product->image);
+                }
+                $data['image'] = $request->file('image')->store('products', 'public');
+            } else {
+                unset($data['image']);
+            }
+
+            // گالری
+            if ($request->hasFile('gallery')) {
+                if (! empty($product->gallery)) {
+                    foreach ($product->gallery as $oldImage) {
+                        if (Storage::disk('public')->exists($oldImage)) {
+                            Storage::disk('public')->delete($oldImage);
+                        }
+                    }
+                }
+
+                $galleryPaths = [];
+                foreach ($request->file('gallery') as $file) {
+                    $galleryPaths[] = $file->store('products/gallery', 'public');
+                }
+                $data['gallery'] = $galleryPaths;
+            } else {
+                unset($data['gallery']);
+            }
+
+            $translations = $data['translations'] ?? [];
+            unset($data['translations']);
+
+            $product->update($data);
+
+            $this->saveTranslations($product, $translations);
+        });
+
+        return redirect()
+            ->route('admin.product.index')
+            ->with('success', 'محصول با موفقیت به‌روزرسانی شد.');
+    }
+
+    /* ============================================================
+     |  Destroy
+     ============================================================ */
+    public function destroy(Product $product): RedirectResponse
+    {
+        DB::transaction(function () use ($product) {
+            // حذف تصویر اصلی
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
+                Storage::disk('public')->delete($product->image);
+            }
+
+            // حذف گالری
+            if (! empty($product->gallery)) {
+                foreach ($product->gallery as $image) {
+                    if (Storage::disk('public')->exists($image)) {
+                        Storage::disk('public')->delete($image);
+                    }
+                }
+            }
+
+            $product->delete();
+        });
+
+        return redirect()
+            ->route('admin.product.index')
+            ->with('success', 'محصول با موفقیت حذف شد.');
+    }
+
+    /* ============================================================
+     |  Helper
+     ============================================================ */
+    protected function saveTranslations(Product $product, array $translations): void
+    {
+        foreach ($translations as $locale => $values) {
+            if (empty($values['name'])) {
+                continue;
+            }
+
+            if (empty($values['slug'])) {
+                $values['slug'] = Product::generateUniqueSlug(
+                    $values['name'],
+                    $locale,
+                    $product->id
+                );
+            }
+
+            $product->translations()->updateOrCreate(
+                ['locale' => $locale],
+                [
+                    'name'              => $values['name'],
+                    'slug'              => $values['slug'],
+                    'short_description' => $values['short_description'] ?? null,
+                    'description'       => $values['description'] ?? null,
+                    'specifications'    => $values['specifications'] ?? null,
+                    'features'          => $values['features'] ?? null,
+                    'packaging'         => $values['packaging'] ?? null,
+                    'shipping_info'     => $values['shipping_info'] ?? null,
+                    'meta_title'        => $values['meta_title'] ?? null,
+                    'meta_description'  => $values['meta_description'] ?? null,
+                    'meta_keywords'     => $values['meta_keywords'] ?? null,
+                    'alt_text'          => $values['alt_text'] ?? null,
+                ]
+            );
         }
-
-        // اگر maxCode کمتر از min بود (مثلاً کدهای متنی قدیمی)، از min شروع کن
-        if (!is_numeric($maxCode) || (int) $maxCode < $min) {
-            return (string) $min;
-        }
-
-        return (string) ((int) $maxCode + 1);
     }
 }

@@ -9,6 +9,10 @@ use \App\Http\Controllers\panelAdmin\ProductController;
 use \App\Http\Controllers\panelAdmin\ProductTranlationController;
 use \App\Http\Controllers\panelAdmin\CatalogController;
 use \App\Http\Controllers\panelAdmin\CatalogTranslationController;
+use \App\Http\Controllers\panelAdmin\GalleryController;
+use \App\Http\Controllers\panelAdmin\GalleryTranslationController;
+
+use \App\Http\Controllers\BlogController;
 
 use \App\Http\Controllers\HomeController;
 
@@ -66,6 +70,17 @@ Route::prefix('{locale}')
         Route::post('/buyer', [HomeController::class, 'store'])->name('buyer.store');
         Route::get('/catalogs', [HomeController::class, 'catalogs'])->name('catalogs');
         Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+        Route::get('/product-export', [HomeController::class, 'productExport'])->name('productExport');
+        Route::get('/gallery', [HomeController::class, 'gallery'])->name('gallery');
+        Route::get('/projects', [HomeController::class, 'projects'])->name('projects');
+        Route::get('/services', [HomeController::class, 'services'])->name('services');
+        Route::get('/blog/export', [BlogController::class, 'export'])->name('blog.export');
+        Route::get('/blog/import', [BlogController::class, 'import'])->name('blog.import');
+        Route::get('/blog/markets', [BlogController::class, 'markets'])->name('blog.markets');
+
+
+
+
 
 
     });
@@ -257,4 +272,69 @@ Route::prefix('panelAdmin')->group(function () {
         )->name('admin.catalog.translation.delete');
 
     });
+    Route::prefix('gallery')->group(function () {
+
+        // لیست گالری‌ها
+        Route::get('/', [GalleryController::class, 'index'])
+            ->name('admin.gallery.index');
+
+        // فرم ایجاد
+        Route::get('/create', [GalleryController::class, 'create'])
+            ->name('admin.gallery.create');
+
+        // ذخیره
+        Route::post('/', [GalleryController::class, 'store'])
+            ->name('admin.gallery.store');
+
+        // نمایش
+        Route::get('/{gallery}', [GalleryController::class, 'show'])
+            ->name('admin.gallery.show');
+
+        // فرم ویرایش
+        Route::get('/{gallery}/edit', [GalleryController::class, 'edit'])
+            ->name('admin.gallery.edit');
+
+        // به‌روزرسانی
+        Route::put('/{gallery}', [GalleryController::class, 'update'])
+            ->name('admin.gallery.update');
+
+        // حذف
+        Route::delete('/{gallery}', [GalleryController::class, 'destroy'])
+            ->name('admin.gallery.destroy');
+
+        // ============================================================
+        // ترجمه‌های گالری
+        // ============================================================
+        Route::prefix('{gallery}/translations')->group(function () {
+
+            // لیست ترجمه‌ها
+            Route::get('/', [GalleryTranslationController::class, 'index'])
+                ->name('admin.gallery.translations.index');
+
+            // فرم ایجاد
+            Route::get('/create', [GalleryTranslationController::class, 'create'])
+                ->name('admin.gallery.translations.create');
+
+            // ذخیره
+            Route::post('/', [GalleryTranslationController::class, 'store'])
+                ->name('admin.gallery.translations.store');
+
+            // نمایش
+            Route::get('/{galleryTranslation}', [GalleryTranslationController::class, 'show'])
+                ->name('admin.gallery.translations.show');
+
+            // فرم ویرایش
+            Route::get('/{galleryTranslation}/edit', [GalleryTranslationController::class, 'edit'])
+                ->name('admin.gallery.translations.edit');
+
+            // به‌روزرسانی
+            Route::put('/{galleryTranslation}', [GalleryTranslationController::class, 'update'])
+                ->name('admin.gallery.translations.update');
+
+            // حذف
+            Route::delete('/{galleryTranslation}', [GalleryTranslationController::class, 'destroy'])
+                ->name('admin.gallery.translations.destroy');
+        });
+    });
+
 });

@@ -73,4 +73,20 @@ class HomeController extends Controller
     {
         return view('contactUs.index');
     }
+    public function productExport()
+    {
+        return view('export.products');
+    }
+    public function gallery()
+    {
+        return view('gallery.index');
+    }
+    public function projects()
+    {
+        return view('projects.index');
+    }
+    public function services()
+    {
+        return view('services.index');
+    }
 }

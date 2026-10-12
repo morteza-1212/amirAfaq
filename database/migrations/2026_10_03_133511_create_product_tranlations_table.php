@@ -6,13 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('product_tranlations', function (Blueprint $table) {
-
             $table->id();
 
             $table->foreignId('product_id')
@@ -49,34 +45,32 @@ return new class extends Migration
 
             // SEO
             $table->string('meta_title')->nullable();
-
             $table->text('meta_description')->nullable();
-
             $table->text('meta_keywords')->nullable();
+
+            // متن جایگزین تصویر
+            $table->string('alt_text')->nullable();
 
             $table->timestamps();
 
             // هر محصول در هر زبان فقط یک ترجمه داشته باشد
             $table->unique(
                 ['product_id', 'locale'],
-                'product_translation_product_locale_unique'
+                'product_tranlation_product_locale_unique'
             );
 
             // slug در هر زبان یکتا باشد
             $table->unique(
                 ['locale', 'slug'],
-                'product_translation_locale_slug_unique'
+                'product_tranlation_locale_slug_unique'
             );
 
             $table->index('locale');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('product_translations');
+        Schema::dropIfExists('product_tranlations');
     }
 };

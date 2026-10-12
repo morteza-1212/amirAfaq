@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductTranlation extends Model
 {
-    use HasFactory;
+    /**
+     * نام جدول (چون با Convention لاراول متفاوت است، صریحاً تعریف می‌شود)
+     */
     protected $table = 'product_tranlations';
+
     protected $fillable = [
         'product_id',
         'locale',
@@ -24,6 +26,7 @@ class ProductTranlation extends Model
         'meta_title',
         'meta_description',
         'meta_keywords',
+        'alt_text',
     ];
 
     public function product(): BelongsTo

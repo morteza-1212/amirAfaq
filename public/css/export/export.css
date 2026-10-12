@@ -1,6 +1,6 @@
 /* =========================================================
    EXPORT LANDING PAGE - Amir Afaq Gostar Pars
-   Optimized for Performance
+   Optimized for Performance + RTL Support (Content on LEFT)
 ========================================================= */
 
 .export-page {
@@ -40,18 +40,19 @@
         rgba(7, 35, 21, .45) 75%,
         rgba(7, 35, 21, .18) 100%
         ),
-        url('/img/markets/Duck-ai-image-2026-10-06-15-41.webp') center / cover no-repeat;
+        url('/img/section/صادرات هوشمند و مطمئن .webp') center / cover no-repeat;
 }
 
+/* RTL Hero - تیرگی سمت چپ تا متن روی آن خوانا باشد */
 [dir="rtl"] .export-hero {
     background:
-        linear-gradient(270deg,
-        rgba(7, 35, 21, .98) 0%,
-        rgba(7, 35, 21, .88) 42%,
-        rgba(7, 35, 21, .45) 75%,
-        rgba(7, 35, 21, .18) 100%
+        linear-gradient(90deg,
+        rgba(7, 35, 21, .18) 0%,
+        rgba(7, 35, 21, .45) 25%,
+        rgba(7, 35, 21, .88) 58%,
+        rgba(7, 35, 21, .98) 100%
         ),
-        url('/img/header/hero.webp') center / cover no-repeat;
+        url('/img/section/صادرات هوشمند و مطمئن .webp') center / cover no-repeat;
 }
 
 .export-hero::after {
@@ -65,12 +66,25 @@
     bottom: -260px;
 }
 
+/* RTL: دایره تزئینی به سمت راست */
+[dir="rtl"] .export-hero::after {
+    left: auto;
+    right: -220px;
+}
+
 .export-hero-content {
     position: relative;
     z-index: 2;
     max-width: 820px;
     padding: 100px 0;
     color: #fff;
+}
+
+/* RTL: محتوا در سمت چپ */
+[dir="rtl"] .export-hero-content {
+    margin-left: 0;
+    margin-right: auto;
+    text-align: left;
 }
 
 .export-hero-label {
@@ -100,6 +114,10 @@
     letter-spacing: -1px;
 }
 
+[dir="rtl"] .export-hero h1 {
+    letter-spacing: 0;
+}
+
 .export-hero h1 span {
     color: #e2c16c;
 }
@@ -125,6 +143,12 @@
     display: flex;
     flex-wrap: wrap;
     gap: 14px;
+}
+
+/* RTL: دکمه‌ها از چپ شروع شوند */
+[dir="rtl"] .export-hero-buttons {
+    flex-direction: row;
+    justify-content: flex-start;
 }
 
 .export-btn-primary,
@@ -188,6 +212,22 @@
     border-left: 0;
 }
 
+/* RTL: خط جداکننده از سمت راست */
+[dir="rtl"] .export-stat {
+    border-left: 0;
+    border-right: 1px solid rgba(255, 255, 255, .12);
+}
+
+[dir="rtl"] .export-stat:first-child {
+    border-right: 0;
+    padding-right: 25px;
+    padding-left: 0;
+}
+
+[dir="rtl"] .export-stat:last-child {
+    padding-left: 0;
+}
+
 .export-stat strong {
     display: block;
     margin-bottom: 4px;
@@ -228,6 +268,11 @@
     letter-spacing: 1px;
 }
 
+[dir="rtl"] .export-intro-label,
+[dir="rtl"] .export-section-label {
+    letter-spacing: 0;
+}
+
 .export-intro h2 {
     margin: 0 0 22px;
     color: #173c29;
@@ -261,6 +306,11 @@
     border-radius: 50%;
     top: -100px;
     left: -80px;
+}
+
+[dir="rtl"] .export-intro-card::before {
+    left: auto;
+    right: -80px;
 }
 
 .export-intro-card-inner {
@@ -361,6 +411,11 @@
     font-weight: 800;
 }
 
+[dir="rtl"] .export-service-number {
+    left: auto;
+    right: 18px;
+}
+
 .export-service-icon {
     position: relative;
     width: 58px;
@@ -450,6 +505,11 @@
     border-radius: 50%;
     right: -70px;
     bottom: -80px;
+}
+
+[dir="rtl"] .export-transport-card::after {
+    right: auto;
+    left: -70px;
 }
 
 /* =========================================================
@@ -558,6 +618,11 @@
     background: #fafbf8;
 }
 
+[dir="rtl"] .export-benefit {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
 .export-benefit-icon {
     flex: 0 0 40px;
     width: 40px;
@@ -637,6 +702,11 @@
     right: -150px;
     border: 1px solid rgba(226, 193, 108, .14);
     border-radius: 50%;
+}
+
+[dir="rtl"] .export-chain::before {
+    right: auto;
+    left: -150px;
 }
 
 .export-chain-content {
@@ -725,6 +795,11 @@
     border-radius: 50%;
     top: -180px;
     left: -80px;
+}
+
+[dir="rtl"] .export-cta-box::before {
+    left: auto;
+    right: -80px;
 }
 
 .export-cta-box > * {
@@ -825,6 +900,10 @@
         align-items: stretch;
     }
 
+    [dir="rtl"] .export-hero-buttons {
+        flex-direction: column;
+    }
+
     .export-btn-primary,
     .export-btn-outline {
         width: 100%;
@@ -837,6 +916,15 @@
 
     .export-stat {
         border: 0;
+        padding: 0 10px;
+    }
+
+    [dir="rtl"] .export-stat {
+        border: 0;
+        padding: 0 10px;
+    }
+
+    [dir="rtl"] .export-stat:first-child {
         padding: 0 10px;
     }
 

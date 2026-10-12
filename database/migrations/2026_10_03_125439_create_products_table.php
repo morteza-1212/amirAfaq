@@ -6,13 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-
             $table->id();
 
             // ارتباط با دسته‌بندی
@@ -25,11 +21,7 @@ return new class extends Migration
             $table->string('code', 100)->unique();
 
             // نوع محصول
-            $table->enum('type', [
-                'export',
-                'import',
-                'both'
-            ])->default('export');
+            $table->enum('type', ['export', 'import', 'both'])->default('export');
 
             // تصویر اصلی
             $table->string('image')->nullable();
@@ -39,41 +31,24 @@ return new class extends Migration
 
             // وضعیت محصول
             $table->boolean('is_active')->default(true);
-
-            // نمایش در صفحه اصلی
             $table->boolean('is_featured')->default(false);
 
             // ترتیب نمایش
             $table->unsignedInteger('sort_order')->default(0);
 
-            // موجودی / وضعیت موجودی
-            $table->enum('stock_status', [
-                'in_stock',
-                'out_of_stock',
-                'on_request'
-            ])->default('on_request');
+            // وضعیت موجودی
+            $table->enum('stock_status', ['in_stock', 'out_of_stock', 'on_request'])->default('on_request');
 
-            // اطلاعات عمومی محصول
+            // اطلاعات عمومی
             $table->string('unit', 50)->nullable();
-
-            // وزن محصول
             $table->decimal('weight', 12, 3)->nullable();
-
-            // کشور مبدا
             $table->string('origin_country', 100)->nullable();
-
-            // حداقل مقدار سفارش
             $table->decimal('minimum_order', 15, 3)->nullable();
-
-            // زمان آماده‌سازی
             $table->unsignedInteger('preparation_days')->nullable();
-
-            // متادیتای عمومی
             $table->string('sku', 100)->nullable()->unique();
 
             $table->timestamps();
 
-            // Indexes
             $table->index('category_id');
             $table->index('type');
             $table->index('is_active');
@@ -82,9 +57,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('products');

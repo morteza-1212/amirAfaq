@@ -33,6 +33,27 @@
 @endphp
 
 @section('content')
+    @php
+        // زبان جاری
+        $currentLocale = app()->getLocale();
+
+        // زبان‌های پشتیبانی‌شده
+        $supportedLocales = [
+            'fa' => 'فارسی',
+            'ar' => 'العربية',
+            'en' => 'English',
+        ];
+
+        // آیکون‌های نوع فعالیت
+        $activityIcons = [
+            'commerce'       => 'fa-shopping-cart',
+            'logistics'      => 'fa-truck',
+            'exhibition'     => 'fa-store',
+            'exports'        => 'fa-ship',
+            'imports'        => 'fa-plane-arrival',
+            'global_markets' => 'fa-globe',
+        ];
+    @endphp
 
     <div class="export-page" dir="{{ $isRtl ? 'rtl' : 'ltr' }}">
 
@@ -330,9 +351,10 @@
                     <h2>{{ __('export.cta.title') }}</h2>
                     <p>{{ __('export.cta.text') }}</p>
 
-                    <a href="{{ url($locale . '/contact') }}" class="export-btn-primary">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        {{ __('export.cta.button') }}
+                    <a href="{{ route('contact', ['locale' => $currentLocale]) }}"
+                       class="gallery-btn">
+                        {{ __('gallery.contact_us') }}
+                        <i class="fas fa-arrow-left"></i>
                     </a>
 
                 </div>

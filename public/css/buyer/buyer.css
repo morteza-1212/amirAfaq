@@ -108,7 +108,7 @@
         rgba(7, 35, 21, .45) 75%,
         rgba(7, 35, 21, .18) 100%
         ),
-        url('/img/header/Duck-ai-image-2026-09-27-14-24.jpeg') center / cover no-repeat;}
+        url('/img/imageheader/buyer.webp') center / cover no-repeat;}
 
 [dir="rtl"] .buyers-hero {
     background:
@@ -118,7 +118,7 @@
         rgba(7, 35, 21, .45) 75%,
         rgba(7, 35, 21, .18) 100%
         ),
-        url('/img/header/Duck-ai-image-2026-09-27-14-24.jpeg') center / cover no-repeat;
+        url('/img/imageheader/buyer.webp') center / cover no-repeat;
 
 }
 

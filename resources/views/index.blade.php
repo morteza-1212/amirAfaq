@@ -6,7 +6,7 @@
 
         {{-- اسلاید اول --}}
         <div class="header-carousel-item"
-             style="background-image: url('{{ asset('img/header/Duck-ai-image-2026-09-27-14-24.jpeg') }}');">
+             style="background-image: url('{{ asset('img/imageheader/headerExport.webp') }}');">
             <div class="carousel-caption">
                 <div class="container">
                     <div class="row align-items-center justify-content-start">

@@ -20,16 +20,12 @@ class UpdateProductRequest extends FormRequest
 
         $rules = [
             'category_id' => ['required', 'exists:categories,id'],
-
-            // code خودکار ساخته می‌شود و نیازی به اعتبارسنجی ندارد
-            // 'code' حذف شد
-
-            'sku' => ['nullable', 'string', 'max:100',
+            'sku'         => ['nullable', 'string', 'max:100',
                 Rule::unique('products', 'sku')->ignore($productId),
             ],
             'type'         => ['required', Rule::in(array_keys(Product::TYPES))],
             'stock_status' => ['required', Rule::in(array_keys(Product::STOCK_STATUSES))],
-            'unit'         => ['nullable', 'string', 'max:50'],
+            'unit'         => ['nullable', Rule::in(array_keys(Product::UNITS))],
             'weight'       => ['nullable', 'numeric', 'min:0'],
             'origin_country' => ['nullable', 'string', 'max:100'],
             'minimum_order'  => ['nullable', 'numeric', 'min:0'],
@@ -48,18 +44,14 @@ class UpdateProductRequest extends FormRequest
 
             $rules["translations.{$locale}.name"] = [$required, 'string', 'max:255'];
 
-            // ✅ اصلاح اصلی: یکتایی slug فقط بین رکوردهای «دیگر»
+            // ✅ اصلاح: نادیده گرفتن ترجمه‌های همان محصول
             $rules["translations.{$locale}.slug"] = [
-                'nullable',
-                'string',
-                'max:255',
+                'nullable', 'string', 'max:255',
                 Rule::unique('product_tranlations', 'slug')
-                    ->where(function ($query) use ($locale, $productId) {
-                        $query->where('locale', $locale);
-
-                        // رکوردهای همین محصول را نادیده بگیر
+                    ->where(function ($q) use ($locale, $productId) {
+                        $q->where('locale', $locale);
                         if ($productId) {
-                            $query->where('product_id', '!=', $productId);
+                            $q->where('product_id', '!=', $productId);
                         }
                     }),
             ];

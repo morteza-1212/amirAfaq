@@ -14,6 +14,16 @@
           integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
           crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    {{-- jQuery --}}
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    {{-- Persian Date --}}
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+
+    {{-- Persian Datepicker --}}
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
 
     {{-- استایل اختصاصی هر صفحه --}}
     @stack('styles')
@@ -695,7 +705,7 @@
             background-color: #3e8e41;
         }
     </style>
-    @yield('style')
+    @yield('styles')
 </head>
 <body>
 
@@ -781,26 +791,36 @@
         </li>
 
         <!-- سایزها -->
+        @inject('trade', 'App\Models\TradeTransaction')
+
         <li class="nav-item">
-            <a href="" class="nav-link">
+            <a href="{{route('admin.trade-transaction.index')}}" class="nav-link">
                 <i class="fas fa-ruler-combined"></i>
-                <span class="nav-text">سایز ها</span>
+                <span class="nav-text"> معاملات انجام شده</span>
+                <span class="badge">{{ $trade->count() }}</span>
+
             </a>
         </li>
 
         <!-- مشتریان -->
+        @inject('buyer','App\Models\Buyer')
         <li class="nav-item">
-            <a href="#customers" class="nav-link">
+            <a href="{{route('admin.buyer.index')}}" class="nav-link">
                 <i class="fas fa-users"></i>
                 <span class="nav-text">مشتریان</span>
+                <span class="badge">{{ $buyer->count() }}</span>
+
             </a>
         </li>
 
         <!-- پروژه‌ها -->
+        @inject('contact','App\Models\Contact')
         <li class="nav-item">
-            <a href="#projects" class="nav-link">
+            <a href="{{route('admin.contact.index')}}" class="nav-link">
                 <i class="fas fa-briefcase"></i>
-                <span class="nav-text">پروژه‌ها</span>
+                <span class="nav-text">درخواست های مشاوره</span>
+                <span class="badge">{{ $contact->count() }}</span>
+
             </a>
         </li>
 
@@ -982,6 +1002,7 @@
 
 {{-- اسکریپت اختصاصی هر صفحه --}}
 @stack('scripts')
+@yield('scripts')
 
 </body>
 </html>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateBuyerRequest;
 use App\Models\Buyer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -50,4 +51,82 @@ class BuyerController extends Controller
             ->route('buyers.index')
             ->with('success', __('buyers.success_message'));
     }
-}
+    public function index1(Request $request): View
+    {
+        $buyers = Buyer::query()
+            ->when($request->filled('search'),
+                fn ($q) => $q->search($request->string('search')))
+            ->when($request->filled('status'),
+                fn ($q) => $q->ofStatus($request->string('status')))
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        // آمار
+        $stats = [
+            'total'     => Buyer::count(),
+            'new'       => Buyer::ofStatus('new')->count(),
+            'reviewed'  => Buyer::ofStatus('reviewed')->count(),
+            'contacted' => Buyer::ofStatus('contacted')->count(),
+            'closed'    => Buyer::ofStatus('closed')->count(),
+        ];
+
+        return view('panelAdmin.buyer.index', compact('buyers', 'stats'));
+    }
+
+    /* ============================================================
+     |  Show
+     ============================================================ */
+    public function show(Buyer $buyer): View
+    {
+        return view('panelAdmin.buyer.show', compact('buyer'));
+    }
+
+    /* ============================================================
+     |  Edit
+     ============================================================ */
+    public function edit(Buyer $buyer): View
+    {
+        return view('panelAdmin.buyer.edit', compact('buyer'));
+    }
+
+    /* ============================================================
+     |  Update
+     ============================================================ */
+    public function update(UpdateBuyerRequest $request, Buyer $buyer): RedirectResponse
+    {
+        $buyer->update($request->validated());
+
+        return redirect()
+            ->route('admin.buyer.index')
+            ->with('success', 'درخواست خریدار با موفقیت به‌روزرسانی شد.');
+    }
+
+    /* ============================================================
+     |  Update Status (Ajax)
+     ============================================================ */
+    public function updateStatus(Request $request, Buyer $buyer): RedirectResponse
+    {
+        $validated = $request->validate([
+            'status' => ['required', 'in:' . implode(',', array_keys(Buyer::STATUSES))],
+        ]);
+
+        $buyer->update(['status' => $validated['status']]);
+
+        return back()->with('success', 'وضعیت با موفقیت تغییر کرد.');
+    }
+
+    /* ============================================================
+     |  Destroy
+     ============================================================ */
+    public function destroy(Buyer $buyer): RedirectResponse
+    {
+        $buyer->delete();
+
+        return redirect()
+            ->route('admin.buyer.index')
+            ->with('success', 'درخواست خریدار با موفقیت حذف شد.');
+
+        }
+    }
+

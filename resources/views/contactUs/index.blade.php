@@ -10,6 +10,27 @@
 @endsection
 
 @section('content')
+    @php
+        // زبان جاری
+        $currentLocale = app()->getLocale();
+
+        // زبان‌های پشتیبانی‌شده
+        $supportedLocales = [
+            'fa' => 'فارسی',
+            'ar' => 'العربية',
+            'en' => 'English',
+        ];
+
+        // آیکون‌های نوع فعالیت
+        $activityIcons = [
+            'commerce'       => 'fa-shopping-cart',
+            'logistics'      => 'fa-truck',
+            'exhibition'     => 'fa-store',
+            'exports'        => 'fa-ship',
+            'imports'        => 'fa-plane-arrival',
+            'global_markets' => 'fa-globe',
+        ];
+    @endphp
 
     <div class="contact-page">
 
@@ -217,9 +238,8 @@
                         </div>
                     @endif
 
-                    <form action="" method="POST" class="contact-form" novalidate>
-                        @csrf
-
+                        <form action="{{ route('contact.store', ['locale' => app()->getLocale()]) }}" method="POST" class="contact-form" novalidate>                        @csrf
+@csrf
                         {{-- Name --}}
                         <div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
                             <label for="name">{{ __('contact.name') }} <span>*</span></label>
@@ -254,10 +274,10 @@
                         </div>
 
                         {{-- Subject --}}
-                        <div class="form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                             <label for="subject">{{ __('contact.subject') }} <span>*</span></label>
-                            <input type="text" id="subject" name="subject"
-                                   value="{{ old('subject') }}"
+                            <input type="text" id="subject" name="title"
+                                   value="{{ old('title') }}"
                                    placeholder="{{ __('contact.subject_placeholder') }}">
                             @error('subject')
                             <small class="form-error">{{ $message }}</small>
@@ -265,10 +285,10 @@
                         </div>
 
                         {{-- Message --}}
-                        <div class="form-group form-group-full {{ $errors->has('message') ? 'has-error' : '' }}">
+                        <div class="form-group form-group-full {{ $errors->has('description') ? 'has-error' : '' }}">
                             <label for="message">{{ __('contact.message') }} <span>*</span></label>
-                            <textarea id="message" name="message" rows="6"
-                                      placeholder="{{ __('contact.message_placeholder') }}">{{ old('message') }}</textarea>
+                            <textarea id="message" name="description" rows="6"
+                                      placeholder="{{ __('contact.message_placeholder') }}">{{ old('description') }}</textarea>
                             @error('message')
                             <small class="form-error">{{ $message }}</small>
                             @enderror

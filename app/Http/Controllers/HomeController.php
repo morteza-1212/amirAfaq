@@ -4,57 +4,101 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBuyerRequest;
 use App\Models\Buyer;
+use App\Models\Contact;
+use App\Models\Gallery;
+use App\Models\TradeTransaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function index()
+    /* ============================================================
+     |  صفحات اصلی
+     ============================================================ */
+
+    public function index(): View
     {
         return view('index');
-
     }
-    public function AbouteUs()
+
+    public function AbouteUs(): View
     {
         return view('Aboute.index');
     }
-    public function export()
+
+    public function export(): View
     {
         return view('export.index');
     }
-    public function import(){
+
+    public function import(): View
+    {
         return view('import.index');
     }
-    public function logistics()
+
+    public function logistics(): View
     {
         return view('Logistics.index');
     }
-    public function markets()
+
+    public function markets(): View
     {
         return view('markets.index');
     }
- public function suppliers()
- {
-        return view('suppliers.index');
- }
- public function buyer()
- {
-     return view('buyers.index');
- }
-    public function store(StoreBuyerRequest $request): RedirectResponse
-    {
-        // داده‌های اعتبارسنجی‌شده به‌صورت خودکار در دسترس هستند
-        Buyer::create($request->validated());
 
-        return redirect()
-            ->route('buyer', ['locale' => app()->getLocale()])
-            ->with('success', __('buyers.success_message'));
+    public function suppliers(): View
+    {
+        return view('suppliers.index');
     }
-    public function catalogs()
+
+    public function buyer(): View
+    {
+        return view('buyers.index');
+    }
+
+    public function contact(): View
+    {
+        return view('contactUs.index');
+    }
+
+    public function productExport(): View
+    {
+        return view('export.products');
+    }
+    public function storeContact(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name'        => 'required|string|max:255',
+            'email'       => 'required|email|max:255',
+            'phone'       => 'required|string|max:50',
+            'title'       => 'required|string|max:255',
+            'description' => 'required|string|max:5000',
+        ]);
+
+        Contact::create($validated);
+
+        return back()->with('success', __('contact.success_message'));
+    }
+
+//    public function gallery(): View
+//    {
+//        return view('gallery.index');
+//    }
+
+    public function services(): View
+    {
+        return view('services.index');
+    }
+
+    /* ============================================================
+     |  Catalogs
+     ============================================================ */
+
+    public function catalogs(): View
     {
         $locale = app()->getLocale();
 
-        // کاتالوگ‌های فعال + ترجمه‌ی زبان جاری
         $catalogs = \App\Models\Catalog::query()
             ->where('is_active', true)
             ->with([
@@ -64,29 +108,66 @@ class HomeController extends Controller
             ])
             ->orderBy('sort_order')
             ->get()
-            // فقط کاتالوگ‌هایی که ترجمه‌ی این زبان را دارند
             ->filter(fn ($catalog) => $catalog->translations->isNotEmpty());
 
         return view('catalogs.index', compact('catalogs', 'locale'));
     }
-    public function contact()
+
+    /* ============================================================
+     |  Buyers
+     ============================================================ */
+
+    public function store(StoreBuyerRequest $request): RedirectResponse
     {
-        return view('contactUs.index');
+        Buyer::create($request->validated());
+
+        return redirect()
+            ->route('buyer', ['locale' => app()->getLocale()])
+            ->with('success', __('buyers.success_message'));
     }
-    public function productExport()
+
+    /* ============================================================
+     |  Projects (Trade Transactions)
+     ============================================================ */
+
+    /**
+     * نمایش پروژه‌های انجام شده با پشتیبانی از سه زبان
+     */
+    public function trads(Request $request, ?string $locale = null): View
     {
-        return view('export.products');
+        // زبان از middleware یا app
+        $currentLocale = app()->getLocale();
+
+        // دریافت پروژه‌های منتشرشده با ترجمه‌ها
+        $trads = TradeTransaction::query()
+            ->with(['translations'])
+            ->where('is_published', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('contract_date')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('projects.index', [
+            'trads'         => $trads,
+            'currentLocale' => $currentLocale,
+        ]);
     }
-    public function gallery()
+    public function gallery(Request $request, ?string $locale = null): View
     {
-        return view('gallery.index');
-    }
-    public function projects()
-    {
-        return view('projects.index');
-    }
-    public function services()
-    {
-        return view('services.index');
+        $currentLocale = app()->getLocale();
+
+        $galleries = \App\Models\Gallery::query()
+            ->with(['translations' => function ($q) use ($currentLocale) {
+                $q->whereIn('locale', [$currentLocale, \App\Models\Gallery::DEFAULT_LOCALE]);
+            }])
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('gallery.index', [
+            'galleries'     => $galleries,
+            'currentLocale' => $currentLocale,
+        ]);
     }
 }

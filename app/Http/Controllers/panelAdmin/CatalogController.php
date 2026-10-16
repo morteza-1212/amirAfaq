@@ -108,4 +108,8 @@ class CatalogController extends Controller
 
         return back()->with('success', 'وضعیت کاتالوگ تغییر کرد.');
     }
+    public function Admin()
+    {
+        return view('panelAdmin.layouts.panel');
+    }
 }

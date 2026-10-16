@@ -49,15 +49,13 @@ class ProductController extends Controller
     /* ============================================================
      |  Store
      ============================================================ */
-    public function store(StoreProductRequest $request ,Product $product): RedirectResponse
+    public function store(StoreProductRequest $request): RedirectResponse
     {
         $data = $request->validated();
+        $product = null;
 
-        // code خودکار در مدل ساخته می‌شود
-        unset($data['code']);
-
-        DB::transaction(function () use ($request, &$data) {
-            // تصویر
+        DB::transaction(function () use ($request, &$data, &$product) {
+            // تصویر اصلی
             if ($request->hasFile('image')) {
                 $data['image'] = $request->file('image')->store('products', 'public');
             }
@@ -74,14 +72,15 @@ class ProductController extends Controller
             $translations = $data['translations'] ?? [];
             unset($data['translations']);
 
-            $product = Product::create($data);   // ← code اینجا خودکار تولید می‌شود
+            // کد محصول خودکار ساخته می‌شود (در Model)
+            $product = Product::create($data);
 
             $this->saveTranslations($product, $translations);
         });
 
         return redirect()
             ->route('admin.product.index')
-            ->with('success', 'محصول با موفقیت ایجاد شد. کد محصول: ' . $product->code);
+            ->with('success', 'محصول با موفقیت ایجاد شد. کد: ' . $product->code);
     }
 
     /* ============================================================
@@ -91,7 +90,7 @@ class ProductController extends Controller
     {
         $product->load(['translations', 'category.translations']);
 
-        return view('panelAdmin.products.show', compact('product'));
+        return view('panelAdmin.product.show', compact('product'));
     }
 
     /* ============================================================
@@ -142,6 +141,9 @@ class ProductController extends Controller
                 unset($data['gallery']);
             }
 
+            // code نباید قابل تغییر باشد
+            unset($data['code']);
+
             $translations = $data['translations'] ?? [];
             unset($data['translations']);
 
@@ -161,12 +163,10 @@ class ProductController extends Controller
     public function destroy(Product $product): RedirectResponse
     {
         DB::transaction(function () use ($product) {
-            // حذف تصویر اصلی
             if ($product->image && Storage::disk('public')->exists($product->image)) {
                 Storage::disk('public')->delete($product->image);
             }
 
-            // حذف گالری
             if (! empty($product->gallery)) {
                 foreach ($product->gallery as $image) {
                     if (Storage::disk('public')->exists($image)) {
@@ -184,7 +184,7 @@ class ProductController extends Controller
     }
 
     /* ============================================================
-     |  Helper
+     |  Helper: Save Translations
      ============================================================ */
     protected function saveTranslations(Product $product, array $translations): void
     {

@@ -88,24 +88,24 @@
            HERO
         ========================================================= */
 
-        .markets-hero {
-            min-height: 570px;
+        {{--.markets-hero {--}}
+        {{--    min-height: 570px;--}}
 
-            display: flex;
-            align-items: center;
+        {{--    display: flex;--}}
+        {{--    align-items: center;--}}
 
-            position: relative;
+        {{--    position: relative;--}}
 
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(16, 48, 33, .95),
-                    rgba(16, 48, 33, .70),
-                    rgba(16, 48, 33, .35)
-                ),
-                url('{{ asset('img/header/Duck-ai-image-2026-09-27-14-24.jpeg') }}')
-                center / cover no-repeat;
-        }
+        {{--    background:--}}
+        {{--        linear-gradient(--}}
+        {{--            90deg,--}}
+        {{--            rgba(16, 48, 33, .95),--}}
+        {{--            rgba(16, 48, 33, .70),--}}
+        {{--            rgba(16, 48, 33, .35)--}}
+        {{--        ),--}}
+        {{--        url('{{'img/imageheader/globalmarket.webp'}}')--}}
+        {{--        center / cover no-repeat;--}}
+        {{--}--}}
 
         .markets-hero-content {
             max-width: 850px;
@@ -470,8 +470,8 @@
                     rgba(21,57,39,.2),
                     rgba(21,57,39,.3)
                 ),
-                url('{{ asset('img/header/Duck-ai-image-2026-09-27-14-24.jpeg') }}')
-                center / cover no-repeat;
+                {{--url('{{ asset('img/header/Duck-ai-image-2026-09-27-14-24.jpeg') }}')--}}
+                {{--center / cover no-repeat;--}}
         }
 
 
@@ -699,7 +699,7 @@
                     rgba(17, 48, 34, .70),
                     rgba(17, 48, 34, .35)
                 ),
-                url('{{ asset('img/header/Duck-ai-image-2026-09-27-14-24.jpeg') }}')
+                url('{{ asset('img/imageheader/globalmarket.webp') }}')
                 center / cover no-repeat;
         }
 
@@ -783,6 +783,27 @@
 
 
 @section('content')
+    @php
+        // زبان جاری
+        $currentLocale = app()->getLocale();
+
+        // زبان‌های پشتیبانی‌شده
+        $supportedLocales = [
+            'fa' => 'فارسی',
+            'ar' => 'العربية',
+            'en' => 'English',
+        ];
+
+        // آیکون‌های نوع فعالیت
+        $activityIcons = [
+            'commerce'       => 'fa-shopping-cart',
+            'logistics'      => 'fa-truck',
+            'exhibition'     => 'fa-store',
+            'exports'        => 'fa-ship',
+            'imports'        => 'fa-plane-arrival',
+            'global_markets' => 'fa-globe',
+        ];
+    @endphp
 
     <div class="markets-page">
 
@@ -1098,11 +1119,10 @@
                         {{ __('markets.cta.text') }}
                     </p>
 
-                    <a
-                        href="{{ url($locale . '/contact') }}"
-                        class="cta-button"
-                    >
-                        {{ __('markets.cta.button') }}
+                    <a href="{{ route('contact', ['locale' => $currentLocale]) }}"
+                       class="gallery-btn">
+                        {{ __('gallery.contact_us') }}
+                        <i class="fas fa-arrow-left"></i>
                     </a>
 
                 </div>

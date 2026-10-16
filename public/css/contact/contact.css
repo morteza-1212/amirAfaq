@@ -35,21 +35,21 @@
     overflow: hidden;
     background:
         linear-gradient(90deg,
-        rgba(7, 35, 21, .97) 0%,
-        rgba(7, 35, 21, .85) 45%,
-        rgba(7, 35, 21, .45) 100%
+        rgba(7, 35, 21, .78) 0%,
+        rgba(7, 35, 21, .55) 45%,
+        rgba(7, 35, 21, .18) 100%
         ),
-        url('/img/header/hero.webp') center / cover no-repeat;
+        url('/img/imageheader/contact.webp') center / cover no-repeat;
 }
 
 [dir="rtl"] .contact-hero {
     background:
         linear-gradient(270deg,
-        rgba(7, 35, 21, .97) 0%,
-        rgba(7, 35, 21, .85) 45%,
-        rgba(7, 35, 21, .45) 100%
+        rgba(7, 35, 21, .78) 0%,
+        rgba(7, 35, 21, .55) 45%,
+        rgba(7, 35, 21, .18) 100%
         ),
-        url('/img/header/hero.webp') center / cover no-repeat;
+        url('/img/imageheader/contact.webp') center / cover no-repeat;
 }
 
 .contact-hero::after {
@@ -773,3 +773,56 @@
         flex: 0 0 auto;
     }
 }
+.contact-hero {
+    position: relative;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+
+    background:
+        linear-gradient(90deg,
+        rgba(7, 35, 21, .78) 0%,
+        rgba(7, 35, 21, .55) 45%,
+        rgba(7, 35, 21, .18) 100%
+        ),
+        url('/img/imageheader/contact.webp') center / cover no-repeat;
+}
+
+/* RTL و LTR هر دو: متن سمت چپ، تیرگی سمت چپ */
+[dir="rtl"] .contact-hero {
+    background:
+        linear-gradient(90deg,
+        rgba(7, 35, 21, .78) 0%,
+        rgba(7, 35, 21, .55) 45%,
+        rgba(7, 35, 21, .18) 100%
+        ),
+        url('/img/imageheader/contact.webp') center / cover no-repeat;
+}
+
+/* محتوای هیرو: همیشه سمت چپ */
+.contact-hero-content {
+    max-width: 720px;
+    padding: 80px 0;
+    color: #fff;
+
+    margin-left: 0;
+    margin-right: auto;   /* ← متن به سمت چپ می‌چسبد */
+    text-align: left;     /* ← تراز متن چپ */
+}
+
+/* حتی در RTL هم متن چپ بماند */
+[dir="rtl"] .contact-hero-content {
+    margin-left: 0;
+    margin-right: auto;
+    text-align: left;
+}
+
+/* اگر خواستید در RTL متن راست‌چین شود، این بلاک را فعال کنید: */
+/*
+[dir="rtl"] .contact-hero-content {
+    margin-left: auto;
+    margin-right: 0;
+    text-align: right;
+}
+*/

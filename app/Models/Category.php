@@ -6,26 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 
 class Category extends Model
 {
     use HasFactory;
-
-    /*
-    |--------------------------------------------------------------------------
-    | Table
-    |--------------------------------------------------------------------------
-    */
-
-    protected $table = 'categories';
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Fillable
-    |--------------------------------------------------------------------------
-    */
 
     protected $fillable = [
         'product_group_id',
@@ -38,317 +23,230 @@ class Category extends Model
         'is_featured',
     ];
 
+    protected $casts = [
+        'status'      => 'boolean',
+        'is_featured' => 'boolean',
+        'sort_order'  => 'integer',
+    ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Casts
-    |--------------------------------------------------------------------------
-    */
+    /* ============================================================
+     |  Constants
+     ============================================================ */
 
-    protected function casts(): array
-    {
-        return [
-            'product_group_id' => 'integer',
-            'parent_id'       => 'integer',
-            'sort_order'      => 'integer',
-            'status'          => 'boolean',
-            'is_featured'     => 'boolean',
-        ];
-    }
+    public const LOCALES = [
+        'fa' => 'فارسی',
+        'ar' => 'العربية',
+        'en' => 'English',
+    ];
 
+    public const DEFAULT_LOCALE = 'fa';
 
-    /*
-    |--------------------------------------------------------------------------
-    | Product Group
-    |--------------------------------------------------------------------------
-    */
+    /* ============================================================
+     |  Relationships
+     ============================================================ */
 
-    /**
-     * گروه محصولی که این دسته به آن تعلق دارد.
-     */
-    public function productGroup(): BelongsTo
-    {
-        return $this->belongsTo(
-            ProductGroup::class,
-            'product_group_id'
-        );
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Parent / Children
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * دسته والد
-     */
-    public function parent(): BelongsTo
-    {
-        return $this->belongsTo(
-            Category::class,
-            'parent_id'
-        );
-    }
-
-
-    /**
-     * زیر دسته‌های مستقیم
-     */
-    public function children(): HasMany
-    {
-        return $this->hasMany(
-            Category::class,
-            'parent_id'
-        )->orderBy('sort_order');
-    }
-
-
-    /**
-     * زیر دسته‌ها به صورت بازگشتی
-     */
-    public function childrenRecursive(): HasMany
-    {
-        return $this->children()->with('childrenRecursive');
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Translations
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * تمام ترجمه‌های دسته
-     *
-     * fa
-     * en
-     * ar
-     */
     public function translations(): HasMany
     {
-        return $this->hasMany(
-            CategoryTranslation::class,
-            'category_id'
-        );
+        return $this->hasMany(CategoryTranslation::class);
     }
 
-
-    /**
-     * دریافت ترجمه بر اساس زبان
-     *
-     * مثال:
-     *
-     * $category->translation('fa')
-     * $category->translation('en')
-     * $category->translation('ar')
-     */
-    public function translation(string $locale): ?CategoryTranslation
+    public function parent(): BelongsTo
     {
-        return $this->translations
-            ->firstWhere('locale', $locale);
+        return $this->belongsTo(Category::class, 'parent_id');
     }
 
-
-    /**
-     * ترجمه فارسی
-     */
-    public function fa(): HasOne
+    public function children(): HasMany
     {
-        return $this->hasOne(
-            CategoryTranslation::class,
-            'category_id'
-        )->where('locale', 'fa');
+        return $this->hasMany(Category::class, 'parent_id');
     }
 
-
-    /**
-     * ترجمه انگلیسی
-     */
-    public function en(): HasOne
+    public function productGroup(): BelongsTo
     {
-        return $this->hasOne(
-            CategoryTranslation::class,
-            'category_id'
-        )->where('locale', 'en');
+        return $this->belongsTo(ProductGroup::class, 'product_group_id');
     }
 
-
-    /**
-     * ترجمه عربی
-     */
-    public function ar(): HasOne
+    public function products(): HasMany
     {
-        return $this->hasOne(
-            CategoryTranslation::class,
-            'category_id'
-        )->where('locale', 'ar');
+        return $this->hasMany(Product::class);
     }
 
+    /* ============================================================
+     |  Boot (تولید خودکار code)
+     ============================================================ */
 
-    /*
-    |--------------------------------------------------------------------------
-    | Scopes
-    |--------------------------------------------------------------------------
-    */
+    protected static function booted(): void
+    {
+        static::creating(function (Category $category) {
+            if (empty($category->code)) {
+                $category->code = static::generateUniqueCode();
+            }
+        });
+    }
+
+    /* ============================================================
+     |  Helpers
+     ============================================================ */
 
     /**
-     * فقط دسته‌های فعال
+     * تولید کد خودکار
+     * فرمت: CAT-YYYYMMDD-XXXX
      */
+    public static function generateUniqueCode(): string
+    {
+        $prefix = 'CAT-' . now()->format('Ymd') . '-';
+
+        $lastCode = static::query()
+            ->where('code', 'like', $prefix . '%')
+            ->orderByDesc('id')
+            ->value('code');
+
+        $nextNumber = $lastCode
+            ? ((int) substr($lastCode, -4)) + 1
+            : 1;
+
+        $code = $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+        while (static::where('code', $code)->exists()) {
+            $nextNumber++;
+            $code = $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        }
+
+        return $code;
+    }
+
+    /**
+     * تولید slug یکتا در یک زبان
+     */
+    public static function generateUniqueSlug(string $name, string $locale, ?int $ignoreId = null): string
+    {
+        $base = trim($name);
+        $base = preg_replace('/\s+/u', '-', $base);
+        $base = preg_replace('/[^\p{L}\p{N}\-]+/u', '', $base);
+        $base = mb_strtolower($base, 'UTF-8');
+
+        if ($locale === 'en') {
+            $base = Str::slug($base);
+        }
+
+        $base = $base ?: 'category';
+        $slug = $base;
+        $count = 1;
+
+        while (
+        CategoryTranslation::where('locale', $locale)
+            ->where('slug', $slug)
+            ->when($ignoreId, fn ($q) => $q->where('category_id', '!=', $ignoreId))
+            ->exists()
+        ) {
+            $slug = $base . '-' . $count++;
+        }
+
+        return $slug;
+    }
+
+    /**
+     * ترجمه زبان جاری با fallback
+     */
+    public function translation(?string $locale = null): ?CategoryTranslation
+    {
+        $locale = $locale ?? app()->getLocale();
+
+        if ($this->relationLoaded('translations')) {
+            return $this->translations->firstWhere('locale', $locale)
+                ?? $this->translations->firstWhere('locale', self::DEFAULT_LOCALE);
+        }
+
+        return $this->translations()
+            ->where('locale', $locale)
+            ->first()
+            ?? $this->translations()
+                ->where('locale', self::DEFAULT_LOCALE)
+                ->first();
+    }
+
+    /* ============================================================
+     |  Accessors
+     ============================================================ */
+
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image ? asset('storage/' . $this->image) : null;
+    }
+
+    public function getNameAttribute(): ?string
+    {
+        return $this->translation()?->name;
+    }
+
+    public function getSlugAttribute(): ?string
+    {
+        return $this->translation()?->slug;
+    }
+
+    public function getShortDescriptionAttribute(): ?string
+    {
+        return $this->translation()?->short_description;
+    }
+
+    public function getDescriptionAttribute(): ?string
+    {
+        return $this->translation()?->description;
+    }
+
+    /**
+     * نام کامل با والد
+     * مثلاً: "میوه‌ها > مرکبات > پرتقال"
+     */
+    public function getFullNameAttribute(): string
+    {
+        $names = [];
+        $current = $this;
+
+        while ($current) {
+            $names[] = $current->name ?? '—';
+            $current = $current->parent;
+        }
+
+        return implode(' / ', array_reverse($names));
+    }
+
+    /* ============================================================
+     |  Scopes
+     ============================================================ */
+
     public function scopeActive($query)
     {
         return $query->where('status', true);
     }
 
-
-    /**
-     * فقط دسته‌های غیرفعال
-     */
-    public function scopeInactive($query)
-    {
-        return $query->where('status', false);
-    }
-
-
-    /**
-     * فقط دسته‌های ویژه
-     */
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
     }
 
-
-    /**
-     * فقط دسته‌های عادی
-     */
-    public function scopeNotFeatured($query)
-    {
-        return $query->where('is_featured', false);
-    }
-
-
-    /**
-     * فقط دسته‌های سطح اول
-     */
-    public function scopeRoot($query)
+    public function scopeRoots($query)
     {
         return $query->whereNull('parent_id');
     }
 
-
-    /**
-     * فقط زیر دسته‌ها
-     */
-    public function scopeChildren($query)
-    {
-        return $query->whereNotNull('parent_id');
-    }
-
-
-    /**
-     * مرتب‌سازی بر اساس ترتیب
-     */
     public function scopeOrdered($query)
     {
-        return $query->orderBy('sort_order');
+        return $query->orderBy('sort_order')->orderByDesc('created_at');
     }
 
-
-    /**
-     * فیلتر بر اساس گروه محصول
-     */
-    public function scopeForGroup($query, int $groupId)
+    public function scopeOfGroup($query, int $groupId)
     {
-        return $query->where(
-            'product_group_id',
-            $groupId
-        );
+        return $query->where('product_group_id', $groupId);
     }
 
-
-    /**
-     * فیلتر بر اساس دسته والد
-     */
-    public function scopeForParent($query, ?int $parentId)
+    public function scopeSearch($query, string $term)
     {
-        if ($parentId === null) {
-            return $query->whereNull('parent_id');
-        }
-
-        return $query->where(
-            'parent_id',
-            $parentId
-        );
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Helper Methods
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * آیا دسته فعال است؟
-     */
-    public function isActive(): bool
-    {
-        return (bool) $this->status;
-    }
-
-
-    /**
-     * آیا دسته ویژه است؟
-     */
-    public function isFeatured(): bool
-    {
-        return (bool) $this->is_featured;
-    }
-
-
-    /**
-     * آیا دسته اصلی است؟
-     */
-    public function isRoot(): bool
-    {
-        return is_null($this->parent_id);
-    }
-
-
-    /**
-     * آیا دسته دارای زیر دسته است؟
-     */
-    public function hasChildren(): bool
-    {
-        return $this->children()->exists();
-    }
-
-
-    /**
-     * دریافت نام دسته در زبان مشخص
-     *
-     * در صورت نبود ترجمه، مقدار پیش‌فرض برگردانده می‌شود.
-     */
-    public function translatedName(
-        string $locale = 'fa',
-        string $fallback = '-'
-    ): string {
-        return $this->translation($locale)?->name
-            ?? $fallback;
-    }
-
-
-    /**
-     * دریافت slug ترجمه شده
-     */
-    public function translatedSlug(
-        string $locale = 'fa',
-        string $fallback = ''
-    ): string {
-        return $this->translation($locale)?->slug
-            ?? $fallback;
+        return $query->where(function ($q) use ($term) {
+            $q->where('code', 'like', "%{$term}%")
+                ->orWhereHas('translations', function ($sub) use ($term) {
+                    $sub->where('name', 'like', "%{$term}%")
+                        ->orWhere('short_description', 'like', "%{$term}%");
+                });
+        });
     }
 }

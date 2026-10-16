@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
@@ -24,9 +25,10 @@ class Gallery extends Model
         'sort_order' => 'integer',
     ];
 
-    /**
-     * زبان‌های پشتیبانی‌شده
-     */
+    /* ============================================================
+     |  Constants
+     ============================================================ */
+
     public const LOCALES = [
         'fa' => 'فارسی',
         'ar' => 'العربية',
@@ -35,12 +37,6 @@ class Gallery extends Model
 
     public const DEFAULT_LOCALE = 'fa';
 
-    /**
-     * نوع فعالیت‌ها (چندزبانه)
-     */
-    /**
-     * نوع فعالیت‌ها (چندزبانه + توضیحات فارسی)
-     */
     public const ACTIVITY_TYPES = [
         'commerce' => [
             'labels' => [
@@ -101,22 +97,58 @@ class Gallery extends Model
         return $this->hasMany(GalleryTranslation::class);
     }
 
+    /* ============================================================
+     |  Helpers
+     ============================================================ */
+
     /**
-     * ترجمه زبان جاری
+     * ترجمه زبان جاری یا زبان مشخص با fallback
      */
-    public function translation()
+    public function translation(?string $locale = null): ?GalleryTranslation
     {
-        return $this->hasOne(GalleryTranslation::class)
-            ->where('locale', app()->getLocale());
+        $locale = $locale ?? app()->getLocale();
+
+        if ($this->relationLoaded('translations')) {
+            return $this->translations->firstWhere('locale', $locale)
+                ?? $this->translations->firstWhere('locale', self::DEFAULT_LOCALE);
+        }
+
+        return $this->translations()
+            ->where('locale', $locale)
+            ->first()
+            ?? $this->translations()
+                ->where('locale', self::DEFAULT_LOCALE)
+                ->first();
     }
 
     /**
-     * ترجمه زبان مشخص
+     * تولید slug یکتا برای یک زبان مشخص
      */
-    public function translationFor(string $locale)
+    public static function generateUniqueSlug(string $title, string $locale, ?int $ignoreId = null): string
     {
-        return $this->hasOne(GalleryTranslation::class)
-            ->where('locale', $locale);
+        $base = trim($title);
+        $base = preg_replace('/\s+/u', '-', $base);
+        $base = preg_replace('/[^\p{L}\p{N}\-]+/u', '', $base);
+        $base = mb_strtolower($base, 'UTF-8');
+
+        if ($locale === 'en') {
+            $base = Str::slug($base);
+        }
+
+        $base = $base ?: 'gallery';
+        $slug = $base;
+        $count = 1;
+
+        while (
+        GalleryTranslation::where('locale', $locale)
+            ->where('slug', $slug)
+            ->when($ignoreId, fn ($q) => $q->where('gallery_id', '!=', $ignoreId))
+            ->exists()
+        ) {
+            $slug = $base . '-' . $count++;
+        }
+
+        return $slug;
     }
 
     /* ============================================================
@@ -132,13 +164,18 @@ class Gallery extends Model
     {
         $locale = app()->getLocale();
 
-        return self::ACTIVITY_TYPES[$this->activity_type][$locale]
-            ?? self::ACTIVITY_TYPES[$this->activity_type][self::DEFAULT_LOCALE]
+        return self::ACTIVITY_TYPES[$this->activity_type]['labels'][$locale]
+            ?? self::ACTIVITY_TYPES[$this->activity_type]['labels'][self::DEFAULT_LOCALE]
             ?? $this->activity_type;
     }
 
+    public function getActivityTypeDescriptionAttribute(): ?string
+    {
+        return self::ACTIVITY_TYPES[$this->activity_type]['description'] ?? null;
+    }
+
     /**
-     * دسترسی سریع به فیلدهای ترجمه با fallback
+     * فیلدهای ترجمه با fallback
      */
     public function getTitleAttribute(): ?string
     {
@@ -160,14 +197,10 @@ class Gallery extends Model
         return $this->translatedField('alt_text');
     }
 
-    /**
-     * خواندن فیلد ترجمه با fallback به زبان پیش‌فرض
-     */
     protected function translatedField(string $field): ?string
     {
         $locale = app()->getLocale();
 
-        // اگر relation لود شده باشد از آن استفاده کن
         if ($this->relationLoaded('translations')) {
             $current = $this->translations->firstWhere('locale', $locale);
             if ($current && $current->{$field}) {
@@ -179,7 +212,6 @@ class Gallery extends Model
             return $fallback?->{$field};
         }
 
-        // در غیر این صورت کوئری بزن
         $translation = $this->translations()
             ->where('locale', $locale)
             ->first();
@@ -212,9 +244,6 @@ class Gallery extends Model
         return $query->orderBy('sort_order')->orderByDesc('created_at');
     }
 
-    /**
-     * جستجو در فیلدهای ترجمه (فقط زبان جاری)
-     */
     public function scopeSearch($query, string $term, ?string $locale = null)
     {
         $locale = $locale ?: app()->getLocale();
@@ -228,9 +257,6 @@ class Gallery extends Model
         });
     }
 
-    /**
-     * فیلتر روی slug زبان مشخص (برای روت‌ها)
-     */
     public function scopeWhereSlug($query, string $slug, ?string $locale = null)
     {
         $locale = $locale ?: app()->getLocale();
@@ -238,39 +264,5 @@ class Gallery extends Model
         return $query->whereHas('translations', function ($q) use ($slug, $locale) {
             $q->where('locale', $locale)->where('slug', $slug);
         });
-    }
-
-    /* ============================================================
-     |  Helpers
-     ============================================================ */
-
-    /**
-     * تولید slug یکتا برای یک زبان
-     */
-    public static function generateUniqueSlug(string $title, string $locale, ?int $ignoreId = null): string
-    {
-        $base = trim($title);
-        $base = preg_replace('/\s+/u', '-', $base);
-        $base = preg_replace('/[^\p{L}\p{N}\-]+/u', '', $base);
-        $base = mb_strtolower($base, 'UTF-8');
-
-        if ($locale === 'en') {
-            $base = Str::slug($base);
-        }
-
-        $base = $base ?: 'gallery';
-        $slug = $base;
-        $count = 1;
-
-        while (
-        GalleryTranslation::where('locale', $locale)
-            ->where('slug', $slug)
-            ->when($ignoreId, fn ($q) => $q->where('gallery_id', '!=', $ignoreId))
-            ->exists()
-        ) {
-            $slug = $base . '-' . $count++;
-        }
-
-        return $slug;
     }
 }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ProductTranlation extends Model
 {
     /**
-     * نام جدول (چون با Convention لاراول متفاوت است، صریحاً تعریف می‌شود)
+     * نام جدول (به دلیل املای خاص در migration)
      */
     protected $table = 'product_tranlations';
 

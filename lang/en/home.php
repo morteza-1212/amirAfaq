@@ -198,6 +198,15 @@ return [
         'copyright'          => 'All rights reserved.',
         'designed_by'        => 'Designed by',
         'designer' => 'Takhti Web Design & Programming Company',
+        'account_title' => 'User Account',
+        'account_description' => 'Sign in to access website features and manage your business inquiries.',
+        'login' => 'Sign In',
+        'register' => 'Create Account',
+        'account_note' => 'Manage your inquiries and communicate with our company.',
+        'enamad_title' => 'Electronic Trust Symbol',
+        'enamad_placeholder' => 'Enamad placement area',
+        'enamad_description' => 'Trust symbol information will be added when available.',
+        'copyright' => 'All rights reserved.',
     ],
 
     'map' => [

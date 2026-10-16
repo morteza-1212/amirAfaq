@@ -29,27 +29,26 @@
     background:
         linear-gradient(
             90deg,
-            rgba(23, 60, 41, .96) 0%,
-            rgba(23, 60, 41, .86) 45%,
-            rgba(23, 60, 41, .50) 100%
+            rgba(23, 60, 41, .62) 0%,
+            rgba(23, 60, 41, .35) 45%,
+            rgba(23, 60, 41, .05) 100%
         ),
-        url('/img/header/hero.webp') center / cover no-repeat;
+        url('/img/imageheader/gallery.webp') center / cover no-repeat;
 
     color: #fff;
 }
 
-/* RTL Hero - تیرگی سمت چپ تا متن روی آن خوانا باشد */
+/* RTL Hero - تیرگی سمت راست (سمت متن در RTL) */
 [dir="rtl"] .gallery-hero {
     background:
         linear-gradient(
-            90deg,
-            rgba(23, 60, 41, .96) 0%,
-            rgba(23, 60, 41, .86) 45%,
-            rgba(23, 60, 41, .50) 100%
+            270deg,
+            rgba(23, 60, 41, .62) 0%,
+            rgba(23, 60, 41, .35) 45%,
+            rgba(23, 60, 41, .05) 100%
         ),
-        url('/img/header/hero.webp') center / cover no-repeat;
+        url('/img/imageheader/gallery.webp') center / cover no-repeat;
 }
-
 .gallery-hero-content {
     max-width: 780px;
     padding: 90px 0;

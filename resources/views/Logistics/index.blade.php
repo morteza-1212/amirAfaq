@@ -59,7 +59,7 @@
                     rgba(17, 48, 34, .70),
                     rgba(17, 48, 34, .35)
                 ),
-                url('{{ asset('img/header/Duck-ai-image-2026-09-27-14-24.jpeg') }}')
+                url('{{ asset('img/imageheader/logistic2.webp') }}')
                 center / cover no-repeat;
         }
 
@@ -536,11 +536,11 @@
             background:
                 linear-gradient(
                     90deg,
-                    rgba(17, 48, 34, .95),
-                    rgba(17, 48, 34, .70),
-                    rgba(17, 48, 34, .35)
+                    rgba(17, 48, 34, .78) 0%,
+                    rgba(17, 48, 34, .50) 45%,
+                    rgba(17, 48, 34, .15) 100%
                 ),
-                url('{{ asset('img/header/Duck-ai-image-2026-09-27-14-24.jpeg') }}')
+                url('{{ asset('img/imageheader/logistic2.webp') }}')
                 center / cover no-repeat;
         }
 
@@ -567,7 +567,27 @@
 
 
 @section('content')
+    @php
+        // زبان جاری
+        $currentLocale = app()->getLocale();
 
+        // زبان‌های پشتیبانی‌شده
+        $supportedLocales = [
+            'fa' => 'فارسی',
+            'ar' => 'العربية',
+            'en' => 'English',
+        ];
+
+        // آیکون‌های نوع فعالیت
+        $activityIcons = [
+            'commerce'       => 'fa-shopping-cart',
+            'logistics'      => 'fa-truck',
+            'exhibition'     => 'fa-store',
+            'exports'        => 'fa-ship',
+            'imports'        => 'fa-plane-arrival',
+            'global_markets' => 'fa-globe',
+        ];
+    @endphp
     <div class="logistics-page">
 
         {{-- =====================================================
@@ -868,11 +888,10 @@
                         {{ __('logistics.cta.text') }}
                     </p>
 
-                    <a
-                        href="{{ url($locale . '/contact') }}"
-                        class="cta-button"
-                    >
-                        {{ __('logistics.cta.button') }}
+                    <a href="{{ route('contact', ['locale' => $currentLocale]) }}"
+                       class="gallery-btn">
+                        {{ __('gallery.contact_us') }}
+                        <i class="fas fa-arrow-left"></i>
                     </a>
 
                 </div>

@@ -7,6 +7,27 @@
 @endsection
 
 @section('content')
+    @php
+        // زبان جاری
+        $currentLocale = app()->getLocale();
+
+        // زبان‌های پشتیبانی‌شده
+        $supportedLocales = [
+            'fa' => 'فارسی',
+            'ar' => 'العربية',
+            'en' => 'English',
+        ];
+
+        // آیکون‌های نوع فعالیت
+        $activityIcons = [
+            'commerce'       => 'fa-shopping-cart',
+            'logistics'      => 'fa-truck',
+            'exhibition'     => 'fa-store',
+            'exports'        => 'fa-ship',
+            'imports'        => 'fa-plane-arrival',
+            'global_markets' => 'fa-globe',
+        ];
+    @endphp
 
     <div class="buyers-page">
 
@@ -461,9 +482,10 @@
                     <p>
                         {{ __('buyers.cta_description') }}
                     </p>
-
-                    <a href="" class="btn btn-outline">
-                        {{ __('buyers.contact_us') }}
+                    <a href="{{ route('contact', ['locale' => $currentLocale]) }}"
+                       class="gallery-btn">
+                        {{ __('gallery.contact_us') }}
+                        <i class="fas fa-arrow-left"></i>
                     </a>
 
                 </div>

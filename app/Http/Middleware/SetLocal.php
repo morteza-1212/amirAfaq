@@ -4,34 +4,43 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Symfony\Component\HttpFoundation\Response;
 
 class SetLocal
 {
-    /**
-     * ترتیب اولویت زبان:
-     *   1. پارامتر locale در URL  ({locale}/about)
-     *   2. Session (انتخاب کاربر)
-     *   3. زبان پیش‌فرض اپلیکیشن (config/app.php → locale)
-     */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
         $supported = ['fa', 'en', 'ar'];
 
-        // اولویت ۱: پارامتر locale از URL
+        // اولویت اول: زبان موجود در URL
         $locale = $request->route('locale');
 
-        // اولویت ۲: Session
-        if (! $locale || ! in_array($locale, $supported)) {
+        // اولویت دوم: زبان ذخیره‌شده در Session
+        if (! $locale || ! in_array($locale, $supported, true)) {
             $locale = session('locale');
         }
 
-        // اولویت ۳: fallback به config
-        if (! $locale || ! in_array($locale, $supported)) {
+        // اولویت سوم: زبان پیش‌فرض برنامه
+        if (! $locale || ! in_array($locale, $supported, true)) {
             $locale = config('app.locale', 'fa');
         }
 
+        // بررسی نهایی زبان
+        if (! in_array($locale, $supported, true)) {
+            $locale = 'fa';
+        }
+
+        // تنظیم زبان برنامه
         app()->setLocale($locale);
+
+        // ذخیره زبان در Session
         session(['locale' => $locale]);
+
+        // تعیین زبان پیش‌فرض برای تولید URL
+        URL::defaults([
+            'locale' => $locale,
+        ]);
 
         return $next($request);
     }

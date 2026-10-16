@@ -3,6 +3,27 @@
 @section('title', __('catalogs.page_title'))
 
 @section('content')
+    @php
+        // زبان جاری
+        $currentLocale = app()->getLocale();
+
+        // زبان‌های پشتیبانی‌شده
+        $supportedLocales = [
+            'fa' => 'فارسی',
+            'ar' => 'العربية',
+            'en' => 'English',
+        ];
+
+        // آیکون‌های نوع فعالیت
+        $activityIcons = [
+            'commerce'       => 'fa-shopping-cart',
+            'logistics'      => 'fa-truck',
+            'exhibition'     => 'fa-store',
+            'exports'        => 'fa-ship',
+            'imports'        => 'fa-plane-arrival',
+            'global_markets' => 'fa-globe',
+        ];
+    @endphp
 
     <div class="container py-5">
 
@@ -223,10 +244,10 @@
                             {{ __('catalogs.request_description') }}
                         </p>
 
-                        <a href=""
-                           class="btn btn-primary px-4">
-                            <i class="bi bi-send me-1"></i>
-                            {{ __('catalogs.request_button') }}
+                        <a href="{{ route('contact', ['locale' => $currentLocale]) }}"
+                           class="gallery-btn">
+                            {{ __('gallery.contact_us') }}
+                            <i class="fas fa-arrow-left"></i>
                         </a>
 
                     </div>

@@ -10,6 +10,27 @@
 @endsection
 
 @section('content')
+    @php
+        // زبان جاری
+        $currentLocale = app()->getLocale();
+
+        // زبان‌های پشتیبانی‌شده
+        $supportedLocales = [
+            'fa' => 'فارسی',
+            'ar' => 'العربية',
+            'en' => 'English',
+        ];
+
+        // آیکون‌های نوع فعالیت
+        $activityIcons = [
+            'commerce'       => 'fa-shopping-cart',
+            'logistics'      => 'fa-truck',
+            'exhibition'     => 'fa-store',
+            'exports'        => 'fa-ship',
+            'imports'        => 'fa-plane-arrival',
+            'global_markets' => 'fa-globe',
+        ];
+    @endphp
 
     <main class="export-products-page">
 
@@ -208,9 +229,10 @@
                         {{ __('export_products.cta_description') }}
                     </p>
 
-                    <a href=""
-                       class="btn btn-primary">
-                        {{ __('export_products.contact_us') }}
+                    <a href="{{ route('contact', ['locale' => $currentLocale]) }}"
+                       class="gallery-btn">
+                        {{ __('gallery.contact_us') }}
+                        <i class="fas fa-arrow-left"></i>
                     </a>
 
                 </div>

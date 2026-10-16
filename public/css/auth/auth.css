@@ -1,0 +1,200 @@
+/* صفحه ورود و ثبت نام */
+
+.auth-page {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    background: #f4f7fb;
+    direction: rtl;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 440px;
+    padding: 35px;
+    background: #ffffff;
+    border: 1px solid #e7edf3;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+}
+
+/* عنوان */
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header h1 {
+    margin: 0 0 15px;
+    color: #17365d;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.8;
+}
+
+.auth-header p {
+    margin: 0;
+    color: #75808c;
+    font-size: 13px;
+    line-height: 2;
+}
+
+/* فرم */
+
+.auth-form {
+    width: 100%;
+}
+
+.auth-form .form-group {
+    margin-bottom: 22px;
+}
+
+.auth-form .form-group label {
+    display: block;
+    margin-bottom: 9px;
+    color: #293746;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.auth-form .form-group input {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    border: 1px solid #dce3eb;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #263238;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.auth-form .form-group input:focus {
+    border-color: #17365d;
+    box-shadow: 0 0 0 3px rgba(23, 54, 93, 0.08);
+}
+
+.auth-form .form-group input::placeholder {
+    color: #a0a9b3;
+    font-size: 12px;
+}
+
+/* خطاهای اعتبارسنجی */
+
+.field-error {
+    display: block;
+    margin-top: 8px;
+    color: #c62828;
+    font-size: 12px;
+    line-height: 1.9;
+}
+
+/* مرا به خاطر بسپار */
+
+.remember-group {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 22px;
+}
+
+.remember-group input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.remember-group label {
+    color: #566371;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* دکمه */
+
+.auth-submit {
+    display: block;
+    width: 100%;
+    min-height: 49px;
+    padding: 13px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #17365d;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.auth-submit:hover {
+    background: #244d7c;
+}
+
+.auth-submit:active {
+    transform: translateY(1px);
+}
+
+/* لینک پایین فرم */
+
+.auth-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 25px;
+    color: #75808c;
+    font-size: 12px;
+    line-height: 2;
+}
+
+.auth-footer a {
+    color: #17365d;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* پیام موفقیت */
+
+.auth-alert {
+    margin-bottom: 22px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+.auth-alert-success {
+    border: 1px solid #c8e6c9;
+    background: #edf7ee;
+    color: #2e7d32;
+}
+
+/* موبایل */
+
+@media (max-width: 576px) {
+    .auth-page {
+        min-height: 65vh;
+        padding: 35px 15px;
+    }
+
+    .auth-container {
+        padding: 25px 20px;
+    }
+
+    .auth-header h1 {
+        font-size: 21px;
+    }
+}

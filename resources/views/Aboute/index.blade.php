@@ -55,7 +55,7 @@
                 rgba(23, 61, 41, .55) 75%,
                 rgba(23, 61, 41, .25) 100%
                 ),
-                url('{{ asset('img/header/Duck-ai-image-2026-09-27-14-24.jpeg') }}')
+                url('{{ asset('img/imageheader/Aboute.webp') }}')
                 center/cover no-repeat;
             isolation: isolate;
         }
@@ -997,7 +997,7 @@
             padding: 100px 20px;
             background:
                 linear-gradient(135deg, rgba(23, 61, 41, .95), rgba(43, 96, 65, .95)),
-                url('{{ asset('img/header/Duck-ai-image-2026-09-27-14-24(1).jpeg') }}')
+                url('{{ asset('img/imageheader/Aboute.webp') }}')
                 center/cover no-repeat;
             color: #fff;
             text-align: center;
@@ -1288,6 +1288,27 @@
 
 
 @section('content')
+    @php
+        // زبان جاری
+        $currentLocale = app()->getLocale();
+
+        // زبان‌های پشتیبانی‌شده
+        $supportedLocales = [
+            'fa' => 'فارسی',
+            'ar' => 'العربية',
+            'en' => 'English',
+        ];
+
+        // آیکون‌های نوع فعالیت
+        $activityIcons = [
+            'commerce'       => 'fa-shopping-cart',
+            'logistics'      => 'fa-truck',
+            'exhibition'     => 'fa-store',
+            'exports'        => 'fa-ship',
+            'imports'        => 'fa-plane-arrival',
+            'global_markets' => 'fa-globe',
+        ];
+    @endphp
 
     <div class="company-page">
 
@@ -1318,7 +1339,7 @@
                 <div class="about-grid reveal">
 
                     <div class="about-image">
-                        <img src="{{ asset('img/header/Duck-ai-image-2026-09-27-14-24.jpeg') }}"
+                        <img src="{{ asset('img/imageheader/Aboute.webp') }}"
                              alt="{{ __('about.intro.image_alt') }}">
                         <div class="about-image-badge">
                             <strong>AGP</strong>

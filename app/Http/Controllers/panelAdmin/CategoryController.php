@@ -7,340 +7,211 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use App\Models\ProductGroup;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Index
-    |--------------------------------------------------------------------------
-    */
-
-    public function index()
+    /* ============================================================
+     |  Index
+     ============================================================ */
+    public function index(Request $request): View
     {
-        $categories = Category::with([
-            'productGroup',
-            'parent',
-            'translations',
-        ])
-            ->orderBy('sort_order')
-            ->paginate(20);
+        $categories = Category::query()
+            ->with(['translations', 'parent.translations', 'productGroup'])
+            ->when($request->filled('search'),
+                fn ($q) => $q->search($request->string('search')))
+            ->when($request->filled('group'),
+                fn ($q) => $q->ofGroup($request->integer('group')))
+            ->when($request->filled('status'), function ($q) use ($request) {
+                $q->where('status', $request->string('status') === 'active');
+            })
+            ->ordered()
+            ->paginate(15)
+            ->withQueryString();
 
-        return view(
-            'panelAdmin.category.index',
-            compact('categories')
-        );
+        $groups = ProductGroup::with('translations')->orderBy('sort_order')->get();
+        return view('panelAdmin.category.index', compact('categories', 'groups'));
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Create
-    |--------------------------------------------------------------------------
-    */
-
-    public function create()
+    /* ============================================================
+     |  Create
+     ============================================================ */
+    public function create(): View
     {
-        $productGroups = ProductGroup::with('translations')->get();
+        $groups = ProductGroup::with('translations')->orderBy('sort_order')->get();        $parents   = Category::with('translations')->ordered()->get();
 
-        $categories = Category::with('translations')
-            ->whereNull('parent_id')
-            ->get();
-
-        return view(
-            'panelAdmin.category.create',
-            compact('productGroups', 'categories')
-        );
+        return view('panelAdmin.category.create', compact('groups', 'parents'));
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Store
-    |--------------------------------------------------------------------------
-    */
-
-    public function store(StoreCategoryRequest $request)
+    /* ============================================================
+     |  Store
+     ============================================================ */
+    public function store(StoreCategoryRequest $request): RedirectResponse
     {
         $data = $request->validated();
+        $category = null;
 
-        /*
-        |--------------------------------------------------------------------------
-        | ۱. آپلود تصویر
-        |--------------------------------------------------------------------------
-        */
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')
-                ->store('categories', 'public');
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | ۲. مقادیر پیش‌فرض برای checkbox ها
-        |--------------------------------------------------------------------------
-        */
-
-        $data['status']      = $request->boolean('status');
-        $data['is_featured'] = $request->boolean('is_featured');
-        $data['sort_order']  = $data['sort_order'] ?? 0;
-
-        /*
-        |--------------------------------------------------------------------------
-        | ۳. جدا کردن فیلدهای ترجمه از فیلدهای جدول categories
-        |--------------------------------------------------------------------------
-        |
-        |   name, slug, short_description, description
-        |   به جدول category_translations می‌روند.
-        |
-        */
-
-        $translationFields = [
-            'name',
-            'slug',
-            'short_description',
-            'description',
-        ];
-
-        $translationData = [];
-
-        foreach ($translationFields as $field) {
-            if (array_key_exists($field, $data)) {
-                $translationData[$field] = $data[$field];
-                unset($data[$field]);
+        DB::transaction(function () use ($request, &$data, &$category) {
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('categories', 'public');
             }
-        }
 
-        /*
-        |--------------------------------------------------------------------------
-        | ۴. ساخت اسلاگ اگر وارد نشده بود
-        |--------------------------------------------------------------------------
-        */
+            $translations = $data['translations'] ?? [];
+            unset($data['translations']);
 
-        if (empty($translationData['slug'])) {
-            $translationData['slug'] = Str::slug($translationData['name'])
-                ?: 'category-' . time();
-        }
+            // کد خودکار در Model ساخته می‌شود
+            $category = Category::create($data);
 
-        /*
-        |--------------------------------------------------------------------------
-        | ۵. ایجاد دسته
-        |--------------------------------------------------------------------------
-        |
-        |   کد (code) به صورت خودکار در مدل Category تولید می‌شود
-        |   (متد booted + generateNextCode در مدل).
-        |
-        */
-
-        $category = Category::create($data);
-
-        /*
-        |--------------------------------------------------------------------------
-        | ۶. ایجاد ترجمه فارسی
-        |--------------------------------------------------------------------------
-        */
-
-        $translationData['locale'] = 'fa';
-
-        $category->translations()->create($translationData);
+            $this->saveTranslations($category, $translations);
+        });
 
         return redirect()
             ->route('admin.category.index')
-            ->with('success', 'دسته‌بندی ایجاد شد');
+            ->with('success', 'دسته‌بندی با موفقیت ایجاد شد. کد: ' . $category->code);
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Show
-    |--------------------------------------------------------------------------
-    */
-
-    public function show(Category $category)
+    /* ============================================================
+     |  Show
+     ============================================================ */
+    public function show(Category $category): View
     {
-        $category->load([
-            'productGroup',
-            'parent',
-            'children',
-            'translations',
-        ]);
+        $category->load(['translations', 'parent.translations', 'productGroup']);
 
-        return view(
-            'panelAdmin.categories.show',
-            compact('category')
-        );
+        return view('panelAdmin.category.show', compact('category'));
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Edit
-    |--------------------------------------------------------------------------
-    */
-
-    public function edit(Category $category)
+    /* ============================================================
+     |  Edit
+     ============================================================ */
+    public function edit(Category $category): View
     {
-        $productGroups = ProductGroup::all();
+        $category->load(['translations', 'parent.translations', 'productGroup']);
 
-        $categories = Category::where('id', '!=', $category->id)
-            ->whereNull('parent_id')
+        $groups = ProductGroup::with('translations')->orderBy('sort_order')->get();
+        // دسته‌های قابل انتخاب به‌عنوان والد
+        // (خود دسته و فرزندانش نباید نمایش داده شوند)
+        $descendantIds = $this->getDescendantIds($category);
+
+        $parents = Category::with('translations')
+            ->where('id', '!=', $category->id)
+            ->whereNotIn('id', $descendantIds)
+            ->ordered()
             ->get();
 
-        return view(
-            'panelAdmin.category.edit',
-            compact(
-                'category',
-                'productGroups',
-                'categories'
-            )
-        );
+        return view('panelAdmin.category.edit', compact('category', 'groups', 'parents'));
     }
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Update
-    |--------------------------------------------------------------------------
-    */
-
-    public function update(
-        UpdateCategoryRequest $request,
-        Category $category
-    ) {
+    /* ============================================================
+     |  Update
+     ============================================================ */
+    public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
+    {
         $data = $request->validated();
 
-        /*
-        |--------------------------------------------------------------------------
-        | ۱. آپلود تصویر جدید (و حذف تصویر قبلی)
-        |--------------------------------------------------------------------------
-        */
+        DB::transaction(function () use ($request, $category, &$data) {
+            if ($request->hasFile('image')) {
+                if ($category->image && Storage::disk('public')->exists($category->image)) {
+                    Storage::disk('public')->delete($category->image);
+                }
+                $data['image'] = $request->file('image')->store('categories', 'public');
+            } else {
+                unset($data['image']);
+            }
 
-        if ($request->hasFile('image')) {
+            // code نباید تغییر کند
+            unset($data['code']);
 
-            // حذف تصویر قبلی از storage
-            if ($category->image) {
+            $translations = $data['translations'] ?? [];
+            unset($data['translations']);
+
+            $category->update($data);
+
+            $this->saveTranslations($category, $translations);
+        });
+
+        return redirect()
+            ->route('admin.category.index')
+            ->with('success', 'دسته‌بندی با موفقیت به‌روزرسانی شد.');
+    }
+
+    /* ============================================================
+     |  Destroy
+     ============================================================ */
+    public function destroy(Category $category): RedirectResponse
+    {
+        // جلوگیری از حذف اگر فرزند دارد
+        if ($category->children()->exists()) {
+            return back()->with('error', 'ابتدا باید زیردسته‌ها را حذف یا منتقل کنید.');
+        }
+
+        DB::transaction(function () use ($category) {
+            if ($category->image && Storage::disk('public')->exists($category->image)) {
                 Storage::disk('public')->delete($category->image);
             }
 
-            $data['image'] = $request->file('image')
-                ->store('categories', 'public');
+            $category->delete();
+        });
+
+        return redirect()
+            ->route('admin.category.index')
+            ->with('success', 'دسته‌بندی با موفقیت حذف شد.');
+    }
+
+    /* ============================================================
+     |  Helper: Save Translations
+     ============================================================ */
+    protected function saveTranslations(Category $category, array $translations): void
+    {
+        foreach ($translations as $locale => $values) {
+            if (empty($values['name'])) {
+                continue;
+            }
+
+            if (empty($values['slug'])) {
+                $values['slug'] = Category::generateUniqueSlug(
+                    $values['name'],
+                    $locale,
+                    $category->id
+                );
+            }
+
+            $category->translations()->updateOrCreate(
+                ['locale' => $locale],
+                [
+                    'name'              => $values['name'],
+                    'slug'              => $values['slug'],
+                    'short_description' => $values['short_description'] ?? null,
+                    'description'       => $values['description'] ?? null,
+                    'meta_title'        => $values['meta_title'] ?? null,
+                    'meta_description'  => $values['meta_description'] ?? null,
+                    'meta_keywords'     => $values['meta_keywords'] ?? null,
+                ]
+            );
         }
+    }
 
-        /*
-        |--------------------------------------------------------------------------
-        | ۲. مقادیر پیش‌فرض
-        |--------------------------------------------------------------------------
-        */
+    /**
+     * آی‌دی همه‌ی فرزندان (چند سطحی) برای جلوگیری از انتخاب به‌عنوان والد
+     */
+    protected function getDescendantIds(Category $category): array
+    {
+        $ids = [];
+        $stack = [$category->id];
 
-        $data['status']      = $request->boolean('status');
-        $data['is_featured'] = $request->boolean('is_featured');
-        $data['sort_order']  = $data['sort_order'] ?? 0;
+        while (! empty($stack)) {
+            $parentId = array_pop($stack);
+            $children = Category::where('parent_id', $parentId)->pluck('id')->toArray();
 
-        /*
-        |--------------------------------------------------------------------------
-        | ۳. جدا کردن فیلدهای ترجمه
-        |--------------------------------------------------------------------------
-        */
-
-        $translationFields = [
-            'name',
-            'slug',
-            'short_description',
-            'description',
-        ];
-
-        $translationData = [];
-
-        foreach ($translationFields as $field) {
-            if (array_key_exists($field, $data)) {
-                $translationData[$field] = $data[$field];
-                unset($data[$field]);
+            foreach ($children as $childId) {
+                $ids[] = $childId;
+                $stack[] = $childId;
             }
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | ۴. ساخت اسلاگ اگر وارد نشده بود
-        |--------------------------------------------------------------------------
-        */
-
-        if (
-            !empty($translationData['name']) &&
-            empty($translationData['slug'])
-        ) {
-            $translationData['slug'] = Str::slug($translationData['name'])
-                ?: 'category-' . $category->id;
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | ۵. بروزرسانی دسته
-        |--------------------------------------------------------------------------
-        */
-
-        $category->update($data);
-
-        /*
-        |--------------------------------------------------------------------------
-        | ۶. بروزرسانی یا ایجاد ترجمه فارسی
-        |--------------------------------------------------------------------------
-        */
-
-        $translation = $category->translations()
-            ->where('locale', 'fa')
-            ->first();
-
-        if ($translation) {
-            $translation->update($translationData);
-        } else {
-            $translationData['locale'] = 'fa';
-            $category->translations()->create($translationData);
-        }
-
-        return redirect()
-            ->route('admin.category.index')
-            ->with('success', 'دسته‌بندی بروزرسانی شد');
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Destroy
-    |--------------------------------------------------------------------------
-    */
-
-    public function destroy(Category $category)
-    {
-        /*
-        |--------------------------------------------------------------------------
-        | حذف تصویر از storage
-        |--------------------------------------------------------------------------
-        */
-
-        if ($category->image) {
-            Storage::disk('public')->delete($category->image);
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | حذف ترجمه‌ها
-        |--------------------------------------------------------------------------
-        */
-
-        $category->translations()->delete();
-
-        /*
-        |--------------------------------------------------------------------------
-        | حذف دسته
-        |--------------------------------------------------------------------------
-        */
-
-        $category->delete();
-
-        return redirect()
-            ->route('admin.category.index')
-            ->with('success', 'دسته‌بندی حذف شد');
+        return $ids;
     }
 }

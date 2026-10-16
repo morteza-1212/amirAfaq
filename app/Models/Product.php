@@ -53,15 +53,24 @@ class Product extends Model
     public const DEFAULT_LOCALE = 'fa';
 
     public const TYPES = [
-        'export' => ['fa' => 'صادرات',          'ar' => 'التصدير',           'en' => 'Export'],
-        'import' => ['fa' => 'واردات',           'ar' => 'الاستيراد',         'en' => 'Import'],
-        'both'   => ['fa' => 'صادرات و واردات', 'ar' => 'التصدير والاستيراد', 'en' => 'Both'],
+        'export' => ['fa' => 'صادرات',           'ar' => 'التصدير',           'en' => 'Export'],
+        'import' => ['fa' => 'واردات',            'ar' => 'الاستيراد',         'en' => 'Import'],
+        'both'   => ['fa' => 'صادرات و واردات',  'ar' => 'التصدير والاستيراد', 'en' => 'Both'],
     ];
 
     public const STOCK_STATUSES = [
-        'in_stock'     => ['fa' => 'موجود',   'ar' => 'متوفر',     'en' => 'In Stock'],
-        'out_of_stock' => ['fa' => 'ناموجود', 'ar' => 'غير متوفر', 'en' => 'Out of Stock'],
-        'on_request'   => ['fa' => 'استعلام', 'ar' => 'حسب الطلب', 'en' => 'On Request'],
+        'in_stock'     => ['fa' => 'موجود',   'ar' => 'متوفر',      'en' => 'In Stock'],
+        'out_of_stock' => ['fa' => 'ناموجود', 'ar' => 'غير متوفر',  'en' => 'Out of Stock'],
+        'on_request'   => ['fa' => 'استعلام', 'ar' => 'حسب الطلب',  'en' => 'On Request'],
+    ];
+
+    public const UNITS = [
+        'ton'    => ['fa' => 'تن',       'ar' => 'طن',       'en' => 'Ton'],
+        'kg'     => ['fa' => 'کیلوگرم',  'ar' => 'كيلوغرام', 'en' => 'Kg'],
+        'piece'  => ['fa' => 'عدد',      'ar' => 'قطعة',     'en' => 'Piece'],
+        'liter'  => ['fa' => 'لیتر',     'ar' => 'لتر',      'en' => 'Liter'],
+        'meter'  => ['fa' => 'متر',      'ar' => 'متر',      'en' => 'Meter'],
+        'carton' => ['fa' => 'کارتن',    'ar' => 'كرتون',    'en' => 'Carton'],
     ];
 
     /* ============================================================
@@ -79,27 +88,52 @@ class Product extends Model
     }
 
     /* ============================================================
+     |  Boot (تولید خودکار code)
+     ============================================================ */
+
+    protected static function booted(): void
+    {
+        static::creating(function (Product $product) {
+            if (empty($product->code)) {
+                $product->code = static::generateUniqueCode();
+            }
+        });
+    }
+
+    /* ============================================================
      |  Helpers
      ============================================================ */
 
-    public function translation(?string $locale = null): ?ProductTranlation
+    /**
+     * تولید کد خودکار
+     */
+    public static function generateUniqueCode(): string
     {
-        $locale = $locale ?? app()->getLocale();
+        $prefix = 'PRD-' . now()->format('Ymd') . '-';
 
-        if ($this->relationLoaded('translations')) {
-            return $this->translations->firstWhere('locale', $locale)
-                ?? $this->translations->firstWhere('locale', self::DEFAULT_LOCALE);
+        $lastCode = static::query()
+            ->where('code', 'like', $prefix . '%')
+            ->orderByDesc('id')
+            ->value('code');
+
+        $nextNumber = $lastCode
+            ? ((int) substr($lastCode, -4)) + 1
+            : 1;
+
+        $code = $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+        while (static::where('code', $code)->exists()) {
+            $nextNumber++;
+            $code = $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
         }
 
-        return $this->translations()
-            ->where('locale', $locale)
-            ->first()
-            ?? $this->translations()
-                ->where('locale', self::DEFAULT_LOCALE)
-                ->first();
+        return $code;
     }
 
-    public static function generateUniqueSlug(string $name, string $locale, ?int $ignoreId = null): string
+    /**
+     * تولید slug یکتا در یک زبان
+     */
+    public static function generateUniqueSlug(string $name, string $locale, ?int $ignoreProductId = null): string
     {
         $base = trim($name);
         $base = preg_replace('/\s+/u', '-', $base);
@@ -117,13 +151,33 @@ class Product extends Model
         while (
         ProductTranlation::where('locale', $locale)
             ->where('slug', $slug)
-            ->when($ignoreId, fn ($q) => $q->where('product_id', '!=', $ignoreId))
+            ->when($ignoreProductId, fn ($q) => $q->where('product_id', '!=', $ignoreProductId))
             ->exists()
         ) {
             $slug = $base . '-' . $count++;
         }
 
         return $slug;
+    }
+
+    /**
+     * ترجمه زبان جاری با fallback
+     */
+    public function translation(?string $locale = null): ?ProductTranlation
+    {
+        $locale = $locale ?? app()->getLocale();
+
+        if ($this->relationLoaded('translations')) {
+            return $this->translations->firstWhere('locale', $locale)
+                ?? $this->translations->firstWhere('locale', self::DEFAULT_LOCALE);
+        }
+
+        return $this->translations()
+            ->where('locale', $locale)
+            ->first()
+            ?? $this->translations()
+                ->where('locale', self::DEFAULT_LOCALE)
+                ->first();
     }
 
     /* ============================================================
@@ -185,6 +239,19 @@ class Product extends Model
             ?? $this->stock_status;
     }
 
+    public function getUnitLabelAttribute(): ?string
+    {
+        if (! $this->unit) {
+            return null;
+        }
+
+        $locale = app()->getLocale();
+
+        return self::UNITS[$this->unit][$locale]
+            ?? self::UNITS[$this->unit][self::DEFAULT_LOCALE]
+            ?? $this->unit;
+    }
+
     /* ============================================================
      |  Scopes
      ============================================================ */
@@ -219,59 +286,6 @@ class Product extends Model
                         ->orWhere('short_description', 'like', "%{$term}%")
                         ->orWhere('description', 'like', "%{$term}%");
                 });
-        });
-    }
-
-    public function scopeWhereSlug($query, string $slug, ?string $locale = null)
-    {
-        $locale = $locale ?: app()->getLocale();
-
-        return $query->whereHas('translations', function ($q) use ($slug, $locale) {
-            $q->where('locale', $locale)->where('slug', $slug);
-        });
-    }
-    /**
-     * تولید کد محصول خودکار
-     * فرمت: PRD-YYYYMMDD-XXXX   مثلاً  PRD-20261010-0007
-     */
-    public static function generateUniqueCode(): string
-    {
-        $prefix = 'PRD-' . now()->format('Ymd') . '-';
-
-        // آخرین کد امروز را پیدا کن
-        $lastCode = static::query()
-            ->where('code', 'like', $prefix . '%')
-            ->orderByDesc('id')
-            ->value('code');
-
-        if ($lastCode) {
-            // استخراج عدد انتهایی
-            $lastNumber = (int) substr($lastCode, -4);
-            $nextNumber = $lastNumber + 1;
-        } else {
-            $nextNumber = 1;
-        }
-
-        $code = $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
-
-        // تضمین یکتایی (در صورت تصادف نادر)
-        while (static::where('code', $code)->exists()) {
-            $nextNumber++;
-            $code = $prefix . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
-        }
-
-        return $code;
-    }
-
-    /**
-     * Boot method: تولید خودکار code هنگام ایجاد
-     */
-    protected static function booted(): void
-    {
-        static::creating(function (Product $product) {
-            if (empty($product->code)) {
-                $product->code = static::generateUniqueCode();
-            }
         });
     }
 }

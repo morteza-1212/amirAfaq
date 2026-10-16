@@ -17,11 +17,10 @@ class StoreProductRequest extends FormRequest
     {
         $rules = [
             'category_id' => ['required', 'exists:categories,id'],
-//            'code'        => ['nullable', 'string', 'max:100', 'unique:products,code'],
             'sku'         => ['nullable', 'string', 'max:100', 'unique:products,sku'],
             'type'        => ['required', Rule::in(array_keys(Product::TYPES))],
             'stock_status' => ['required', Rule::in(array_keys(Product::STOCK_STATUSES))],
-            'unit'        => ['nullable', 'string', 'max:50'],
+            'unit'        => ['nullable', Rule::in(array_keys(Product::UNITS))],
             'weight'      => ['nullable', 'numeric', 'min:0'],
             'origin_country' => ['nullable', 'string', 'max:100'],
             'minimum_order'  => ['nullable', 'numeric', 'min:0'],
@@ -35,12 +34,11 @@ class StoreProductRequest extends FormRequest
             'gallery.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
         ];
 
-        // فیلدهای چندزبانه — توجه: نام جدول product_tranlations
         foreach (array_keys(Product::LOCALES) as $locale) {
             $required = $locale === Product::DEFAULT_LOCALE ? 'required' : 'nullable';
 
-            $rules["translations.{$locale}.name"]              = [$required, 'string', 'max:255'];
-            $rules["translations.{$locale}.slug"]              = [
+            $rules["translations.{$locale}.name"] = [$required, 'string', 'max:255'];
+            $rules["translations.{$locale}.slug"] = [
                 'nullable', 'string', 'max:255',
                 Rule::unique('product_tranlations', 'slug')->where('locale', $locale),
             ];
@@ -62,21 +60,20 @@ class StoreProductRequest extends FormRequest
     public function attributes(): array
     {
         $attrs = [
-            'category_id' => 'دسته‌بندی',
-            'code'        => 'کد محصول',
-            'sku'         => 'SKU',
-            'type'        => 'نوع محصول',
+            'category_id'  => 'دسته‌بندی',
+            'sku'          => 'SKU',
+            'type'         => 'نوع محصول',
             'stock_status' => 'وضعیت موجودی',
-            'unit'        => 'واحد',
-            'weight'      => 'وزن',
+            'unit'         => 'واحد',
+            'weight'       => 'وزن',
             'origin_country' => 'کشور مبدا',
             'minimum_order'  => 'حداقل سفارش',
             'preparation_days' => 'مدت آماده‌سازی',
-            'sort_order'  => 'ترتیب نمایش',
-            'is_active'   => 'وضعیت فعال',
-            'is_featured' => 'محصول ویژه',
-            'image'       => 'تصویر اصلی',
-            'gallery'     => 'گالری تصاویر',
+            'sort_order'   => 'ترتیب نمایش',
+            'is_active'    => 'وضعیت فعال',
+            'is_featured'  => 'محصول ویژه',
+            'image'        => 'تصویر اصلی',
+            'gallery'      => 'گالری تصاویر',
         ];
 
         foreach (Product::LOCALES as $code => $label) {

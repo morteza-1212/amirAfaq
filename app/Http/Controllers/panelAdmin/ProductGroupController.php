@@ -6,120 +6,177 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductGroupRequest;
 use App\Http\Requests\UpdateProductGroupRequest;
 use App\Models\ProductGroup;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class ProductGroupController extends Controller
 {
-    /**
-     * نمایش لیست گروه‌های محصول
-     */
-    public function index(Request $request)
+    /* ============================================================
+     |  Index
+     ============================================================ */
+    public function index(Request $request): View
     {
-        $query = ProductGroup::query();
-
-        // جستجو بر اساس کد
-        if ($request->filled('search')) {
-            $query->where('code', 'like', '%' . $request->search . '%');
-        }
-
-        // فیلتر نوع
-        if ($request->filled('type')) {
-            $query->where('type', $request->type);
-        }
-
-        // فیلتر وضعیت
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        $productGroups = $query->orderBy('sort_order', 'asc')
+        $groups = ProductGroup::query()
+            ->with(['translations'])
+            ->withCount('categories')
+            ->when($request->filled('search'),
+                fn ($q) => $q->search($request->string('search')))
+            ->when($request->filled('type'),
+                fn ($q) => $q->ofType($request->string('type')))
+            ->when($request->filled('status'), function ($q) use ($request) {
+                $q->where('status', $request->string('status') === 'active');
+            })
+            ->ordered()
             ->paginate(15)
             ->withQueryString();
 
-        return view('panelAdmin.productGroup.index', compact('productGroups'));
+        return view('panelAdmin.productGroup.index', compact('groups'));
     }
 
-    /**
-     * نمایش فرم ایجاد گروه جدید
-     */
-    public function create()
+    /* ============================================================
+     |  Create
+     ============================================================ */
+    public function create(): View
     {
         return view('panelAdmin.productGroup.create');
     }
 
-    /**
-     * ذخیره گروه جدید
-     */
-    public function store(StoreProductGroupRequest $request)
+    /* ============================================================
+     |  Store
+     ============================================================ */
+    public function store(StoreProductGroupRequest $request): RedirectResponse
     {
         $data = $request->validated();
+        $group = null;
 
-        // آپلود تصویر
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('product-groups', 'public');
-        }
+        DB::transaction(function () use ($request, &$data, &$group) {
+            if ($request->hasFile('image')) {
+                $data['image'] = $request->file('image')->store('product-groups', 'public');
+            }
 
-        ProductGroup::create($data);
+            $translations = $data['translations'] ?? [];
+            unset($data['translations']);
+
+            // code خودکار در Model ساخته می‌شود
+            $group = ProductGroup::create($data);
+
+            $this->saveTranslations($group, $translations);
+        });
 
         return redirect()
             ->route('admin.productGroup.index')
-            ->with('success', 'گروه محصول با موفقیت ایجاد شد.');
+            ->with('success', 'گروه محصول با موفقیت ایجاد شد. کد: ' . $group->code);
     }
 
-    /**
-     * نمایش جزئیات گروه
-     */
-//    public function show(ProductGroup $productGroup)
-//    {
-//        return view('panelAdmin.productGroup.show', compact('productGroup'));
-//    }
-
-    /**
-     * نمایش فرم ویرایش
-     */
-    public function edit(ProductGroup $productGroup)
+    /* ============================================================
+     |  Show
+     ============================================================ */
+    public function show(ProductGroup $productGroup): View
     {
+        $productGroup->load(['translations', 'categories.translations']);
+
+        return view('panelAdmin.productGroup.show', compact('productGroup'));
+    }
+
+    /* ============================================================
+     |  Edit
+     ============================================================ */
+    public function edit(ProductGroup $productGroup): View
+    {
+        $productGroup->load(['translations']);
+
         return view('panelAdmin.productGroup.edit', compact('productGroup'));
     }
 
-    /**
-     * بروزرسانی گروه
-     */
-    public function update(UpdateProductGroupRequest $request, ProductGroup $productGroup)
+    /* ============================================================
+     |  Update
+     ============================================================ */
+    public function update(UpdateProductGroupRequest $request, ProductGroup $productGroup): RedirectResponse
     {
         $data = $request->validated();
 
-        // آپلود تصویر جدید
-        if ($request->hasFile('image')) {
-            // حذف تصویر قدیمی
-            if ($productGroup->image && Storage::disk('public')->exists($productGroup->image)) {
-                Storage::disk('public')->delete($productGroup->image);
+        DB::transaction(function () use ($request, $productGroup, &$data) {
+            if ($request->hasFile('image')) {
+                if ($productGroup->image && Storage::disk('public')->exists($productGroup->image)) {
+                    Storage::disk('public')->delete($productGroup->image);
+                }
+                $data['image'] = $request->file('image')->store('product-groups', 'public');
+            } else {
+                unset($data['image']);
             }
-            $data['image'] = $request->file('image')->store('product-groups', 'public');
-        }
 
-        $productGroup->update($data);
+            // code نباید تغییر کند
+            unset($data['code']);
+
+            $translations = $data['translations'] ?? [];
+            unset($data['translations']);
+
+            $productGroup->update($data);
+
+            $this->saveTranslations($productGroup, $translations);
+        });
 
         return redirect()
             ->route('admin.productGroup.index')
-            ->with('success', 'گروه محصول با موفقیت بروزرسانی شد.');
+            ->with('success', 'گروه محصول با موفقیت به‌روزرسانی شد.');
     }
 
-    /**
-     * حذف گروه
-     */
-    public function destroy(ProductGroup $productGroup)
+    /* ============================================================
+     |  Destroy
+     ============================================================ */
+    public function destroy(ProductGroup $productGroup): RedirectResponse
     {
-        // حذف تصویر
-        if ($productGroup->image && Storage::disk('public')->exists($productGroup->image)) {
-            Storage::disk('public')->delete($productGroup->image);
+        // جلوگیری از حذف اگر دسته‌بندی دارد
+        if ($productGroup->categories()->exists()) {
+            return back()->with('error', 'ابتدا باید دسته‌بندی‌های این گروه را حذف یا منتقل کنید.');
         }
 
-        $productGroup->delete();
+        DB::transaction(function () use ($productGroup) {
+            if ($productGroup->image && Storage::disk('public')->exists($productGroup->image)) {
+                Storage::disk('public')->delete($productGroup->image);
+            }
+
+            $productGroup->delete();
+        });
 
         return redirect()
             ->route('admin.productGroup.index')
             ->with('success', 'گروه محصول با موفقیت حذف شد.');
+    }
+
+    /* ============================================================
+     |  Helper: Save Translations
+     ============================================================ */
+    protected function saveTranslations(ProductGroup $group, array $translations): void
+    {
+        foreach ($translations as $locale => $values) {
+            if (empty($values['name'])) {
+                continue;
+            }
+
+            if (empty($values['slug'])) {
+                $values['slug'] = ProductGroup::generateUniqueSlug(
+                    $values['name'],
+                    $locale,
+                    $group->id
+                );
+            }
+
+            $group->translations()->updateOrCreate(
+                ['locale' => $locale],
+                [
+                    'name'              => $values['name'],
+                    'slug'              => $values['slug'],
+                    'short_description' => $values['short_description'] ?? null,
+                    'description'       => $values['description'] ?? null,
+                    'meta_title'        => $values['meta_title'] ?? null,
+                    'meta_description'  => $values['meta_description'] ?? null,
+                    'meta_keywords'     => $values['meta_keywords'] ?? null,
+                ]
+            );
+        }
     }
 }

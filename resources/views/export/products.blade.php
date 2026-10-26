@@ -62,157 +62,78 @@
 
         {{-- Products Section --}}
         <section class="export-products-section">
-
             <div class="container">
 
+                {{-- Heading --}}
                 <div class="section-heading">
-
-                    <span class="section-eyebrow">
-                        {{ __('export_products.products_eyebrow') }}
-                    </span>
-
-                    <h2>
-                        {{ __('export_products.products_title') }}
-                    </h2>
-
-                    <p>
-                        {{ __('export_products.products_description') }}
-                    </p>
-
+            <span class="section-eyebrow">
+                {{ __('export_products.products_eyebrow') }}
+            </span>
+                    <h2>{{ __('export_products.products_title') }}</h2>
+                    <p>{{ __('export_products.products_description') }}</p>
                 </div>
 
-
+                {{-- Products Grid --}}
                 <div class="export-products-grid">
 
-                    {{-- Product 1 --}}
-                    <article class="export-product-card">
+                    @forelse($products as $product)
+                        @php
+                            // ترجمه زبان جاری با fallback
+                            $t = $product->translation($currentLocale ?? app()->getLocale());
+                        @endphp
 
-                        <div class="export-product-image">
-                            <img
-                                src="{{ asset('images/export-products/product-1.jpg') }}"
-                                alt="{{ __('export_products.product_1.title') }}"
-                                loading="lazy"
-                            >
+                        @if(!$t)
+                            @continue
+                        @endif
+
+                        <article class="export-product-card">
+
+                            <div class="export-product-image">
+                                @if($product->image)
+                                    <img src="{{ $product->image_url }}"
+                                         alt="{{ $t->name }}"
+                                         loading="lazy">
+                                @else
+                                    <div class="no-image">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div class="export-product-content">
+
+                                <h3>{{ $t->name }}</h3>
+
+                                @if($t->short_description)
+                                    <p>{{ \Illuminate\Support\Str::limit($t->short_description, 120) }}</p>
+                                @endif
+
+                                <a href="{{ route('productExport.show', ['locale' => $currentLocale, 'productExport' => $product->id]) }}"
+                                   class="export-product-link">
+                                    {{ __('export_products.view_product') }}
+                                </a>
+                            </div>
+
+                        </article>
+
+                    @empty
+                        <div class="export-products-empty">
+                            <i class="fas fa-box-open"></i>
+                            <p>{{ __('export_products.empty') ?? 'هیچ محصولی یافت نشد.' }}</p>
                         </div>
-
-                        <div class="export-product-content">
-
-                            <h3>
-                                {{ __('export_products.product_1.title') }}
-                            </h3>
-
-                            <p>
-                                {{ __('export_products.product_1.description') }}
-                            </p>
-
-                            <a href="#"
-                               class="export-product-link">
-                                {{ __('export_products.view_product') }}
-                            </a>
-
-                        </div>
-
-                    </article>
-
-
-                    {{-- Product 2 --}}
-                    <article class="export-product-card">
-
-                        <div class="export-product-image">
-                            <img
-                                src="{{ asset('images/export-products/product-2.jpg') }}"
-                                alt="{{ __('export_products.product_2.title') }}"
-                                loading="lazy"
-                            >
-                        </div>
-
-                        <div class="export-product-content">
-
-                            <h3>
-                                {{ __('export_products.product_2.title') }}
-                            </h3>
-
-                            <p>
-                                {{ __('export_products.product_2.description') }}
-                            </p>
-
-                            <a href="#"
-                               class="export-product-link">
-                                {{ __('export_products.view_product') }}
-                            </a>
-
-                        </div>
-
-                    </article>
-
-
-                    {{-- Product 3 --}}
-                    <article class="export-product-card">
-
-                        <div class="export-product-image">
-                            <img
-                                src="{{ asset('images/export-products/product-3.jpg') }}"
-                                alt="{{ __('export_products.product_3.title') }}"
-                                loading="lazy"
-                            >
-                        </div>
-
-                        <div class="export-product-content">
-
-                            <h3>
-                                {{ __('export_products.product_3.title') }}
-                            </h3>
-
-                            <p>
-                                {{ __('export_products.product_3.description') }}
-                            </p>
-
-                            <a href="#"
-                               class="export-product-link">
-                                {{ __('export_products.view_product') }}
-                            </a>
-
-                        </div>
-
-                    </article>
-
-
-                    {{-- Product 4 --}}
-                    <article class="export-product-card">
-
-                        <div class="export-product-image">
-                            <img
-                                src="{{ asset('images/export-products/product-4.jpg') }}"
-                                alt="{{ __('export_products.product_4.title') }}"
-                                loading="lazy"
-                            >
-                        </div>
-
-                        <div class="export-product-content">
-
-                            <h3>
-                                {{ __('export_products.product_4.title') }}
-                            </h3>
-
-                            <p>
-                                {{ __('export_products.product_4.description') }}
-                            </p>
-
-                            <a href="#"
-                               class="export-product-link">
-                                {{ __('export_products.view_product') }}
-                            </a>
-
-                        </div>
-
-                    </article>
+                    @endforelse
 
                 </div>
 
+                {{-- Pagination --}}
+                @if($products->hasPages())
+                    <div class="export-products-pagination mt-4">
+                        {{ $products->links() }}
+                    </div>
+                @endif
+
             </div>
-
         </section>
-
 
         {{-- Export CTA --}}
         <section class="export-products-cta">

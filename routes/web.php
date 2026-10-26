@@ -10,7 +10,7 @@ use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AgentChatController;
-
+use App\Http\Controllers\Shop\ParentCategoryController;
 use App\Http\Controllers\panelAdmin\ProductGroupController;
 use App\Http\Controllers\panelAdmin\ProductGroupTranslationController;
 use App\Http\Controllers\panelAdmin\CategoryController;
@@ -21,6 +21,7 @@ use App\Http\Controllers\panelAdmin\CatalogController;
 use App\Http\Controllers\panelAdmin\CatalogTranslationController;
 use App\Http\Controllers\panelAdmin\GalleryController;
 use App\Http\Controllers\panelAdmin\GalleryTranslationController;
+use App\Http\Controllers\panelAdmin\ProductExportController;
 use App\Http\Controllers\panelAdmin\TradeTransactionController;
 use App\Http\Controllers\panelAdmin\ContactController;
 use App\Http\Controllers\panelAdmin\FaqController;
@@ -86,6 +87,8 @@ Route::prefix('{locale}')->whereIn('locale', ['fa', 'en', 'ar'])->middleware('se
     Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
     Route::post('/contact', [HomeController::class, 'storeContact'])->name('contact.store');
     Route::get('/product-export', [HomeController::class, 'productExport'])->name('productExport');
+    Route::get('/product-export/{productExport}', [HomeController::class, 'productExportShow'])
+        ->name('productExport.show');
     Route::get('/gallery', [HomeController::class, 'gallery'])->name('gallery');
     Route::get('/projects', [HomeController::class, 'trads'])->name('trad');
     Route::get('/services', [HomeController::class, 'services'])->name('services');
@@ -94,6 +97,28 @@ Route::prefix('{locale}')->whereIn('locale', ['fa', 'en', 'ar'])->middleware('se
     Route::get('/blog/export', [BlogController::class, 'export'])->name('blog.export');
     Route::get('/blog/import', [BlogController::class, 'import'])->name('blog.import');
     Route::get('/blog/markets', [BlogController::class, 'markets'])->name('blog.markets');
+    Route::prefix('chatbot')->name('chatbot.')->middleware('throttle:30,1')->group(function () {
+        Route::post('/start', [ChatbotController::class, 'start'])->name('start');
+        Route::post('/send', [ChatbotController::class, 'send'])->name('send');
+        Route::get('/messages', [ChatbotController::class, 'messages'])->name('messages');
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Alternative Chat Routes
+    |--------------------------------------------------------------------------
+    | NOTE: Route names changed from `chat.message` / `chat.messages`
+    | to `chat.public.send` / `chat.public.messages` to avoid conflict
+    | with the `chat.messages` route defined in the admin panel section.
+    |--------------------------------------------------------------------------
+    */
+
+    Route::prefix('chat')->name('chat.public.')->middleware('throttle:30,1')->group(function () {
+        Route::post('/message', [ChatbotController::class, 'send'])->name('send');
+        Route::get('/messages', [ChatbotController::class, 'messages'])->name('messages');
+    });
+
 
 });
 
@@ -104,7 +129,7 @@ Route::prefix('{locale}')->whereIn('locale', ['fa', 'en', 'ar'])->middleware('se
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('panelAdmin')->group(function () {
+Route::prefix('panelAdmin') ->middleware(['admin'])->group(function () {
 
     // Admin Dashboard
     Route::get('/', [CatalogController::class, 'Admin'])->name('view.panel');
@@ -343,6 +368,30 @@ Route::prefix('panelAdmin')->group(function () {
         Route::patch('/{conversation}/close', [SupportController::class, 'close'])->name('close');
         Route::patch('/{conversation}/reopen', [SupportController::class, 'reopen'])->name('reopen');
     });
+    Route::prefix('productExport')->group(function () {
+        Route::get('/', [ProductExportController::class, 'index'])->name('admin.productExport.index');
+        Route::get('/create', [ProductExportController::class, 'create'])->name('admin.productExport.create');
+        Route::post('/create', [ProductExportController::class, 'store'])->name('admin.productExport.store');
+        Route::get('/show/{productExport}', [ProductExportController::class, 'show'])->name('admin.productExport.show');
+        Route::get('/edit/{productExport}', [ProductExportController::class, 'edit'])->name('admin.productExport.edit');
+        Route::put('/update/{productExport}', [ProductExportController::class, 'update'])->name('admin.productExport.update');
+        Route::delete('/delete/{productExport}', [ProductExportController::class, 'destroy'])->name('admin.productExport.delete');
+    });
+    Route::prefix('parentShop')->group(function (){
+
+        Route::get('/',[ParentCategoryController::class,'index'])->name('admin.parentShop.index');
+
+        Route::get('/create',[ParentCategoryController::class,'create'])->name('admin.parentShop.create');
+
+        Route::post('/',[ParentCategoryController::class,'store'])->name('admin.parentShop.store');
+
+        Route::get('/{parentCategory}/edit',[ParentCategoryController::class,'edit'])->name('admin.parentShop.edit');
+
+        Route::put('/{parentCategory}',[ParentCategoryController::class,'update'])->name('admin.parentShop.update');
+
+        Route::delete('/{parentCategory}',[ParentCategoryController::class,'destroy'])->name('admin.parentShop.destroy');
+
+    });
 
 });
 
@@ -353,20 +402,4 @@ Route::prefix('panelAdmin')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('chatbot')->name('chatbot.')->middleware('throttle:30,1')->group(function () {
-    Route::post('/start', [ChatbotController::class, 'start'])->name('start');
-    Route::post('/send', [ChatbotController::class, 'send'])->name('send');
-    Route::get('/messages', [ChatbotController::class, 'messages'])->name('messages');
-});
 
-
-/*
-|--------------------------------------------------------------------------
-| Alternative Chat Routes
-|--------------------------------------------------------------------------
-*/
-
-Route::prefix('chat')->name('chat.')->middleware('throttle:30,1')->group(function () {
-    Route::post('/message', [ChatbotController::class, 'send'])->name('message');
-    Route::get('/messages', [ChatbotController::class, 'messages'])->name('messages');
-});

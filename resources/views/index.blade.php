@@ -6,7 +6,7 @@
 
         {{-- اسلاید اول --}}
         <div class="header-carousel-item"
-             style="background-image: url('{{ asset('img/imageheader/headerExport.webp') }}');">
+             style="background-image: url('{{ asset('img/imageheader/slider1.jpeg') }}');">
             <div class="carousel-caption">
                 <div class="container">
                     <div class="row align-items-center justify-content-start">
@@ -24,7 +24,7 @@
                                     {{ __('home.carousel.slide1.description') }}
                                 </p>
                                 <div class="d-flex justify-content-center justify-content-md-start flex-shrink-0 mb-4">
-                                    <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="{{ $productsUrl }}">
+                                    <a class="btn btn-light rounded-pill py-3 px-4 px-md-5 me-2" href="{{  route('productExport') }}">
                                         <i class="fas fa-box-open me-2"></i>{{ __('home.carousel.slide1.btn_primary') }}
                                     </a>
                                     <a class="btn btn-dark rounded-pill py-3 px-4 px-md-5 ms-2" href="{{ $contactUrl }}">
@@ -338,102 +338,203 @@
 
 
     <!-- Map Start -->
-    <div class="container-fluid py-5" id="contact" style="background-color: #f8f9fa;">
+    {{-- Map Section --}}
+    <div class="container-fluid py-5" id="contact"
+         style="background-color: #f8f9fa;">
+
         <div class="container py-5">
-            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.2s" style="max-width: 800px;">
-                <h4 style="color: #1B361E">{{ __('home.map_section.badge') }}</h4>
-                <h1 class="display-4 mb-4">{{ __('home.map_section.title') }}</h1>
-                <p class="mb-0">{{ __('home.map_section.description') }}</p>
+
+            {{-- Header --}}
+            <div class="text-center mx-auto pb-5"
+                 style="max-width: 800px;">
+
+                <h4 style="color: #1B361E">
+                    {{ __('home.map_section.badge') }}
+                </h4>
+
+                <h1 class="display-4 mb-4">
+                    {{ __('home.map_section.title') }}
+                </h1>
+
+                <p class="mb-0">
+                    {{ __('home.map_section.description') }}
+                </p>
+
             </div>
 
-            <div class="row g-4 justify-content-center">
+            <div class="row g-4">
 
-                <div class="col-lg-8 wow fadeInLeft" data-wow-delay="0.2s">
-                    <div class="bg-white rounded p-3 h-100 shadow-sm">
-                        <div id="map" style="width: 100%; height: 500px; border-radius: 8px;"></div>
+                {{-- Map --}}
+                <div class="col-lg-8">
 
-                        <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
-                            <button type="button" id="btn-driving" class="btn btn-primary rounded-pill active" onclick="setTravelMode('DRIVING')">
-                                <i class="fa fa-car me-1"></i> {{ __('home.map_section.travel_modes.driving') }}
-                            </button>
-                            <button type="button" id="btn-walking" class="btn btn-outline-primary rounded-pill" onclick="setTravelMode('WALKING')">
-                                <i class="fa fa-walking me-1"></i> {{ __('home.map_section.travel_modes.walking') }}
-                            </button>
-                            <button type="button" id="btn-bicycling" class="btn btn-outline-primary rounded-pill" onclick="setTravelMode('BICYCLING')">
-                                <i class="fa fa-bicycle me-1"></i> {{ __('home.map_section.travel_modes.bicycling') }}
-                            </button>
+                    <div class="bg-white rounded p-3 shadow-sm">
+
+                        <div id="company-map"
+                             style="
+                            width: 100%;
+                            height: 500px;
+                            border-radius: 8px;
+                         ">
                         </div>
 
-                        <div id="route-summary" class="alert alert-success mt-3 mb-0 d-none">
-                            <div class="d-flex justify-content-around text-center">
-                                <div>
-                                    <i class="fa fa-road text-primary fa-2x mb-2"></i>
-                                    <div>
-                                        <strong>{{ __('home.map_section.distance') }}:</strong>
-                                        <span id="route-distance">-</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <i class="fa fa-clock text-primary fa-2x mb-2"></i>
-                                    <div>
-                                        <strong>{{ __('home.map_section.duration') }}:</strong>
-                                        <span id="route-duration">-</span>
-                                    </div>
-                                </div>
-                            </div>
+                        {{-- Map buttons --}}
+                        <div class="d-flex flex-wrap gap-2 mt-3">
+
+                            <a href="https://balad.ir/p/4t19XkOaUFLTdg"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="btn btn-success rounded-pill">
+
+                                <i class="fa fa-map-marker-alt me-1"></i>
+
+                                مشاهده موقعیت شرکت در بلد
+
+                            </a>
+
+                            <a href="https://www.openstreetmap.org/"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="btn btn-outline-primary rounded-pill">
+
+                                <i class="fa fa-map me-1"></i>
+
+                                مشاهده نقشه بزرگ‌تر
+
+                            </a>
+
                         </div>
+
                     </div>
+
                 </div>
 
-                <div class="col-lg-4 wow fadeInRight" data-wow-delay="0.2s">
-                    <div class="bg-white rounded p-4 h-100 shadow-sm">
-                        <h5 class="mb-3 pb-2" style="color: #1B361E; border-bottom: 2px solid #1B361E;">
-                            <i class="fa fa-route me-2"></i> {{ __('home.map_section.route_title') }}
+                {{-- Company Information --}}
+                <div class="col-lg-4">
+
+                    <div class="bg-white rounded p-4 shadow-sm h-100">
+
+                        <h5 class="mb-4"
+                            style="color: #1B361E;">
+
+                            <i class="fa fa-building me-2"></i>
+
+                            اطلاعات شرکت
+
                         </h5>
 
-                        <div class="mb-3">
-                            <label for="origin-input" class="form-label small text-muted">
-                                {{ __('home.map_section.origin') }}
-                            </label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-white">
-                                    <i class="fa fa-map-marker-alt text-primary"></i>
-                                </span>
-                                <input type="text" id="origin-input" class="form-control"
-                                       placeholder="{{ __('home.map_section.origin_placeholder') }}"
-                                       value="{{ __('home.map_section.origin_default') }}">
-                                <button type="button" class="btn btn-outline-primary" onclick="useMyLocation()"
-                                        title="{{ __('home.map_section.my_location') }}">
-                                    <i class="fa fa-crosshairs"></i>
-                                </button>
-                            </div>
+                        <div class="mb-4">
+
+                            <h6>
+                                <i class="fa fa-map-marker-alt text-success me-2"></i>
+                                آدرس شرکت
+                            </h6>
+
+                            <p class="text-muted">
+                                کاشمر، خیابان امام خمینی،
+                                خیابان قائم، خیابان سلمان فارسی
+                            </p>
+
                         </div>
 
-                        <div class="mb-3">
-                            <label for="destination-input" class="form-label small text-muted">
-                                {{ __('home.map_section.destination') }}
-                            </label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-white">
-                                    <i class="fa fa-flag-checkered text-danger"></i>
-                                </span>
-                                <input type="text" id="destination-input" class="form-control"
-                                       value="{{ __('home.map_section.destination_value') }}" readonly>
-                            </div>
+                        <hr>
+
+                        <div class="mb-4">
+
+                            <h6>
+                                <i class="fa fa-globe text-success me-2"></i>
+                                نام شرکت
+                            </h6>
+
+                            <p class="text-muted">
+                                شرکت صادرات و واردات امیر آفاق گستر پارس
+                            </p>
+
                         </div>
 
-                        <button type="button" class="btn btn-primary w-100 rounded-pill py-2 mb-4" onclick="calculateRoute()">
-                            <i class="fa fa-search-location me-2"></i>
-                            {{ __('home.map_section.show_route') }}
-                        </button>
+                        <a href="https://balad.ir/p/4t19XkOaUFLTdg"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="btn btn-primary w-100 rounded-pill py-2">
 
-                        <div id="directions-text" style="max-height: 320px; overflow-y: auto; font-size: 13px;"></div>
+                            <i class="fa fa-directions me-2"></i>
+
+                            مسیریابی تا شرکت
+
+                        </a>
+
                     </div>
+
                 </div>
 
             </div>
+
         </div>
+
     </div>
     <!-- Map End -->
 
+
+@endsection
+@section('scripts')
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            /*
+            |--------------------------------------------------------------------------
+            | مختصات مقصد
+            |--------------------------------------------------------------------------
+            | این مختصات نمونه هستند و باید با مختصات دقیق شرکت
+            | استخراج‌شده از نقشه بلد جایگزین شوند.
+            */
+
+            const companyLocation = {
+                lat: 35.2383,
+                lng: 58.4656
+            };
+
+            // Create map
+            const map = L.map('company-map').setView(
+                [companyLocation.lat, companyLocation.lng],
+                16
+            );
+
+            // OpenStreetMap tiles
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Company marker
+            const companyMarker = L.marker([
+                companyLocation.lat,
+                companyLocation.lng
+            ]).addTo(map);
+
+            // Popup
+            companyMarker.bindPopup(`
+            <div style="direction: rtl; text-align: right;">
+                <strong>شرکت امیر آفاق گستر پارس</strong>
+                <br>
+                شرکت صادرات و واردات
+                <br>
+                کاشمر، خیابان سلمان فارسی
+                <br><br>
+                <a
+                    href="https://balad.ir/p/4t19XkOaUFLTdg"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    مشاهده موقعیت در بلد
+                </a>
+            </div>
+        `).openPopup();
+
+            // Fix map display when its container becomes visible
+            setTimeout(function () {
+                map.invalidateSize();
+            }, 200);
+
+        });
+    </script>
 @endsection

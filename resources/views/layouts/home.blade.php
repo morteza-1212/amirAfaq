@@ -78,6 +78,8 @@
     <link rel="stylesheet" href="{{ asset('lib/owlcarousel/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
     <style>
         /* =========================================================
@@ -2200,6 +2202,8 @@
 
     })();
 </script>
+@yield('scripts')
+
 
 </body>
 </html>

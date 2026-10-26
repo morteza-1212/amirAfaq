@@ -131,6 +131,10 @@ return [
     |
     */
 
-    'serializable_classes' => false,
-
+    'serializable_classes' => [
+        App\Models\FaqTranslation::class,
+        // در صورت نیاز کلاس‌های دیگر را هم اضافه کنید:
+        // App\Models\Faq::class,
+        // Illuminate\Database\Eloquent\Collection::class,
+    ],
 ];

@@ -58,34 +58,45 @@ class FaqSearchService
 
     private function searchSimilar(string $normalized, string $locale): ?Faq
     {
+        // ✅ فقط داده‌های ساده (آرایه) را کش می‌کنیم، نه آبجکت مدل
         $candidates = Cache::remember(
-            "faq_trans_{$locale}_v3",
+            "faq_trans_{$locale}_v4",
             self::CACHE_TTL,
-            fn () => FaqTranslation::query()
-                ->where('locale', $locale)
-                ->whereHas('faq', fn ($q) => $q->where('is_active', true))
-                ->with('faq')
-                ->get()
-                ->all()
+            function () use ($locale) {
+                return FaqTranslation::query()
+                    ->where('locale', $locale)
+                    ->whereHas('faq', fn ($q) => $q->where('is_active', true))
+                    ->with('faq')
+                    ->get()
+                    ->map(function (FaqTranslation $t) {
+                        return [
+                            'faq_id'    => $t->faq_id,
+                            'question'  => $t->question,
+                            'keywords'  => $t->keywords,
+                            'faq_answer'=> $t->faq?->answer,
+                        ];
+                    })
+                    ->all();
+            }
         );
 
         Log::info('[FaqSearch] candidates', ['count' => count($candidates)]);
 
-        $best = null;
+        $bestId = null;
         $bestScore = 0.0;
 
-        foreach ($candidates as $translation) {
-            if (!$translation->faq) {
+        foreach ($candidates as $candidate) {
+            if (empty($candidate['faq_id'])) {
                 continue;
             }
 
-            $question = $this->normalize($translation->question);
+            $question = $this->normalize($candidate['question']);
 
             similar_text($normalized, $question, $percent);
             $score = $percent / 100;
 
             // پاداش کلمات کلیدی
-            $keywords = $translation->keywords;
+            $keywords = $candidate['keywords'];
             if (is_string($keywords)) {
                 $keywords = json_decode($keywords, true) ?: [];
             }
@@ -95,24 +106,30 @@ class FaqSearchService
             }
 
             Log::info('[FaqSearch] score', [
-                'faq_id'   => $translation->faq->id,
-                'question' => $translation->question,
+                'faq_id'   => $candidate['faq_id'],
+                'question' => $candidate['question'],
                 'score'    => round($score, 3),
             ]);
 
             if ($score > $bestScore) {
                 $bestScore = $score;
-                $best = $translation->faq;
+                $bestId = $candidate['faq_id'];
             }
         }
 
         Log::info('[FaqSearch] best', [
-            'faq_id' => $best?->id,
+            'faq_id' => $bestId,
             'score'  => round($bestScore, 3),
             'threshold' => self::SIMILARITY_THRESHOLD,
         ]);
 
-        return $bestScore >= self::SIMILARITY_THRESHOLD ? $best : null;
+        if ($bestScore < self::SIMILARITY_THRESHOLD || $bestId === null) {
+            return null;
+        }
+
+        // ✅ فقط در صورت نیاز، مدل کامل را از دیتابیس می‌خوانیم
+        return Faq::with(['translations' => fn ($q) => $q->where('locale', $locale)])
+            ->find($bestId);
     }
 
     private function keywordScore(string $normalized, array $keywords): float

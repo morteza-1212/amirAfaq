@@ -62,10 +62,10 @@ class HomeController extends Controller
         return view('contactUs.index');
     }
 
-    public function productExport(): View
-    {
-        return view('export.products');
-    }
+//    public function productExport(): View
+//    {
+//        return view('export.products');
+//    }
     public function storeContact(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -168,6 +168,32 @@ class HomeController extends Controller
         return view('gallery.index', [
             'galleries'     => $galleries,
             'currentLocale' => $currentLocale,
+        ]);
+    }
+    public function productExport(Request $request, ?string $locale = null): View
+    {
+        $currentLocale = app()->getLocale();
+
+        // محصولات صادراتی فعال و قابل صادرات
+        $products = \App\Models\ProductExport::query()
+            ->with(['translations', 'category.translations'])
+            ->where('is_active', true)
+            ->where('is_exportable', true)
+            ->ordered()
+            ->paginate(12);
+
+        return view('export.products', [
+            'products'      => $products,
+            'currentLocale' => $currentLocale,
+        ]);
+    }
+    public function productExportShow(string $locale, \App\Models\ProductExport $productExport): View
+    {
+        $productExport->load(['translations', 'category.translations']);
+
+        return view('export.product-show', [
+            'product'       => $productExport,
+            'currentLocale' => app()->getLocale(),
         ]);
     }
 }

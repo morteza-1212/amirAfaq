@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use App\Http\Middleware\EnsureIsAdmin;
+use App\Http\Middleware\SetLocal;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,21 +14,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // ✅ ثبت alias برای Middleware
+        // ✅ ثبت همه‌ی aliasها در یک جا
         $middleware->alias([
-            'setLocale' => \App\Http\Middleware\SetLocal::class,
+            'setLocale' => SetLocal::class,
+            'admin'     => EnsureIsAdmin::class,
         ]);
 
-        // ✅ اگر می‌خواهید Middleware روی همه‌ی درخواست‌ها اجرا شود، این را هم اضافه کنید:
+        // ✅ اگر می‌خواهید SetLocal روی همه‌ی درخواست‌های web اجرا شود،
+        // خط زیر را از حالت کامنت خارج کنید:
         // $middleware->web(append: [
-        //     \App\Http\Middleware\SetLocal::class,
+        //     SetLocal::class,
         // ]);
-    })
-    ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias([
-            'setLocale' => \App\Http\Middleware\SetLocal::class,
-            'admin' => EnsureIsAdmin::class,
-        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

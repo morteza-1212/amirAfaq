@@ -48,12 +48,14 @@ return [
 
     'carousel' => [
         'slide1' => [
-            'badge'         => 'Exporting Iranian Products to the World',
-            'title_line1'   => 'Pistachio, Raisin & Saffron',
-            'title_line2'   => 'With World-Class Quality',
-            'description'   => 'Supply and export of selected Iranian agricultural products, focusing on quality, standard packaging, and building trade relations with international markets.',
-            'btn_primary'   => 'Export Products',
-            'btn_secondary' => 'Request Cooperation',
+
+                'badge'         => 'Exporting Iranian Products to the World',
+                'title_line1'   => 'Iranian Products',
+                'title_line2'   => 'with World-Class Quality',
+                'description'   => 'Sourcing and exporting selected Iranian products with a focus on quality, standard packaging, and building trade relationships with international markets.',
+                'btn_primary'   => 'Export Products',
+                'btn_secondary' => 'Request Cooperation',
+
         ],
         'slide2' => [
             'badge'         => 'International Trade & Supply',

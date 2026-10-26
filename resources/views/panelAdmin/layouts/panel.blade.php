@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پنل مدیریت | شرکت خدمات رایانه‌ای تختی</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title', 'پنل مدیریت') | شرکت خدمات رایانه‌ای تختی</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -154,6 +155,14 @@
 
         .nav-item {
             margin-bottom: 5px;
+        }
+
+        .nav-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #7f8c8d;
+            padding: 15px 15px 8px;
+            letter-spacing: 1px;
         }
 
         .nav-link {
@@ -662,206 +671,184 @@
             border-color: #0f3460;
             color: #e0e0e0;
         }
-
-        /* Dropdown */
-        .dropbtn {
-            background-color: #0f3460;
-            color: white;
-            padding: 16px;
-            font-size: 16px;
-            border: none;
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f1f1f1;
-            min-width: 160px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown-content a:hover {
-            background-color: #ddd;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown:hover .dropbtn {
-            background-color: #3e8e41;
-        }
     </style>
     @yield('styles')
 </head>
 <body>
 
-<!-- ═══════════════════ Sidebar ═══════════════════ -->
+@php
+    // شمارش‌ها برای نمایش در سایدبار
+    $counts = [
+        'categories'    => \App\Models\Category::count(),
+        'productGroups' => \App\Models\ProductGroup::count(),
+        'products'      => \App\Models\Product::count(),
+        'catalogs'      => \App\Models\Catalog::count(),
+        'gallery'       => \App\Models\Gallery::count(),
+        'trades'        => \App\Models\TradeTransaction::count(),
+        'buyers'        => \App\Models\Buyer::count(),
+        'contacts'      => \App\Models\Contact::count(),
+        'productExports'=> \App\Models\ProductExport::count(),
+    ];
+@endphp
+
+    <!-- ═══════════════════ Sidebar ═══════════════════ -->
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <div class="company-logo">
-            <span class="logo-text">فروشگاه مدیریت</span>
+            <span class="logo-text">پنل مدیریت</span>
         </div>
-        <small class="text-muted">پنل مدیریت چندمنظوره</small>
+        <small class="text-muted">مدیریت چندمنظوره</small>
     </div>
 
     <div class="sidebar-user">
         <div class="user-avatar">
             <i class="fas fa-user"></i>
         </div>
-        <div class="user-name">مدیر سیستم</div>
-        <div class="user-role">Administrator</div>
+        <div class="user-name">{{ auth()->user()->name ?? 'مدیر سیستم' }}</div>
+        <div class="user-role">{{ auth()->user()->role ?? 'Administrator' }}</div>
     </div>
 
     <ul class="nav-links">
-        <!-- داشبورد -->
+        {{-- داشبورد --}}
         <li class="nav-item">
-            <a href="#dashboard" class="nav-link active">
+            <a href="{{ route('view.panel') }}"
+               class="nav-link {{ request()->routeIs('view.panel') ? 'active' : '' }}">
                 <i class="fas fa-home"></i>
                 <span class="nav-text">داشبورد</span>
             </a>
         </li>
 
-        @inject('category', 'App\Models\Category')
+        {{-- بخش فروشگاه --}}
+        <li class="nav-section-title">فروشگاه</li>
 
-        <!-- دسته‌بندی‌ها -->
         <li class="nav-item">
-            <a href="{{route('admin.category.index')}}" class="nav-link">
-                <i class="fas fa-code"></i>
-                <span class="nav-text">دسته بندی ها</span>
-                <span class="badge">{{ $category->count() }}</span>
+            <a href="{{ route('admin.category.index') }}"
+               class="nav-link {{ request()->routeIs('admin.category.*') ? 'active' : '' }}">
+                <i class="fas fa-tags"></i>
+                <span class="nav-text">دسته‌بندی‌ها</span>
+                <span class="badge">{{ $counts['categories'] }}</span>
             </a>
         </li>
 
-        @inject('productGroup', 'App\Models\ProductGroup')
-
-        <!-- گروه‌ها -->
         <li class="nav-item">
-            <a href="{{ route('admin.productGroup.index') }}" class="nav-link">
+            <a href="{{ route('admin.productGroup.index') }}"
+               class="nav-link {{ request()->routeIs('admin.productGroup.*') ? 'active' : '' }}">
                 <i class="fas fa-layer-group"></i>
-                <span class="nav-text">گروه ها</span>
-                <span class="badge">{{ $productGroup->count() }}</span>
+                <span class="nav-text">گروه‌ها</span>
+                <span class="badge">{{ $counts['productGroups'] }}</span>
             </a>
         </li>
 
-        <!-- محصولات -->
-        @inject('product', 'App\Models\Product')
         <li class="nav-item">
-            <a href="{{route('admin.product.index')}}" class="nav-link">
-                <i class="fas fa-graduation-cap"></i>
+            <a href="{{ route('admin.product.index') }}"
+               class="nav-link {{ request()->routeIs('admin.product.*') ? 'active' : '' }}">
+                <i class="fas fa-box-open"></i>
                 <span class="nav-text">محصولات</span>
-                <span class="badge">{{ $product->count() }}</span>
-
+                <span class="badge">{{ $counts['products'] }}</span>
             </a>
         </li>
 
-        <!-- رنگ‌ها -->
-        @inject('catalogs', 'App\Models\Catalog')
-
         <li class="nav-item">
-            <a href="{{route('admin.catalog.index')}}" class="nav-link">
-                <i class="fas fa-palette"></i>
-                <span class="nav-text"> کاتالوگ ها</span>
-                <span class="badge">{{ $catalogs->count() }}</span>
-
-            </a>
-        </li>
-        @inject('gallery', 'App\Models\Gallery')
-
-        <li class="nav-item">
-            <a href="{{route('admin.gallery.index')}}" class="nav-link">
-                <i class="fas fa-palette"></i>
-                <span class="nav-text">  گالری</span>
-                <span class="badge">{{ $gallery->count() }}</span>
-
+            <a href="{{ route('admin.catalog.index') }}"
+               class="nav-link {{ request()->routeIs('admin.catalog.*') ? 'active' : '' }}">
+                <i class="fas fa-book"></i>
+                <span class="nav-text">کاتالوگ‌ها</span>
+                <span class="badge">{{ $counts['catalogs'] }}</span>
             </a>
         </li>
 
-        <!-- سایزها -->
-        @inject('trade', 'App\Models\TradeTransaction')
-
         <li class="nav-item">
-            <a href="{{route('admin.trade-transaction.index')}}" class="nav-link">
-                <i class="fas fa-ruler-combined"></i>
-                <span class="nav-text"> معاملات انجام شده</span>
-                <span class="badge">{{ $trade->count() }}</span>
-
+            <a href="{{ route('admin.gallery.index') }}"
+               class="nav-link {{ request()->routeIs('admin.gallery.*') ? 'active' : '' }}">
+                <i class="fas fa-images"></i>
+                <span class="nav-text">گالری</span>
+                <span class="badge">{{ $counts['gallery'] }}</span>
             </a>
         </li>
 
-        <!-- مشتریان -->
-        @inject('buyer','App\Models\Buyer')
+        {{-- بخش معاملات --}}
+        <li class="nav-section-title">معاملات</li>
+
         <li class="nav-item">
-            <a href="{{route('admin.buyer.index')}}" class="nav-link">
+            <a href="{{ route('admin.trade-transaction.index') }}"
+               class="nav-link {{ request()->routeIs('admin.trade-transaction.*') ? 'active' : '' }}">
+                <i class="fas fa-exchange-alt"></i>
+                <span class="nav-text">معاملات انجام‌شده</span>
+                <span class="badge">{{ $counts['trades'] }}</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ route('admin.buyer.index') }}"
+               class="nav-link {{ request()->routeIs('admin.buyer.*') ? 'active' : '' }}">
                 <i class="fas fa-users"></i>
                 <span class="nav-text">مشتریان</span>
-                <span class="badge">{{ $buyer->count() }}</span>
-
+                <span class="badge">{{ $counts['buyers'] }}</span>
             </a>
         </li>
 
-        <!-- پروژه‌ها -->
-        @inject('contact','App\Models\Contact')
         <li class="nav-item">
-            <a href="{{route('admin.contact.index')}}" class="nav-link">
-                <i class="fas fa-briefcase"></i>
-                <span class="nav-text">درخواست های مشاوره</span>
-                <span class="badge">{{ $contact->count() }}</span>
-
+            <a href="{{ route('admin.contact.index') }}"
+               class="nav-link {{ request()->routeIs('admin.contact.*') ? 'active' : '' }}">
+                <i class="fas fa-envelope-open-text"></i>
+                <span class="nav-text">درخواست‌های مشاوره</span>
+                <span class="badge">{{ $counts['contacts'] }}</span>
             </a>
         </li>
 
-        <!-- مالی -->
         <li class="nav-item">
-            <a href="#finance" class="nav-link">
-                <i class="fas fa-chart-line"></i>
-                <span class="nav-text">مالی</span>
+            <a href="{{ route('admin.productExport.index') }}"
+               class="nav-link {{ request()->routeIs('admin.productExport.*') ? 'active' : '' }}">
+                <i class="fas fa-shipping-fast"></i>
+                <span class="nav-text">محصولات صادراتی</span>
+                <span class="badge">{{ $counts['productExports'] }}</span>
             </a>
         </li>
 
-        <!-- تنظیمات -->
-        <li class="nav-item">
-            <a href="#settings" class="nav-link">
-                <i class="fas fa-cog"></i>
-                <span class="nav-text">تنظیمات</span>
-            </a>
-        </li>
+        {{-- بخش پشتیبانی --}}
+        <li class="nav-section-title">پشتیبانی</li>
 
-        <!-- نظرات -->
         <li class="nav-item">
-            <a href="" class="nav-link">
-                <i class="fas fa-chart-bar"></i>
-                <span class="nav-text">نظرات</span>
-            </a>
-        </li>
-
-        <!-- سفارشات -->
-        <li class="nav-item">
-            <a href="" class="nav-link">
+            <a href="{{ route('admin.support.index') }}"
+               class="nav-link {{ request()->routeIs('admin.support.*') ? 'active' : '' }}">
                 <i class="fas fa-headset"></i>
-                <span class="nav-text">سفارشات</span>
+                <span class="nav-text">پشتیبانی آنلاین</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ route('admin.chat.index') }}"
+               class="nav-link {{ request()->routeIs('admin.chat.*') ? 'active' : '' }}">
+                <i class="fas fa-comments"></i>
+                <span class="nav-text">چت اپراتورها</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ route('admin.chatbot.faqs.index') }}"
+               class="nav-link {{ request()->routeIs('admin.chatbot.faqs.*') ? 'active' : '' }}">
+                <i class="fas fa-question-circle"></i>
+                <span class="nav-text">سوالات متداول</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{{ route('waiting-list') }}"
+               class="nav-link {{ request()->routeIs('waiting-list') ? 'active' : '' }}">
+                <i class="fas fa-hourglass-half"></i>
+                <span class="nav-text">لیست انتظار چت</span>
             </a>
         </li>
     </ul>
 
     <div class="sidebar-footer">
-        <a href="#logout" class="nav-link text-danger">
-            <i class="fas fa-sign-out-alt"></i>
-            <span class="nav-text">خروج از سیستم</span>
-        </a>
+        <form method="POST" action="">
+            @csrf
+            <button type="submit" class="nav-link text-danger w-100 border-0 bg-transparent text-start">
+                <i class="fas fa-sign-out-alt"></i>
+                <span class="nav-text">خروج از سیستم</span>
+            </button>
+        </form>
     </div>
 </div>
 
@@ -876,32 +863,46 @@
             <button class="toggle-sidebar" id="toggleSidebar" aria-label="باز و بسته کردن منو">
                 <i class="fas fa-bars"></i>
             </button>
-            <h1 class="page-title" id="pageTitle">داشبورد مدیریت</h1>
+            <h1 class="page-title" id="pageTitle">@yield('title', 'داشبورد مدیریت')</h1>
         </div>
 
         <div class="header-right">
             <div class="search-box">
-                <input type="text" placeholder="جستجو در پنل...">
+                <input type="text" id="globalSearch" placeholder="جستجو در پنل...">
                 <i class="fas fa-search"></i>
             </div>
 
             <div class="notification">
-                <button class="notification-btn">
+                <button class="notification-btn" type="button">
                     <i class="fas fa-bell"></i>
-                    <span class="notification-count">5</span>
+                    <span class="notification-count">0</span>
                 </button>
             </div>
 
             <div class="user-dropdown">
-                <button class="btn btn-primary">
+                <a href="{{ route('view.panel') }}" class="btn btn-primary">
                     <i class="fas fa-user-circle"></i>
-                    پروفایل
-                </button>
+                    {{ auth()->user()->name ?? 'پروفایل' }}
+                </a>
             </div>
         </div>
     </header>
 
     <div class="content">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
         @yield('content')
     </div>
 </div>
@@ -914,11 +915,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const sidebar       = document.getElementById('sidebar');
-        const mainContent   = document.getElementById('mainContent');
         const toggleBtn     = document.getElementById('toggleSidebar');
         const overlay       = document.getElementById('sidebarOverlay');
-        const navLinks      = document.querySelectorAll('.nav-link');
-        const pageTitle     = document.getElementById('pageTitle');
 
         /* ─── باز و بسته کردن سایدبار ─── */
         function openSidebar() {
@@ -933,11 +931,7 @@
 
         if (toggleBtn) {
             toggleBtn.addEventListener('click', function () {
-                if (sidebar.classList.contains('active')) {
-                    closeSidebar();
-                } else {
-                    openSidebar();
-                }
+                sidebar.classList.contains('active') ? closeSidebar() : openSidebar();
             });
         }
 
@@ -952,48 +946,13 @@
             }
         });
 
-        /* ─── مدیریت لینک‌های hash داخلی ─── */
-        navLinks.forEach(function (link) {
-            link.addEventListener('click', function () {
-                const href = this.getAttribute('href');
-
-                // فقط لینک‌های hash داخلی را مدیریت کن
-                if (href && href.startsWith('#') && href.length > 1) {
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-
-                    if (pageTitle) {
-                        const navText = this.querySelector('.nav-text');
-                        if (navText) {
-                            pageTitle.textContent = navText.textContent.trim() + ' - پنل مدیریت';
-                        }
-                    }
-
-                    // بستن سایدبار در موبایل بعد از کلیک
-                    if (window.innerWidth < 992) {
-                        closeSidebar();
-                    }
-                }
-            });
-        });
-
-        /* ─── اعلان‌ها ─── */
-        const notificationBtn = document.querySelector('.notification-btn');
-        if (notificationBtn) {
-            notificationBtn.addEventListener('click', function () {
-                alert('۵ اعلان جدید دارید!');
-                const count = this.querySelector('.notification-count');
-                if (count) count.style.display = 'none';
-            });
-        }
-
         /* ─── جستجوی هدر ─── */
-        const searchInput = document.querySelector('.search-box input');
+        const searchInput = document.getElementById('globalSearch');
         if (searchInput) {
             searchInput.addEventListener('keyup', function (e) {
-                if (e.key === 'Enter') {
-                    alert('جستجو برای: ' + this.value);
-                    this.value = '';
+                if (e.key === 'Enter' && this.value.trim() !== '') {
+                    // می‌توانید اینجا به یک صفحه جستجو ریدایرکت کنید
+                    console.log('Search for:', this.value);
                 }
             });
         }

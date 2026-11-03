@@ -6,7 +6,7 @@ use App\Events\AgentNeeded;
 use App\Events\MessageSent;
 use App\Models\Conversation;
 use App\Models\Message;
-use App\service\FaqSearchService;
+use App\Services\FaqSearchService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

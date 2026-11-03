@@ -6,31 +6,67 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
+
             $table->id();
 
-            $table->string('name')->unique();
+            // اطلاعات حساب کاربری
+            $table->string('name', 100)->unique(); // نام کاربری
+            $table->string('full_name', 150)->nullable(); // نام و نام خانوادگی
+            $table->string('email', 150)->nullable()->unique();
+            $table->string('phone', 20)->unique();
 
-            $table->enum('role', ['admin', 'user'])
-                ->default('user');
+            // اطلاعات نقش و وضعیت کاربر
+            $table->enum('role', ['admin', 'user'])->default('user');
 
+            $table->enum('status', [
+                'active',
+                'inactive',
+                'blocked'
+            ])->default('active');
+
+            // اطلاعات امنیتی
             $table->string('password');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('phone_verified_at')->nullable();
+            $table->timestamp('last_login_at')->nullable();
 
+            // اطلاعات آدرس مشتری
+            $table->string('province', 100)->nullable();
+            $table->string('city', 100)->nullable();
+            $table->string('postal_code', 10)->nullable();
+            $table->text('address')->nullable();
+            $table->string('plaque', 20)->nullable();
+            $table->string('unit', 20)->nullable();
+
+            // موقعیت جغرافیایی (اختیاری)
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+
+            // توضیحات تکمیلی
+            $table->text('description')->nullable();
+
+            // توکن ورود
             $table->rememberToken();
+
             $table->timestamps();
+
+            // ایندکس‌ها
+            $table->index('role');
+            $table->index('status');
+            $table->index(['province', 'city']);
         });
 
+        // جدول بازیابی رمز عبور
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
+        // جدول نشست کاربران
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
@@ -41,13 +77,10 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
     }
 };

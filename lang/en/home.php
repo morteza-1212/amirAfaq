@@ -2,527 +2,307 @@
 
 return [
 
+    /* =========================================================
+       META / SEO
+    ========================================================= */
     'meta' => [
-        'title'       => 'Amir Afaq Gostar Pars | Exporting Iranian Agricultural Products to the World',
-        'description' => 'Supply and export of selected Iranian agricultural products, focusing on quality, standard packaging, and building trade relations with international markets.',
-        'keywords'    => 'pistachio export, raisin export, saffron export, international trade, Iranian agricultural products',
+        'title'       => 'Shahab Balloon | Defense, Advertising & Research Balloons',
+        'description' => 'Shahab Balloon — design, manufacturing, and supply of defense, advertising, and research balloons with international standards and expert technical support.',
+        'keywords'    => 'Shahab Balloon, Shahab Balon, defense balloon, advertising balloon, research balloon, weather balloon, exhibition balloon, shahab balloon, shahab balon',
     ],
 
     'loading'     => 'Loading...',
     'back_to_top' => 'Back to top',
 
-    'common' => [
-        'learn_more' => 'Learn More',
-        'read_more'  => 'Read More',
+    /* =========================================================
+       CHAT
+    ========================================================= */
+    'chat' => [
+        'open'          => 'Open chat',
+        'close'         => 'Close chat',
+        'title'         => 'Balloon Technical Consultation',
+        'status'        => 'Online — a technical expert is ready to help',
+        'hello'         => 'Hello! 👋',
+        'ask'           => 'What type of balloon are you looking for?',
+        'options'       => 'Defense / Advertising / Research',
+        'placeholder'   => 'Type your message...',
+        'send'          => 'Send message',
+        'waiting_agent' => 'Waiting for an agent...',
+        'agent_joined'  => 'Agent connected',
+        'online'        => 'Online — ready to respond',
+        'closed'        => 'This conversation has been closed',
+        'error'         => 'Failed to send message. Please try again.',
     ],
 
+    /* =========================================================
+       TOPBAR
+    ========================================================= */
     'topbar' => [
-        'address' => 'Salman Farsi St., Kashmar, Iran',
-        'phone'   => '+98 915 039 8636',
-        'email'   => 'info@amirafaq.com',
+        'address' => '123 Valiasr St., Tehran, Iran',
+        'phone'   => '+98 21 8877 6655',
     ],
 
+    /* =========================================================
+       NAVBAR
+    ========================================================= */
     'navbar' => [
-        'logo_alt'         => 'Amir Afaq Gostar Pars logo',
-        'toggle_menu'      => 'Toggle navigation menu',
-        'home'             => 'Home',
-        'about'            => 'About Us',
-        'services'         => 'Services',
-        'sections'         => 'Sections',
-        'export_products'  => 'Export Products',
-        'export'           => 'Export',
-        'import'           => 'Import',
-        'logistics' => 'Logistics',
-        'markets'           => 'Markets',
-        'suppliers'         => 'Suppliers',
-        'team'             => 'Our Team',
-        'contact'          => 'Contact Us',
-        'cooperation'      => 'Request Cooperation',
-        'experts'          => 'Our Experts',
-        'call'             => 'Call Us',
-        'catalogs' => 'Catalogs',
-        'buyer'    => 'Buyer',
-        'gallery'  => 'Gallery',
-        'projects' => 'Projects',
+        'home'                 => 'Home',
+        'about'                => 'About Us',
+        'projects'             => 'Projects',
+        'sections'             => 'Specialized Sections',
+        'defense_balloons'     => 'Defense Balloons',
+        'advertising_balloons' => 'Advertising Balloons',
+        'research_balloons'    => 'Research Balloons',
+        'products'             => 'Products & Parts',
+        'catalogs'             => 'Technical Catalogs',
+        'suppliers'            => 'Suppliers',
+        'logistics'            => 'Logistics & Transport',
+        'team'                 => 'Our Team',
+        'gallery'              => 'Project Gallery',
+        'buyer'                => 'Buyers',
+        'contact'              => 'Contact Us',
+        'cooperation'          => 'Request Consultation',
+        'experts'              => 'Expert Support',
+        'call'                 => 'Call',
+        'toggle_menu'          => 'Toggle menu',
+        'logo_alt'             => 'Shahab Balloon logo',
+        'admin_menu'           => 'Site Admin',
+        'logout'               => 'Logout',
     ],
 
+    /* =========================================================
+       ADMIN
+    ========================================================= */
+    'admin' => [
+        'dashboard'        => 'Admin Dashboard',
+        'product_groups'   => 'Product Groups',
+        'categories'       => 'Categories',
+        'products'         => 'Products',
+        'catalogs'         => 'Catalogs',
+        'gallery'          => 'Image Gallery',
+        'transactions'     => 'Completed Transactions',
+        'buyers'           => 'Buyers',
+        'contact_messages' => 'Contact Messages',
+        'chatbot_faqs'     => 'Manage FAQs',
+        'support'          => 'User Support',
+    ],
+
+    /* =========================================================
+       COMMON
+    ========================================================= */
+    'common' => [
+        'learn_more' => 'Learn more',
+    ],
+
+    /* =========================================================
+       CAROUSEL
+    ========================================================= */
     'carousel' => [
         'slide1' => [
-
-                'badge'         => 'Exporting Iranian Products to the World',
-                'title_line1'   => 'Iranian Products',
-                'title_line2'   => 'with World-Class Quality',
-                'description'   => 'Sourcing and exporting selected Iranian products with a focus on quality, standard packaging, and building trade relationships with international markets.',
-                'btn_primary'   => 'Export Products',
-                'btn_secondary' => 'Request Cooperation',
-
+            'badge'         => 'Defense Balloons',
+            'title_line1'   => 'Authority in the Sky,',
+            'title_line2'   => 'Trust on the Ground',
+            'description'   => 'Design and manufacturing of reconnaissance, surveillance, and training balloons with defense standards and modern technology.',
+            'btn_primary'   => 'View Defense Products',
+            'btn_secondary' => 'Request Consultation',
         ],
         'slide2' => [
-            'badge'         => 'International Trade & Supply',
-            'title_line1'   => 'Trusted Connection',
-            'title_line2'   => 'With Global Markets',
-            'description'   => 'Activities in exporting agricultural products, importing selected goods, and providing trade services aimed at developing international cooperation.',
-            'btn_primary'   => 'About Company',
-            'btn_secondary' => 'Contact Us',
+            'badge'         => 'Advertising Balloons',
+            'title_line1'   => 'Your Message,',
+            'title_line2'   => 'High in the Sky',
+            'description'   => 'Exhibition and outdoor advertising balloons with custom printing, high durability, and unmatched visual impact.',
+            'btn_primary'   => 'View Advertising Products',
+            'btn_secondary' => 'Request Consultation',
+        ],
+        'slide3' => [
+            'badge'         => 'Research Balloons',
+            'title_line1'   => 'Scientific Precision,',
+            'title_line2'   => 'at Research Altitude',
+            'description'   => 'Weather, atmospheric, and research balloons with high measurement precision and scientific equipment compatibility.',
+            'btn_primary'   => 'View Research Products',
+            'btn_secondary' => 'Request Consultation',
         ],
     ],
 
+    /* =========================================================
+       SECTORS
+    ========================================================= */
+    'sectors' => [
+        'badge'       => 'Specialized Sectors',
+        'title'       => 'Three Sectors, One Standard',
+        'description' => 'Shahab Balloon provides dedicated solutions across defense, advertising, and research sectors.',
+        'defense' => [
+            'title'       => 'Defense Balloons',
+            'description' => 'Reconnaissance, surveillance, and training balloons with defense standards.',
+        ],
+        'advertising' => [
+            'title'       => 'Advertising Balloons',
+            'description' => 'Exhibition and outdoor advertising balloons with custom printing.',
+        ],
+        'research' => [
+            'title'       => 'Research Balloons',
+            'description' => 'Weather, atmospheric, and research balloons with scientific precision.',
+        ],
+    ],
+
+    /* =========================================================
+       ABOUT
+    ========================================================= */
     'about' => [
-        'badge'      => 'About Company',
-        'title'      => 'Export and Import of Agricultural and Dairy Products',
-        'paragraph1' => 'Amir Afaq Gostar Pars, with years of experience in supplying, packaging, and distributing agricultural and dairy products, has expanded its activities in exporting and importing high-quality products to domestic and international markets.',
-        'paragraph2' => 'Through direct collaboration with farmers, livestock breeders, and dairy factories, we have established a reliable supply chain to deliver fresh and standard products to our customers.',
-        'feature1'   => 'Direct supply from reputable producers',
-        'feature2'   => 'Standard packaging and quality control',
-        'feature3'   => 'International transportation and cold chain',
-        'learn_more' => 'Learn More',
-        'image_alt'  => 'Export of agricultural and dairy products',
+        'badge'         => 'About Shahab Balloon',
+        'title'         => 'Over a Decade of Balloon Design & Manufacturing',
+        'paragraph1'    => 'Since 2011, Shahab Balloon has relied on the technical expertise of its specialists to design, manufacture, and supply defense, advertising, and research balloons.',
+        'paragraph2'    => 'Using high-quality materials, international standards, and an experienced technical team, we deliver customized solutions for every sector.',
+        'feature1'      => 'Custom design based on client needs',
+        'feature2'      => 'Manufacturing with standard and durable materials',
+        'feature3'      => 'Technical support and after-sales service',
+        'learn_more'    => 'Learn more',
+        'image_alt'     => 'Shahab Balloon company image',
         'stats' => [
-            'countries' => 'Export Destination Countries',
-            'producers' => 'Partner Producers',
-            'tons'      => 'Tons of Annual Export',
-            'customers' => 'Active Domestic & International Customers',
+            'balloons'    => 'Balloons Produced',
+            'projects'    => 'Completed Projects',
+            'experience'  => 'Years of Experience',
+            'customers'   => 'Satisfied Customers',
         ],
     ],
 
+    /* =========================================================
+       SERVICES
+    ========================================================= */
     'services' => [
         'badge'       => 'Our Services',
-        'title'       => 'Specialized Export & Import Services for Agricultural Products',
-        'description' => 'Amir Afaq Gostar Pars, by providing specialized services in supplying, exporting, and importing agricultural products, creates a reliable connection between Iranian producers and international markets.',
-        'view_all'    => 'View All Services',
+        'title'       => 'Specialized Balloon Solutions',
+        'description' => 'From design to manufacturing, from consultation to support — with you at every stage.',
+        'view_all'    => 'View all services',
         'items' => [
-            'agriculture' => [
-                'title' => 'Supply of Agricultural Products',
-                'text'  => 'Supplying high-quality agricultural products from reputable producers with careful quality inspection.',
+            'defense' => [
+                'title' => 'Defense Balloons',
+                'text'  => 'Design and manufacturing of reconnaissance, surveillance, and training balloons compliant with defense standards.',
             ],
-            'export' => [
-                'title' => 'Export to Global Markets',
-                'text'  => 'Exporting Iranian products to various countries in compliance with international standards and destination market needs.',
+            'advertising' => [
+                'title' => 'Advertising Balloons',
+                'text'  => 'Exhibition and outdoor advertising balloons with custom printing and high durability.',
             ],
-            'import' => [
-                'title' => 'Import of Agricultural Products',
-                'text'  => 'Importing required products from reputable foreign suppliers with full management of the purchasing and shipping process.',
+            'research' => [
+                'title' => 'Research Balloons',
+                'text'  => 'Weather, atmospheric, and research balloons with high measurement precision.',
             ],
-            'logistics' => [
-                'title' => 'Transportation & Logistics',
-                'text'  => 'Managing transportation, packaging, customs affairs, and safe delivery of products in the shortest possible time.',
+            'support' => [
+                'title' => 'Technical Support',
+                'text'  => 'Consultation, installation, setup, and after-sales service across the country.',
             ],
         ],
     ],
 
+    /* =========================================================
+       BLOG
+    ========================================================= */
     'blog' => [
-        'badge'       => 'News & Articles',
-        'title'       => 'Latest Agricultural & Dairy Articles',
-        'description' => 'Discover the latest news, analyses, and specialized articles on exporting and importing agricultural and dairy products. From global market changes to key tips on packaging, storage, and transportation.',
-        'author'      => 'Content Team',
+        'badge'       => 'Articles & News',
+        'title'       => 'Latest from Shahab Balloon',
+        'description' => 'Latest news, technical articles, and completed projects.',
+        'author'      => 'Author',
         'comments'    => 'Comments',
-        'read_more'   => 'Read More',
+        'read_more'   => 'Read more',
         'categories' => [
-            'export' => 'Export',
-            'import' => 'Import',
-            'market' => 'Market Analysis',
+            'defense'     => 'Defense',
+            'advertising' => 'Advertising',
+            'research'    => 'Research',
         ],
         'posts' => [
             'post1' => [
-                'title' => 'Complete Guide to Exporting Agricultural Products to Neighboring Countries',
-                'text'  => 'From obtaining required permits to standard packaging and international transportation; everything you need to start a successful export.',
+                'title' => 'Next-Generation Defense Balloons',
+                'text'  => "Introducing Shahab Balloon's latest reconnaissance and surveillance balloons with modern technology.",
+                'date'  => 'December 21, 2025',
             ],
             'post2' => [
-                'title' => 'Key Tips for Importing Dairy Products and Cold Chain Maintenance',
-                'text'  => 'Understanding health standards, storage conditions, and transportation of dairy products to prevent quality loss.',
+                'title' => 'Advertising Balloons & Branding',
+                'text'  => 'How advertising balloons can take your brand message to the sky.',
+                'date'  => 'December 16, 2025',
             ],
             'post3' => [
-                'title' => 'Global Market Analysis of Agricultural Products and Export Opportunities',
-                'text'  => 'Reviewing price trends, global demand, and target markets for exporting agricultural and dairy products this year.',
+                'title' => 'Research and Weather Balloons',
+                'text'  => 'Applications of research balloons in atmospheric and modern weather studies.',
+                'date'  => 'December 11, 2025',
             ],
         ],
     ],
 
+    /* =========================================================
+       TEAM
+    ========================================================= */
     'team' => [
         'badge'       => 'Our Team',
-        'title'       => 'Meet Our Specialists',
-        'description' => 'Our team consists of experienced experts in agriculture, livestock, dairy industry, international marketing, and logistics, who support you on the path to successful export and import with specialized knowledge and a broad global network.',
+        'title'       => 'A Team That Knows the Sky',
+        'description' => 'The technical experts and engineers of Shahab Balloon are with you, backed by years of experience.',
         'members' => [
-            'member1' => ['name' => 'Ali Rezaei',    'role' => 'CEO & Founder'],
-            'member2' => ['name' => 'Maryam Ahmadi', 'role' => 'Export Manager'],
-            'member3' => ['name' => 'Hossein Karimi','role' => 'Import Manager'],
-            'member4' => ['name' => 'Zahra Mousavi', 'role' => 'Quality Control Specialist'],
+            'member1' => ['name' => 'Eng. Reza Ahmadi',      'role' => 'Technical Manager'],
+            'member2' => ['name' => 'Eng. Sara Karimi',      'role' => 'Senior Designer'],
+            'member3' => ['name' => 'Eng. Mohammad Rezaei',  'role' => 'Production Manager'],
+            'member4' => ['name' => 'Eng. Negar Mousavi',    'role' => 'QC Specialist'],
         ],
     ],
 
+    /* =========================================================
+       MAP SECTION
+    ========================================================= */
     'map_section' => [
-        'badge'       => 'Our Location on the Map',
-        'title'       => 'Amir Afaq Gostar Pars Head Office',
-        'description' => 'To view the route to our head office, enter your origin or use the "My Location" button.',
-        'travel_modes' => [
-            'driving'   => 'Driving',
-            'walking'   => 'Walking',
-            'bicycling' => 'Bicycling',
-        ],
-        'distance'  => 'Distance',
-        'duration'  => 'Duration',
-        'route_title'        => 'Route',
-        'origin'             => 'Origin',
-        'origin_placeholder' => 'Enter origin address',
-        'origin_default'     => 'Kashmar',
-        'my_location'        => 'My Location',
-        'destination'        => 'Destination',
-        'destination_value'  => 'Salman Farsi St., Kashmar, Head Office',
-        'show_route'         => 'Show Route',
+        'badge'              => 'Contact Us',
+        'title'              => 'Shahab Balloon Location',
+        'description'        => 'Visit our headquarters for an on-site consultation.',
+        'company_info_title' => 'Company Information',
+        'address_label'      => 'Company Address',
+        'address_value'      => 'Imam Khomeini St., Ghaem St., Salman Farsi St., Kashmar, Iran',
+        'company_label'      => 'Company Name',
+        'company_value'      => 'Shahab Balloon',
+        'view_on_balad'      => 'View on Balad',
+        'view_larger'        => 'View Larger Map',
+        'directions'         => 'Get Directions',
+        'popup_title'        => 'Shahab Balloon',
+        'offline_title'      => 'Company Location',
+        'offline_text'       => 'An internet connection is required to display map tiles.',
     ],
 
+    /* =========================================================
+       FOOTER
+    ========================================================= */
     'footer' => [
-        'company_name'  => 'Amir Afaq Gostar Pars',
-        'description'   => 'Building on years of experience in exporting agricultural products, we bring Iranian quality to global markets.',
-        'quick_links_title' => 'Quick Links',
+        'company_name'        => 'Shahab Balloon',
+        'description'         => 'Shahab Balloon — design, manufacturing, and supply of defense, advertising, and research balloons with international standards and expert technical support.',
+        'quick_links_title'   => 'Quick Links',
+        'account_title'       => 'My Account',
+        'account_description' => 'Log in to track your orders and download catalogs.',
+        'login'               => 'Log in',
+        'register'            => 'Sign up',
+        'account_note'        => 'Your data is protected with full encryption.',
+        'gallery_title'       => 'Project Gallery',
+        'view_image'          => 'View image',
+        'gallery_image_alt'   => 'Project image #:number',
+        'address_title'       => 'Address',
+        'address'             => '123 Valiasr St., Tehran, Iran',
+        'email_title'         => 'Email',
+        'phone_title'         => 'Phone',
+        'phone'               => '+98 21 8877 6655',
+        'enamad_title'        => 'E-Trust Symbol',
+        'enamad_placeholder'  => 'E-Trust badge',
+        'enamad_description'  => 'Place the official e-trust symbol here to increase customer confidence.',
+        'copyright'           => 'All rights reserved.',
+        'designed_by'         => 'Designed & developed by:',
+        'designer'            => 'Takhti Company',
         'links' => [
-            'about'                 => 'About Us',
-            'agricultural_products' => 'Agricultural Products',
-            'dairy_products'        => 'Dairy Products',
-            'export'                => 'Export',
-            'import'                => 'Import',
-            'contact'               => 'Contact Us',
-        ],
-        'gallery_title'      => 'Image Gallery',
-        'gallery_image_alt'  => 'Gallery image number :number',
-        'view_image'         => 'View image',
-        'address_title'      => 'Address',
-        'address'            => 'Salman Farsi St., Kashmar, Iran',
-        'email_title'        => 'Email',
-        'email'              => 'info@amirafaq.com',
-        'phone_title'        => 'Phone',
-        'phone'              => '+98 915 039 8636',
-        'newsletter_title'   => 'Newsletter',
-        'newsletter_text'    => 'Enter your email to receive our latest news and special offers.',
-        'newsletter_placeholder' => 'Your email...',
-        'newsletter_email'   => 'Email address',
-        'newsletter_button'  => 'Subscribe',
-        'copyright'          => 'All rights reserved.',
-        'designed_by'        => 'Designed by',
-        'designer' => 'Takhti Web Design & Programming Company',
-        'account_title' => 'User Account',
-        'account_description' => 'Sign in to access website features and manage your business inquiries.',
-        'login' => 'Sign In',
-        'register' => 'Create Account',
-        'account_note' => 'Manage your inquiries and communicate with our company.',
-        'enamad_title' => 'Electronic Trust Symbol',
-        'enamad_placeholder' => 'Enamad placement area',
-        'enamad_description' => 'Trust symbol information will be added when available.',
-        'copyright' => 'All rights reserved.',
-    ],
-
-    'map' => [
-        'company_name'     => 'Amir Afaq Gostar Pars',
-        'address'          => 'Salman Farsi St., Kashmar, Iran',
-        'current_location' => 'Your current location',
-        'messages' => [
-            'enter_origin'            => 'Please enter the origin.',
-            'zero_results'            => 'No route found between origin and destination.',
-            'not_found'               => 'Origin or destination not found.',
-            'route_error'             => 'Error calculating route:',
-            'geolocation_unsupported' => 'Your browser does not support geolocation.',
-            'location_denied'         => 'Access to your location was denied.',
+            'about'                => 'About Us',
+            'defense_balloons'     => 'Defense Balloons',
+            'advertising_balloons' => 'Advertising Balloons',
+            'research_balloons'    => 'Research Balloons',
+            'projects'             => 'Completed Projects',
+            'contact'              => 'Contact Us',
         ],
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Meta
-    |--------------------------------------------------------------------------
-    */
-    'meta' => [
-        'title' => 'About Us | Amir Afaq Gostar Pars',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Hero
-    |--------------------------------------------------------------------------
-    */
-    'hero' => [
-        'label'    => 'Amir Afaq Gostar Pars',
-        'title'    => 'International Trade with Trust and Quality',
-        'subtitle' => 'Leveraging our experience, extensive supplier network, and advanced infrastructure, we professionally deliver export, import, and international trade cooperation services.',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Intro
-    |--------------------------------------------------------------------------
-    */
-    'intro' => [
-        'image_alt'  => 'Amir Afaq Gostar Pars',
-        'title'      => 'About Amir Afaq Gostar Pars',
-        'paragraph1' => 'Amir Afaq Gostar Pars began its operations in international trade with the goal of building a bridge between Iranian markets and regional countries. By leveraging specialized knowledge, an experienced team, and a vast network of trade partners, we have established our position in export and import markets.',
-        'paragraph2' => 'Our main focus is on providing comprehensive trade services including sourcing, export, import, professional packaging, international transportation, and supply chain management. Our goal is to create sustainable value for our customers and trade partners through transparency, quality, and commitment.',
-        'paragraph3' => 'Today, Amir Afaq Gostar Pars proudly stands alongside manufacturers, suppliers, and international buyers, and is ready to cooperate with new markets around the world.',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | History
-    |--------------------------------------------------------------------------
-    */
-    'history' => [
-        'eyebrow'     => 'Growth Path',
-        'title'       => 'Company History',
-        'description' => 'A look at the journey of Amir Afaq Gostar Pars from the beginning to today.',
-        'items' => [
-            'item1' => [
-                'year'  => '2011',
-                'title' => 'Beginning of Operations',
-                'text'  => 'Amir Afaq Gostar Pars started its activities with a focus on agricultural products trade.',
-            ],
-            'item2' => [
-                'year'  => '2016',
-                'title' => 'Export Expansion',
-                'text'  => 'Entering international markets and exporting products to neighboring and regional countries.',
-            ],
-            'item3' => [
-                'year'  => '2020',
-                'title' => 'Warehousing Infrastructure',
-                'text'  => 'Establishing equipped warehouses and a professional supply chain management system.',
-            ],
-            'item4' => [
-                'year'  => '2023',
-                'title' => 'International Cooperation',
-                'text'  => 'Expanding the network of trade partners across Asia, Europe, and the Middle East.',
-            ],
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Identity (Mission / Vision / Values)
-    |--------------------------------------------------------------------------
-    */
-    'identity' => [
-        'eyebrow' => 'Corporate Identity',
-        'title'   => 'Mission, Vision & Values',
-        'items' => [
-            'mission' => [
-                'title' => 'Our Mission',
-                'text'  => 'To provide international trade services with the highest quality standards and create sustainable value for customers, partners, and stakeholders.',
-            ],
-            'vision' => [
-                'title' => 'Our Vision',
-                'text'  => 'To become one of the most reputable trading companies in the region in the fields of export, import, and international cooperation.',
-            ],
-            'values' => [
-                'title' => 'Our Values',
-                'text'  => 'Honesty, transparency, commitment, quality orientation, mutual respect, and responsibility towards customers and society.',
-            ],
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Activities
-    |--------------------------------------------------------------------------
-    */
-    'activities' => [
-        'eyebrow'     => 'Fields of Activity',
-        'title'       => 'Main Company Activities',
-        'description' => 'Amir Afaq Gostar Pars operates in various fields of international trade.',
-        'items' => [
-            'item1' => [
-                'title' => 'Export of Agricultural Products',
-                'text'  => 'Exporting various agricultural products, nuts, and food items to global markets.',
-            ],
-            'item2' => [
-                'title' => 'Import of Essential Goods',
-                'text'  => 'Sourcing and importing essential goods, raw materials, and equipment needed by the domestic market.',
-            ],
-            'item3' => [
-                'title' => 'Packaging & Processing',
-                'text'  => 'Professional packaging and processing of products in accordance with international standards.',
-            ],
-            'item4' => [
-                'title' => 'International Transportation',
-                'text'  => 'Managing land, sea, and air transportation in cooperation with reputable logistics companies.',
-            ],
-            'item5' => [
-                'title' => 'Trade Consultancy',
-                'text'  => 'Providing specialized consultancy in international trade, customs regulations, and marketing.',
-            ],
-            'item6' => [
-                'title' => 'Trade Cooperation',
-                'text'  => 'Building bridges between domestic manufacturers and international buyers.',
-            ],
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Management
-    |--------------------------------------------------------------------------
-    */
-    'management' => [
-        'eyebrow'     => 'Management Team',
-        'title'       => 'Management & Organizational Structure',
-        'description' => 'The management team of Amir Afaq Gostar Pars with experience and expertise in international trade.',
-        'items' => [
-            'ceo' => [
-                'title' => 'CEO',
-                'text'  => 'Strategic leadership of the company and development of international relations.',
-            ],
-            'commercial' => [
-                'title' => 'Commercial Manager',
-                'text'  => 'Managing trade negotiations, contracts, and relationships with foreign partners.',
-            ],
-            'export' => [
-                'title' => 'Export Manager',
-                'text'  => 'Planning and executing the company\'s export strategies.',
-            ],
-            'logistics' => [
-                'title' => 'Logistics Manager',
-                'text'  => 'Managing the supply chain, warehousing, and international transportation.',
-            ],
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Infrastructure
-    |--------------------------------------------------------------------------
-    */
-    'infrastructure' => [
-        'eyebrow'     => 'Infrastructure',
-        'title'       => 'Company Facilities & Infrastructure',
-        'description' => 'Advanced infrastructure to support trade operations at an international level.',
-        'items' => [
-            'item1' => [
-                'title' => 'Equipped Warehouses',
-                'text'  => 'Standard warehouses with temperature and humidity control systems.',
-            ],
-            'item2' => [
-                'title' => 'Warehouse Management System',
-                'text'  => 'Advanced software for inventory management and cargo tracking.',
-            ],
-            'item3' => [
-                'title' => 'Packaging Line',
-                'text'  => 'Modern packaging lines in accordance with global standards.',
-            ],
-            'item4' => [
-                'title' => 'Quality Control Team',
-                'text'  => 'Inspection and quality control of products at all stages.',
-            ],
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Warehouses
-    |--------------------------------------------------------------------------
-    */
-    'warehouses' => [
-        'eyebrow'     => 'Warehousing',
-        'title'       => 'Professional Warehousing System',
-        'description' => 'Smart warehouse management to maintain quality and speed in delivery.',
-        'items' => [
-            'storage' => [
-                'title' => 'Storage Space',
-                'text'  => 'Vast and standard space for storing various types of goods.',
-            ],
-            'inventory' => [
-                'title' => 'Inventory Management',
-                'text'  => 'Precise system for tracking and controlling goods inventory.',
-            ],
-            'preparation' => [
-                'title' => 'Order Preparation',
-                'text'  => 'Fast and accurate preparation of orders for shipment.',
-            ],
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Network
-    |--------------------------------------------------------------------------
-    */
-    'network' => [
-        'eyebrow'     => 'Trade Network',
-        'title'       => 'Suppliers & Partners Network',
-        'description' => 'Collaboration with the most reputable suppliers and trade partners around the world.',
-        'suppliers' => [
-            'title' => 'Suppliers',
-            'items' => [
-                'item1' => 'Agricultural product manufacturers',
-                'item2' => 'Food processing factories',
-                'item3' => 'Raw material suppliers',
-                'item4' => 'Professional packaging companies',
-            ],
-        ],
-        'partners' => [
-            'title' => 'Trade Partners',
-            'items' => [
-                'item1' => 'International transportation companies',
-                'item2' => 'Reputable importers and exporters',
-                'item3' => 'Logistics and warehousing companies',
-                'item4' => 'Distribution and retail groups',
-            ],
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Countries
-    |--------------------------------------------------------------------------
-    */
-    'countries' => [
-        'eyebrow'     => 'Target Markets',
-        'title'       => 'Partner Countries',
-        'description' => 'Trade cooperation with numerous countries across Asia, Europe, and the Middle East.',
-        'items' => [
-            'Iran',
-            'Iraq',
-            'United Arab Emirates',
-            'Turkey',
-            'Afghanistan',
-            'Oman',
-            'Qatar',
-            'Russia',
-            'China',
-            'India',
-            'Pakistan',
-            'Turkmenistan',
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Capacity
-    |--------------------------------------------------------------------------
-    */
-    'capacity' => [
-        'eyebrow'     => 'Capabilities',
-        'title'       => 'Trade Capacities',
-        'description' => 'Our capabilities in export, import, and international cooperation.',
-        'items' => [
-            'export' => [
-                'title' => 'Export',
-                'text'  => 'Exporting high-quality products to target markets around the world.',
-            ],
-            'import' => [
-                'title' => 'Import',
-                'text'  => 'Importing essential goods and raw materials needed by the domestic market.',
-            ],
-            'cooperation' => [
-                'title' => 'Trade Cooperation',
-                'text'  => 'Building sustainable cooperation with international trade partners.',
-            ],
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | CTA
-    |--------------------------------------------------------------------------
-    */
-    'cta' => [
-        'title'  => 'We Are Ready to Cooperate with You',
-        'text'   => 'To receive specialized consultancy and start trade cooperation with Amir Afaq Gostar Pars, contact us today.',
-        'button' => 'Contact Us',
-    ],
+    /* =========================================================
+       CALL FLOATING BUTTON
+    ========================================================= */
+    'call_aria'  => 'Call Shahab Balloon',
+    'call_title' => 'Contact Us',
 
 ];

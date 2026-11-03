@@ -12,7 +12,11 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
+        'full_name',
+        'email',
+        'phone',
         'password',
+        // role و status و بقیه نیاز نیست، چون default دارند
     ];
 
     protected $hidden = [
@@ -23,15 +27,10 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'email_verified_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    /**
-     * بررسی مدیر بودن کاربر
-     */
-    public function isAdmin(): bool
-    {
-        return $this->role === 'admin';
     }
 }

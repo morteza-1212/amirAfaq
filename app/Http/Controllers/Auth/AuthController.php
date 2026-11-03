@@ -37,10 +37,32 @@ class AuthController extends Controller
                 Rule::unique('users', 'name'),
             ],
 
+            'full_name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:150',
+            ],
+
+            'phone' => [
+                'nullable',
+                'string',
+                'regex:/^09\d{9}$/',          // شماره موبایل ایران: 09xxxxxxxxx
+                Rule::unique('users', 'phone'),
+            ],
+
+            'email' => [
+                'nullable',
+                'email',
+                'max:150',
+                Rule::unique('users', 'email'),
+            ],
+
             'password' => [
                 'required',
                 'string',
                 Password::min(8),
+                'confirmed',                   // نیاز به فیلد password_confirmation
             ],
         ], [
             'name.required' => 'وارد کردن نام کاربری الزامی است.',
@@ -50,14 +72,32 @@ class AuthController extends Controller
             'name.regex' => 'نام کاربری فقط می‌تواند شامل حروف، اعداد و علامت‌های نقطه، زیرخط و خط تیره باشد.',
             'name.unique' => 'این نام کاربری قبلاً ثبت شده است.',
 
+            'full_name.required' => 'وارد کردن نام و نام خانوادگی الزامی است.',
+            'full_name.string' => 'نام و نام خانوادگی باید به‌صورت متن باشد.',
+            'full_name.min' => 'نام و نام خانوادگی باید حداقل ۳ کاراکتر باشد.',
+            'full_name.max' => 'نام و نام خانوادگی نباید بیشتر از ۱۵۰ کاراکتر باشد.',
+
+            'phone.required' => 'وارد کردن شماره موبایل الزامی است.',
+            'phone.string' => 'شماره موبایل باید به‌صورت متن باشد.',
+            'phone.regex' => 'شماره موبایل باید با ۰۹ شروع شده و ۱۱ رقم باشد.',
+            'phone.unique' => 'این شماره موبایل قبلاً ثبت شده است.',
+
+            'email.email' => 'فرمت ایمیل صحیح نیست.',
+            'email.max' => 'ایمیل نباید بیشتر از ۱۵۰ کاراکتر باشد.',
+            'email.unique' => 'این ایمیل قبلاً ثبت شده است.',
+
             'password.required' => 'وارد کردن رمز عبور الزامی است.',
             'password.string' => 'رمز عبور باید به‌صورت متن باشد.',
             'password.min' => 'رمز عبور باید حداقل ۸ کاراکتر باشد.',
+            'password.confirmed' => 'تکرار رمز عبور با رمز عبور مطابقت ندارد.',
         ]);
 
-        // ایجاد کاربر جدید
+        // ایجاد کاربر جدید — همه ستون‌های NOT NULL پر می‌شوند
         $user = User::create([
             'name' => $validated['name'],
+            'full_name' => $validated['full_name'],
+            'phone' => $validated['phone'],
+            'email' => $validated['email'] ?? null,
             'password' => Hash::make($validated['password']),
         ]);
 

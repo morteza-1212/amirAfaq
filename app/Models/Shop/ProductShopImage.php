@@ -2,12 +2,15 @@
 
 namespace App\Models\Shop;
 
-use App\Models\Shop\ProductShop;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductShopImage extends Model
 {
+    use HasFactory;
+
+    protected $table = 'product_shop_images';
+
     protected $fillable = [
         'product_shop_id',
         'image_path',
@@ -16,19 +19,13 @@ class ProductShopImage extends Model
         'is_primary',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'is_primary' => 'boolean',
-            'sort_order' => 'integer',
-        ];
-    }
+    protected $casts = [
+        'sort_order' => 'integer',
+        'is_primary' => 'boolean',
+    ];
 
-    public function productShop(): BelongsTo
+    public function product()
     {
-        return $this->belongsTo(
-            ProductShop::class,
-            'product_shop_id'
-        );
+        return $this->belongsTo(ProductShop::class, 'product_shop_id');
     }
 }

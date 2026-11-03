@@ -688,6 +688,10 @@
         'buyers'        => \App\Models\Buyer::count(),
         'contacts'      => \App\Models\Contact::count(),
         'productExports'=> \App\Models\ProductExport::count(),
+        'parentShops'=> \App\Models\Shop\ParentCategory::count(),
+        'categoryShops' => \App\Models\Shop\CategoryShop::count(),
+        'productShops' => \App\Models\Shop\ProductShop::count(),
+        'productShopImages'=> \App\Models\Shop\ProductShopImage::count(),
     ];
 @endphp
 
@@ -746,6 +750,58 @@
                 <span class="nav-text">محصولات</span>
                 <span class="badge">{{ $counts['products'] }}</span>
             </a>
+        </li>
+        {{-- ===== منوی فروشگاه با dropdown ===== --}}
+        <li class="nav-item dropdown {{ request()->routeIs('admin.parentShop.*', 'admin.categoryShop.*', 'admin.productShop.*', 'admin.productShopImage.*') ? 'active' : '' }}">
+            <a href="#"
+               class="nav-link dropdown-toggle {{ request()->routeIs('admin.parentShop.*', 'admin.categoryShop.*', 'admin.productShop.*', 'admin.productShopImage.*') ? 'active' : '' }}"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+                <i class="fas fa-store"></i>
+                <span class="nav-text">فروشگاه</span>
+            </a>
+
+            <ul class="dropdown-menu">
+                {{-- دسته‌بندی والد --}}
+                <li>
+                    <a href="{{ route('admin.parentShop.index') }}"
+                       class="dropdown-item {{ request()->routeIs('admin.parentShop.*') ? 'active' : '' }}">
+                        <i class="fas fa-folder-tree"></i>
+                        <span>دسته‌بندی والد</span>
+                        <span class="badge">{{ $counts['parentShops'] ?? 0 }}</span>
+                    </a>
+                </li>
+
+                {{-- دسته‌بندی فروشگاه --}}
+                <li>
+                    <a href="{{ route('admin.categoryShop.index') }}"
+                       class="dropdown-item {{ request()->routeIs('admin.categoryShop.*') ? 'active' : '' }}">
+                        <i class="fas fa-layer-group"></i>
+                        <span>دسته‌بندی فروشگاه</span>
+                        <span class="badge">{{ $counts['categoryShops'] ?? 0 }}</span>
+                    </a>
+                </li>
+
+                {{-- محصولات --}}
+                <li>
+                    <a href="{{ route('admin.productShop.index') }}"
+                       class="dropdown-item {{ request()->routeIs('admin.productShop.*') ? 'active' : '' }}">
+                        <i class="fas fa-box-open"></i>
+                        <span>محصولات</span>
+                        <span class="badge">{{ $counts['productShops'] ?? 0 }}</span>
+                    </a>
+                </li>
+
+                {{-- تصاویر محصولات --}}
+                <li>
+                    <a href="{{ route('admin.productShopImage.index') }}"
+                       class="dropdown-item {{ request()->routeIs('admin.productShopImage.*') ? 'active' : '' }}">
+                        <i class="fas fa-images"></i>
+                        <span>تصاویر محصولات</span>
+                        <span class="badge">{{ $counts['productShopImages'] ?? 0 }}</span>
+                    </a>
+                </li>
+            </ul>
         </li>
 
         <li class="nav-item">

@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class ParentCategory extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'name',
@@ -138,5 +138,9 @@ class ParentCategory extends Model
         }
 
         return $slug;
+    }
+    public function categoryShops()
+    {
+        return $this->hasMany(CategoryShop::class, 'parent_category_id');
     }
 }

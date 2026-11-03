@@ -10,26 +10,23 @@
 
     /*
     |--------------------------------------------------------------------------
-    | Localized URLs
+    | Localized URLs — ساختار جدید مخصوص بالن
     |--------------------------------------------------------------------------
     */
-    $homeUrl       = url($locale);
-    $aboutUrl      = url($locale . '/about');
-    $blogExportUrl = url($locale . '/blog/export');
-    $servicesUrl   = url($locale . '/services');
-    $productsUrl   = url($locale . '/product-export');
-    $exportUrl     = url($locale . '/export');
-    $importUrl     = url($locale . '/import');
-    $logisticsUrl  = url($locale . '/logistics');
-    $teamUrl       = url($locale . '/team');
-    $contactUrl    = url($locale . '/contact');
-    $suppliersUrl  = url($locale . '/suppliers');
-    $marketsUrl    = url($locale . '/markets');
-    $catalogs      = url($locale . '/catalogs');
-    $contact       = url($locale . '/contact');
-    $buyer         = url($locale . '/buyer');
-    $gallery       = url($locale . '/gallery');
-    $projectsUrl   = url($locale . '/projects');
+    $homeUrl           = url($locale);
+    $aboutUrl          = url($locale . '/about');
+    $projectsUrl       = url($locale . '/projects');
+    $productsUrl       = url($locale . '/products');
+    $defenseUrl        = url($locale . '/defense-balloons');     // بالون‌های نظامی
+    $advertisingUrl    = url($locale . '/advertising-balloons'); // بالون‌های تبلیغاتی
+    $researchUrl       = url($locale . '/research-balloons');    // بالون‌های پژوهشی
+    $suppliersUrl      = url($locale . '/suppliers');
+    $logisticsUrl      = url($locale . '/logistics');
+    $teamUrl           = url($locale . '/team');
+    $contactUrl        = url($locale . '/contact');
+    $catalogsUrl       = url($locale . '/catalogs');
+    $galleryUrl        = url($locale . '/gallery');
+    $buyerUrl          = url($locale . '/buyer');
 
     /*
     |--------------------------------------------------------------------------
@@ -58,53 +55,73 @@
     <!DOCTYPE html>
 <html lang="{{ $locale }}" dir="{{ $direction }}">
 <head>
+    {{-- Meta --}}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://static.neshan.org/sdk/mapboxgl/v1.13.2/neshan-sdk/v1.1.3/index.css" />
-    <script src="https://static.neshan.org/sdk/mapboxgl/v1.13.2/neshan-sdk/v1.1.3/index.js" defer></script>
+
     <meta name="description" content="{{ __('home.meta.description') }}">
     <meta name="keywords" content="{{ __('home.meta.keywords') }}">
     <meta name="language" content="{{ $locale }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>@yield('title', __('home.meta.title'))</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    {{-- Local Fonts --}}
+    <link rel="stylesheet" href="{{ asset('fonts/vazirmatn/vazirmatn.css') }}">
+
+    {{-- Neshan --}}
+    <link rel="stylesheet" href="{{ asset('vendor/neshan/index.css') }}">
+
+    {{-- Font Awesome --}}
+    <link rel="stylesheet" href="{{ asset('vendor/fontawesome/css/all.min.css') }}">
+
+    {{-- Bootstrap Icons --}}
+    <link rel="stylesheet" href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.min.css') }}">
+
+    {{-- Leaflet --}}
+    <link rel="stylesheet" href="{{ asset('vendor/leaflet/leaflet.css') }}">
+
+    {{-- Local CSS --}}
     <link rel="stylesheet" href="{{ asset('lib/animate/animate.min.css') }}">
     <link rel="stylesheet" href="{{ asset('lib/lightbox/css/lightbox.min.css') }}">
     <link rel="stylesheet" href="{{ asset('lib/owlcarousel/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    {{-- Local JS --}}
+    <script src="{{ asset('vendor/neshan/index.js') }}" defer></script>
+    <script src="{{ asset('vendor/leaflet/leaflet.js') }}" defer></script>
 
     <style>
         /* =========================================================
-           ROOT
+           ROOT — هویت رنگی شرکت بالن
         ========================================================= */
         :root {
-            --site-primary: #1b361e;
-            --site-primary-dark: #132b17;
-            --site-secondary: #d6a84f;
-            --site-light: #f7f8f4;
-            --site-text: #26352a;
+            --site-primary: #0A1F44;         /* سرمه‌ای نظامی/پژوهشی */
+            --site-primary-dark: #071633;
+            --site-secondary: #F26B21;       /* نارنجی ایمنی */
+            --site-light: #F5F7FA;
+            --site-text: #1E2A38;
             --site-muted: #6c757d;
-            --site-border: rgba(27, 54, 30, .12);
+            --site-border: rgba(10, 31, 68, .12);
             --site-radius: 12px;
             --site-radius-lg: 18px;
             --site-shadow: 0 8px 30px rgba(0, 0, 0, .06);
             --site-transition: all .25s ease;
+
+            /* رنگ‌های سه بخش */
+            --defense-primary: #0A1F44;
+            --defense-accent: #C9A227;
+            --advertising-primary: #F26B21;
+            --advertising-accent: #F7B32B;
+            --research-primary: #1E6FA8;
+            --research-accent: #2AB7A9;
         }
 
         /* =========================================================
            RESET
         ========================================================= */
-        *,
-        *::before,
-        *::after { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; }
 
         html {
             width: 100%;
@@ -130,15 +147,9 @@
         a { text-decoration: none; }
         button, input, textarea, select { font-family: 'Vazirmatn', Tahoma, Arial, sans-serif; }
 
-        /* =========================================================
-           DIRECTION
-        ========================================================= */
         html[dir="rtl"] body { direction: rtl; text-align: right; }
         html[dir="ltr"] body { direction: ltr; text-align: left; }
 
-        /* =========================================================
-           CONTAINER
-        ========================================================= */
         .container { width: 100%; }
         @media (min-width: 1200px) { .container { max-width: 1180px; } }
         @media (min-width: 1400px) { .container { max-width: 1240px; } }
@@ -149,12 +160,14 @@
         .topbar {
             position: relative;
             z-index: 1030;
-            border-bottom: 1px solid rgba(27, 54, 30, .06);
+            background: var(--site-light);
+            border-bottom: 1px solid var(--site-border);
         }
-        .topbar a { transition: var(--site-transition); }
+        .topbar a { transition: var(--site-transition); color: #555; }
         .topbar a:hover { color: var(--site-primary) !important; }
-        .topbar .border-primary { border-color: rgba(27, 54, 30, .18) !important; }
         .topbar .text-primary { color: var(--site-primary) !important; }
+        .topbar .text-secondary { color: var(--site-secondary) !important; }
+        .topbar .border-start { border-color: var(--site-border) !important; }
         .topbar .small { line-height: 1.8; }
 
         /* =========================================================
@@ -204,7 +217,7 @@
         .nav-bar {
             position: relative;
             z-index: 1020;
-            background: #0F1C05;
+            background: var(--site-primary);
             border-bottom: 1px solid rgba(0, 0, 0, .04);
         }
         .navbar {
@@ -234,7 +247,7 @@
             justify-content: center;
             min-height: 44px;
             padding: 9px 14px !important;
-            color: #26352a !important;
+            color: #1E2A38 !important;
             font-size: 14px;
             font-weight: 600;
             white-space: nowrap;
@@ -243,7 +256,7 @@
         }
         .navbar-nav .nav-link:hover {
             color: var(--site-primary) !important;
-            background: rgba(27, 54, 30, .05);
+            background: rgba(10, 31, 68, .05);
         }
         .navbar-nav .nav-link.active { color: var(--site-primary) !important; }
         .navbar-nav .nav-link.active::after {
@@ -256,7 +269,7 @@
             background: var(--site-secondary);
         }
         .navbar .dropdown-menu {
-            min-width: 210px;
+            min-width: 230px;
             margin-top: 8px;
             padding: 8px;
             border: 0;
@@ -266,20 +279,32 @@
         }
         .navbar .dropdown-item {
             padding: 10px 13px;
-            color: #26352a;
+            color: #1E2A38;
             font-size: 14px;
             font-weight: 500;
             border-radius: 8px;
             transition: var(--site-transition);
         }
         .navbar .dropdown-item:hover { color: #fff; background: var(--site-primary); }
+        .navbar .dropdown-item .fa-shield-alt { color: var(--defense-accent); }
+        .navbar .dropdown-item .fa-bullhorn  { color: var(--advertising-primary); }
+        .navbar .dropdown-item .fa-flask     { color: var(--research-primary); }
+
         .nav-btn { display: flex; align-items: center; }
         .nav-btn .btn {
-            min-width: 125px;
+            min-width: 145px;
             border-radius: 9px;
             font-size: 14px;
             font-weight: 600;
             white-space: nowrap;
+            background: var(--site-secondary);
+            color: #fff;
+            border: none;
+        }
+        .nav-btn .btn:hover {
+            background: #D85A15;
+            color: #fff;
+            transform: translateY(-2px);
         }
         .nav-bar .btn-light {
             width: 54px;
@@ -287,10 +312,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(27, 54, 30, .08);
+            border: 1px solid rgba(10, 31, 68, .08);
             box-shadow: 0 5px 18px rgba(0, 0, 0, .05);
+            color: var(--site-primary);
         }
-        .nav-bar .btn-light:hover { transform: translateY(-2px); }
+        .nav-bar .btn-light:hover { transform: translateY(-2px); color: var(--site-secondary); }
         .navbar-toggler {
             width: 48px;
             height: 44px;
@@ -298,13 +324,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(27, 54, 30, .15);
+            border: 1px solid var(--site-secondary);
             border-radius: 9px;
-            color: var(--site-primary);
+            color: var(--site-secondary);
             background: #fff;
             box-shadow: none !important;
         }
-        .navbar-toggler:focus { box-shadow: 0 0 0 3px rgba(27, 54, 30, .1) !important; }
+        .navbar-toggler:focus { box-shadow: 0 0 0 3px rgba(242, 107, 33, .15) !important; }
 
         main { width: 100%; min-height: 300px; overflow: hidden; }
 
@@ -313,18 +339,18 @@
         ========================================================= */
         .footer {
             position: relative;
-            background: #162d19;
-            color: rgba(255, 255, 255, .78);
+            background: linear-gradient(135deg, #0A1F44 0%, #0D2650 55%, #071633 100%);
+            color: rgba(255, 255, 255, .82);
         }
         .footer::before {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0;
             height: 3px;
-            background: linear-gradient(90deg, var(--site-primary), var(--site-secondary), var(--site-primary));
+            background: linear-gradient(90deg, var(--site-secondary), var(--site-primary), var(--site-secondary));
         }
-        .footer-item h3 { margin-bottom: 18px; font-size: 21px; font-weight: 700; }
-        .footer-item h4 { font-size: 17px; font-weight: 700; }
+        .footer-item h3 { margin-bottom: 18px; font-size: 21px; font-weight: 700; color: #fff; }
+        .footer-item h4 { font-size: 17px; font-weight: 700; color: #fff; }
         .footer-item p { line-height: 2; }
         .footer-item > a:not(.p-0) {
             display: block;
@@ -378,7 +404,7 @@
             align-items: center;
             justify-content: center;
             opacity: 0;
-            background: rgba(27, 54, 30, .65);
+            background: rgba(10, 31, 68, .7);
             transition: var(--site-transition);
         }
         .footer-instagram:hover .footer-search-icon { opacity: 1; }
@@ -413,9 +439,245 @@
         [dir="rtl"] .footer form .form-control { padding-left: 100px; padding-right: 20px; }
         [dir="ltr"] .footer form .form-control { padding-right: 100px; padding-left: 20px; }
         .footer form .btn { min-width: 82px; font-size: 12px; font-weight: 600; }
-        .copyright { background: #102313; border-top: 1px solid rgba(255, 255, 255, .06); }
+
+        /* Footer — elements از style.css */
+        .footer-heading {
+            position: relative;
+            display: inline-block;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.8;
+            margin-bottom: 24px;
+            padding-bottom: 10px;
+        }
+        .footer-heading::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 42px;
+            height: 3px;
+            border-radius: 5px;
+            background: var(--site-secondary);
+        }
+        [dir="ltr"] .footer-heading::after { left: 0; right: auto; }
+
+        .footer-brand { gap: 12px; }
+        .footer-brand-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            background: rgba(242, 107, 33, .15);
+            color: var(--site-secondary);
+            font-size: 23px;
+        }
+        .footer-brand h3 { font-size: 21px; font-weight: 800; line-height: 1.8; }
+        .footer-description { color: #B8C6D6; font-size: 14px; line-height: 2.1; }
+
+        .footer-social { display: flex; flex-wrap: wrap; gap: 10px; }
+        .footer-social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 50%;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 17px;
+        }
+        .footer-social-link:hover {
+            color: #fff;
+            background: var(--site-secondary);
+            border-color: var(--site-secondary);
+            transform: translateY(-3px);
+        }
+
+        .footer-links { display: flex; flex-direction: column; gap: 12px; }
+        .footer-links a {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            color: #B8C6D6;
+            line-height: 1.9;
+        }
+        .footer-links a i { color: var(--site-secondary); margin-top: 5px; flex-shrink: 0; }
+        .footer-links a:hover { color: #fff; transform: translateX(-3px); }
+
+        .footer-auth-box {
+            padding: 22px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.045);
+        }
+        .footer-auth-description { color: #B8C6D6; font-size: 13px; line-height: 2; margin-bottom: 18px; }
+        .footer-auth-actions { display: flex; flex-direction: column; gap: 10px; }
+        .footer-auth-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 45px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .footer-login-btn {
+            color: #fff;
+            background: var(--research-primary);
+            border: 1px solid var(--research-accent);
+        }
+        .footer-login-btn:hover {
+            color: #fff;
+            background: var(--research-accent);
+            border-color: var(--research-accent);
+            transform: translateY(-2px);
+        }
+        .footer-register-btn {
+            color: #fff;
+            background: var(--site-secondary);
+            border: 1px solid var(--site-secondary);
+        }
+        .footer-register-btn:hover {
+            color: #fff;
+            background: var(--advertising-accent);
+            border-color: var(--advertising-accent);
+            transform: translateY(-2px);
+        }
+        .footer-auth-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-top: 17px;
+            color: #9FB2C4;
+            font-size: 12px;
+            line-height: 1.9;
+        }
+        .footer-auth-note i { margin-top: 4px; color: var(--site-secondary); flex-shrink: 0; }
+
+        .footer-gallery-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.07);
+        }
+        .footer-gallery-item a { display: block; width: 100%; height: 100%; }
+        .footer-gallery-item img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.35s ease;
+        }
+        .footer-gallery-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            background: rgba(10, 31, 68, 0.72);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .footer-gallery-item:hover img { transform: scale(1.1); }
+        .footer-gallery-item:hover .footer-gallery-overlay { opacity: 1; }
+
+        .footer-divider {
+            width: 100%;
+            height: 1px;
+            margin: 42px 0 30px;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            height: 100%;
+            padding: 17px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.035);
+        }
+        .footer-contact-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 43px;
+            height: 43px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            color: var(--site-secondary);
+            background: rgba(242, 107, 33, 0.12);
+            font-size: 18px;
+        }
+        .footer-contact-content { min-width: 0; }
+        .footer-contact-content h5 { margin-bottom: 8px; color: #fff; font-size: 15px; font-weight: 700; }
+        .footer-contact-content p,
+        .footer-contact-content a {
+            margin-bottom: 0;
+            color: #B8C6D6;
+            font-size: 13px;
+            line-height: 2;
+            overflow-wrap: anywhere;
+        }
+        .footer-contact-content a:hover { color: var(--site-secondary); }
+
+        .footer-enamad-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            min-height: 190px;
+            padding: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.045);
+            text-align: center;
+        }
+        .footer-enamad-title { margin-bottom: 15px; color: #fff; font-size: 15px; font-weight: 700; }
+        .footer-enamad-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 150px;
+            min-height: 95px;
+            border: 2px dashed rgba(242, 107, 33, 0.5);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.035);
+        }
+        .footer-enamad-description { margin: 12px 0 0; color: #9FB2C4; font-size: 11px; line-height: 1.9; }
+
+        .footer-copyright {
+            margin-top: 30px;
+            padding-top: 22px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        .footer-copyright p { color: #9FB2C4; font-size: 12px; line-height: 2; }
+        .footer-copyright-name { color: var(--site-secondary); font-weight: 700; }
+
+        /* Copyright Bar */
+        .copyright {
+            background: #071633;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+            color: rgba(255, 255, 255, .7);
+            font-size: 0.85rem;
+        }
         .copyright span, .copyright div { font-size: 13px; line-height: 2; }
-        .copyright a { color: #fff; }
+        .copyright a { color: var(--site-secondary); }
+        .copyright a:hover { color: #fff !important; }
+
         .back-to-top {
             width: 48px;
             height: 48px;
@@ -427,10 +689,18 @@
             bottom: 22px;
             z-index: 1000;
             opacity: .9;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, .15);
+            background: var(--site-primary);
+            color: #fff;
+            border: none;
+            box-shadow: 0 8px 25px rgba(10, 31, 68, .25);
             transition: var(--site-transition);
         }
-        .back-to-top:hover { opacity: 1; transform: translateY(-4px); }
+        .back-to-top:hover {
+            opacity: 1;
+            background: var(--site-secondary);
+            color: #fff;
+            transform: translateY(-4px);
+        }
         [dir="rtl"] .back-to-top { right: auto; left: 22px; }
 
         #spinner {
@@ -462,13 +732,14 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 6px 24px rgba(27, 54, 30, .35);
+            box-shadow: 0 6px 24px rgba(10, 31, 68, .35);
             transition: transform .25s ease, box-shadow .25s ease;
         }
         [dir="rtl"] .jr-chat-launcher { left: auto; right: 22px; }
         .jr-chat-launcher:hover {
             transform: translateY(-4px) scale(1.04);
-            box-shadow: 0 10px 32px rgba(27, 54, 30, .45);
+            background: linear-gradient(135deg, var(--site-secondary) 0%, #D85A15 100%);
+            box-shadow: 0 10px 32px rgba(242, 107, 33, .45);
         }
         .jr-chat-launcher:active { transform: scale(.96); }
         .jr-chat-launcher .jr-badge {
@@ -498,7 +769,7 @@
             max-width: calc(100vw - 44px);
             background: #fff;
             border-radius: 18px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, .18), 0 0 0 1px rgba(27, 54, 30, .06);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, .18), 0 0 0 1px var(--site-border);
             display: none;
             flex-direction: column;
             overflow: hidden;
@@ -527,7 +798,8 @@
         .jr-avatar {
             width: 42px; height: 42px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, .15);
+            background: rgba(242, 107, 33, .25);
+            color: var(--site-secondary);
             display: flex; align-items: center; justify-content: center;
             font-size: 22px;
             flex-shrink: 0;
@@ -572,7 +844,7 @@
             transition: background .2s ease;
             flex-shrink: 0;
         }
-        .jr-chat-close:hover { background: rgba(255, 255, 255, .25); }
+        .jr-chat-close:hover { background: rgba(242, 107, 33, .35); }
 
         .jr-chat-body {
             flex: 1;
@@ -588,7 +860,7 @@
         }
         .jr-chat-body::-webkit-scrollbar { width: 6px; }
         .jr-chat-body::-webkit-scrollbar-thumb {
-            background: rgba(27, 54, 30, .2);
+            background: rgba(10, 31, 68, .2);
             border-radius: 3px;
         }
 
@@ -601,8 +873,8 @@
         }
         .jr-placeholder i {
             font-size: 36px;
-            color: var(--site-primary);
-            opacity: .5;
+            color: var(--site-secondary);
+            opacity: .8;
             margin-bottom: 10px;
             display: block;
         }
@@ -670,8 +942,8 @@
             transition: border-color .2s ease, box-shadow .2s ease;
         }
         .jr-chat-input input:focus {
-            border-color: var(--site-primary);
-            box-shadow: 0 0 0 3px rgba(27, 54, 30, .1);
+            border-color: var(--site-secondary);
+            box-shadow: 0 0 0 3px rgba(242, 107, 33, .12);
             background: #fff;
         }
         .jr-chat-input input::placeholder { color: #a0a8a2; }
@@ -679,7 +951,7 @@
             width: 44px; height: 44px;
             border: none;
             border-radius: 50%;
-            background: var(--site-primary);
+            background: var(--site-secondary);
             color: #fff;
             font-size: 18px;
             cursor: pointer;
@@ -688,7 +960,7 @@
             transition: background .2s ease, transform .15s ease;
         }
         .jr-chat-input button:hover {
-            background: var(--site-primary-dark);
+            background: #D85A15;
             transform: scale(1.06);
         }
         .jr-chat-input button:active { transform: scale(.94); }
@@ -722,6 +994,37 @@
         }
 
         /* =========================================================
+           FLOATING CALL BUTTON
+        ========================================================= */
+        .floating-call-button {
+            position: fixed;
+            right: 22px;
+            bottom: 92px;
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0A1F44 0%, #071633 100%);
+            color: #fff;
+            font-size: 23px;
+            border: 2px solid rgba(242, 107, 33, 0.85);
+            border-radius: 50%;
+            box-shadow: 0 6px 22px rgba(10, 31, 68, 0.3);
+            text-decoration: none;
+            z-index: 1035;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+        .floating-call-button:hover {
+            color: #fff;
+            background: var(--site-secondary);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 28px rgba(10, 31, 68, 0.4);
+        }
+        .floating-call-button:active { transform: scale(0.95); }
+        [dir="rtl"] .floating-call-button { right: auto; left: 22px; }
+
+        /* =========================================================
            RESPONSIVE
         ========================================================= */
         @media (max-width: 1199.98px) {
@@ -733,7 +1036,7 @@
                 font-size: 13px;
             }
             .nav-btn { padding-left: 8px !important; padding-right: 8px !important; }
-            .nav-btn .btn { min-width: 105px; padding-left: 14px; padding-right: 14px; }
+            .nav-btn .btn { min-width: 120px; padding-left: 14px; padding-right: 14px; }
         }
 
         @media (max-width: 991.98px) {
@@ -750,41 +1053,44 @@
                 margin-top: 12px;
                 padding: 10px;
                 background: #fff;
-                border: 1px solid rgba(27, 54, 30, .08);
+                border: 1px solid var(--site-border);
                 border-radius: 12px;
                 box-shadow: 0 12px 30px rgba(0, 0, 0, .07);
             }
-            .navbar-nav {
-                width: 100%;
-                align-items: stretch;
-                gap: 3px;
-            }
+            .navbar-nav { width: 100%; align-items: stretch; gap: 3px; }
             .navbar-nav .nav-link {
                 width: 100%;
                 min-height: 44px;
                 justify-content: flex-start;
                 padding: 10px 13px !important;
                 border-radius: 8px;
-                color: #26352a !important;
+                color: #1E2A38 !important;
             }
             [dir="rtl"] .navbar-nav .nav-link { text-align: right; }
             [dir="ltr"] .navbar-nav .nav-link { text-align: left; }
             .navbar-nav .nav-link.active::after { display: none; }
-            .navbar-nav .nav-link.active { background: rgba(27, 54, 30, .06); }
+            .navbar-nav .nav-link.active { background: rgba(10, 31, 68, .06); }
             .navbar .dropdown-menu {
                 width: 100%;
                 min-width: 0;
                 margin-top: 3px;
                 padding: 5px;
                 box-shadow: none;
-                border: 1px solid rgba(27, 54, 30, .07);
-                background: #fafbf8;
+                border: 1px solid var(--site-border);
+                background: #FAFBFD;
             }
-            .navbar .dropdown-item { padding: 9px 12px; color: #26352a; }
+            .navbar .dropdown-item { padding: 9px 12px; color: #1E2A38; }
             .nav-btn { width: 100%; padding: 8px 0 2px !important; }
             .nav-btn .btn { width: 100%; margin: 0 !important; }
             .topbar .border-end { border-right: 0 !important; border-left: 0 !important; }
             main { min-height: 250px; }
+
+            .floating-call-button {
+                width: 52px;
+                height: 52px;
+                bottom: 84px;
+                font-size: 21px;
+            }
         }
 
         @media (max-width: 767.98px) {
@@ -820,6 +1126,15 @@
             }
             [dir="rtl"] .jr-chat-launcher { left: auto; right: 18px; }
             .jr-chat-body { min-height: 220px; max-height: 300px; }
+
+            .floating-call-button {
+                width: 52px;
+                height: 52px;
+                right: 16px;
+                bottom: 84px;
+                font-size: 21px;
+            }
+            [dir="rtl"] .floating-call-button { right: auto; left: 16px; }
         }
 
         @media (max-width: 575.98px) {
@@ -858,6 +1173,13 @@
             .jr-chat-input { padding: 10px 12px; }
             .jr-chat-input input { height: 40px; font-size: 13px; }
             .jr-chat-input button { width: 40px; height: 40px; font-size: 16px; }
+
+            .floating-call-button {
+                width: 48px;
+                height: 48px;
+                bottom: 80px;
+                font-size: 19px;
+            }
         }
 
         @media (max-width: 380px) {
@@ -881,95 +1203,14 @@
                 transition-duration: .01ms !important;
             }
         }
-        /* =========================================================
-   FLOATING CALL BUTTON — ONLY PERSIAN
-========================================================= */
 
-        .floating-call-button {
-            position: fixed;
-            right: 22px;
-            bottom: 92px;
-
-            width: 58px;
-            height: 58px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: linear-gradient(
-                135deg,
-                #1b361e 0%,
-                #132b17 100%
-            );
-
-            color: #fff;
-            font-size: 23px;
-
-            border: 2px solid rgba(214, 168, 79, 0.8);
-            border-radius: 50%;
-
-            box-shadow: 0 6px 22px rgba(27, 54, 30, 0.3);
-
-            text-decoration: none;
-            z-index: 1035;
-
-            transition:
-                transform 0.25s ease,
-                box-shadow 0.25s ease,
-                background 0.25s ease;
-        }
-
-        /* Hover */
-        .floating-call-button:hover {
-            color: #fff;
-            background: #d6a84f;
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 10px 28px rgba(27, 54, 30, 0.4);
-        }
-
-        /* Click */
-        .floating-call-button:active {
-            transform: scale(0.95);
-        }
-
-        /* موقعیت در موبایل */
-        @media (max-width: 767.98px) {
-            .floating-call-button {
-                width: 52px;
-                height: 52px;
-                right: 16px;
-                bottom: 84px;
-                font-size: 21px;
-            }
-        }
-
-        /* صفحه‌نمایش کوچک */
-        @media (max-width: 380px) {
-            .floating-call-button {
-                width: 48px;
-                height: 48px;
-                right: 12px;
-                bottom: 80px;
-                font-size: 19px;
-            }
-        }
-
-        /* انیمیشن ملایم */
         @media (prefers-reduced-motion: no-preference) {
-            .floating-call-button {
-                animation: floatingCallPulse 2.5s infinite;
-            }
+            .floating-call-button { animation: floatingCallPulse 2.5s infinite; }
         }
 
         @keyframes floatingCallPulse {
-            0%, 100% {
-                box-shadow: 0 6px 22px rgba(27, 54, 30, 0.3);
-            }
-
-            50% {
-                box-shadow: 0 6px 28px rgba(214, 168, 79, 0.45);
-            }
+            0%, 100% { box-shadow: 0 6px 22px rgba(10, 31, 68, 0.3); }
+            50%      { box-shadow: 0 6px 28px rgba(242, 107, 33, 0.45); }
         }
     </style>
 
@@ -987,25 +1228,25 @@
 </div>
 
 {{-- TOPBAR --}}
-<div class="container-fluid topbar px-0 bg-light">
+<div class="container-fluid topbar px-0">
     <div class="container">
         <div class="row gx-0 align-items-center py-2">
             <div class="col-lg-8 col-md-7 col-12">
                 <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-start">
                     <div class="pe-3">
-                        <a href="{{ $contactUrl }}" class="text-muted small">
+                        <a href="{{ $contactUrl }}" class="small">
                             <i class="fas fa-map-marker-alt text-primary me-1"></i>
                             {{ __('home.topbar.address') }}
                         </a>
                     </div>
                     <div class="ps-3 pe-3 border-start">
-                        <a href="mailto:info@keshtavaran.ir" class="text-muted small">
+                        <a href="mailto:info@amirafaq.ir" class="small">
                             <i class="fas fa-envelope text-primary me-1"></i>
-                            info@keshtavaran.ir
+                            info@amirafaq.ir
                         </a>
                     </div>
                     <div class="ps-3">
-                        <a href="tel:+989150398636" class="text-muted small" dir="ltr">
+                        <a href="tel:+982188776655" class="small" dir="ltr">
                             <i class="fas fa-phone text-primary me-1"></i>
                             {{ __('home.topbar.phone') }}
                         </a>
@@ -1021,7 +1262,7 @@
                         <a class="btn p-0 text-primary" href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     </div>
                     <div class="language-dropdown" id="languageDropdownWrapper">
-                        <a href="javascript:void(0)" class="dropdown-toggle d-inline-flex align-items-center" id="languageDropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: #26352a; font-weight: 600;">
+                        <a href="javascript:void(0)" class="dropdown-toggle d-inline-flex align-items-center" id="languageDropdown" role="button" aria-haspopup="true" aria-expanded="false" style="color: #1E2A38; font-weight: 600;">
                             <i class="fa-solid fa-globe me-1"></i>
                             {{ $currentLanguage }}
                         </a>
@@ -1078,103 +1319,87 @@
                 <div class="navbar-nav mx-0 mx-lg-auto">
 
                     {{-- صفحه اصلی --}}
-                    <a
-                        href="{{ $homeUrl }}"
-                        class="nav-item nav-link {{ request()->is($locale) || request()->is($locale . '/') ? 'active' : '' }}"
-                    >
+                    <a href="{{ $homeUrl }}"
+                       class="nav-item nav-link {{ request()->is($locale) || request()->is($locale . '/') ? 'active' : '' }}">
                         {{ __('home.navbar.home') }}
                     </a>
 
                     {{-- درباره ما --}}
-                    <a
-                        href="{{ $aboutUrl }}"
-                        class="nav-item nav-link {{ request()->is($locale . '/about') ? 'active' : '' }}"
-                    >
+                    <a href="{{ $aboutUrl }}"
+                       class="nav-item nav-link {{ request()->is($locale . '/about') ? 'active' : '' }}">
                         {{ __('home.navbar.about') }}
                     </a>
 
                     {{-- پروژه‌ها --}}
-                    <a
-                        href="{{ $projectsUrl }}"
-                        class="nav-item nav-link {{ request()->is($locale . '/project*') ? 'active' : '' }}"
-                    >
+                    <a href="{{ $projectsUrl }}"
+                       class="nav-item nav-link {{ request()->is($locale . '/project*') ? 'active' : '' }}">
                         {{ __('home.navbar.projects') }}
                     </a>
 
-                    {{-- بخش‌های سایت --}}
+                    {{-- بخش‌های تخصصی --}}
                     <div class="nav-item dropdown">
-
-                        <a
-                            href="#"
-                            class="nav-link dropdown-toggle"
-                            id="sectionsDropdown"
-                            role="button"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                        >
+                        <a href="#" class="nav-link dropdown-toggle" id="sectionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ __('home.navbar.sections') }}
                         </a>
+                        <div class="dropdown-menu" aria-labelledby="sectionsDropdown">
 
-                        <div
-                            class="dropdown-menu"
-                            aria-labelledby="sectionsDropdown"
-                        >
+                            {{-- سه بخش اصلی --}}
+                            <a href="{{ $defenseUrl }}" class="dropdown-item">
+                                <i class="fas fa-shield-alt me-2"></i>
+                                {{ __('home.navbar.defense_balloons') }}
+                            </a>
+                            <a href="{{ $advertisingUrl }}" class="dropdown-item">
+                                <i class="fas fa-bullhorn me-2"></i>
+                                {{ __('home.navbar.advertising_balloons') }}
+                            </a>
+                            <a href="{{ $researchUrl }}" class="dropdown-item">
+                                <i class="fas fa-flask me-2"></i>
+                                {{ __('home.navbar.research_balloons') }}
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+
                             <a href="{{ $productsUrl }}" class="dropdown-item">
-                                {{ __('home.navbar.export_products') }}
+                                <i class="fas fa-boxes me-2"></i>
+                                {{ __('home.navbar.products') }}
                             </a>
-
-                            <a href="{{ $exportUrl }}" class="dropdown-item">
-                                {{ __('home.navbar.export') }}
-                            </a>
-
-                            <a href="{{ $importUrl }}" class="dropdown-item">
-                                {{ __('home.navbar.import') }}
-                            </a>
-
-                            <a href="{{ $marketsUrl }}" class="dropdown-item">
-                                {{ __('home.navbar.markets') }}
-                            </a>
-
-                            <a href="{{ $suppliersUrl }}" class="dropdown-item">
-                                {{ __('home.navbar.suppliers') }}
-                            </a>
-
-                            <a href="{{ $logisticsUrl }}" class="dropdown-item">
-                                {{ __('home.navbar.logistics') }}
-                            </a>
-
-                            <a href="{{ $homeUrl }}#team" class="dropdown-item">
-                                {{ __('home.navbar.team') }}
-                            </a>
-
-                            <a href="{{ $catalogs }}" class="dropdown-item">
+                            <a href="{{ $catalogsUrl }}" class="dropdown-item">
+                                <i class="fas fa-file-pdf me-2"></i>
                                 {{ __('home.navbar.catalogs') }}
                             </a>
-
-                            <a href="{{ $buyer }}" class="dropdown-item">
-                                {{ __('home.navbar.buyer') }}
+                            <a href="{{ $suppliersUrl }}" class="dropdown-item">
+                                <i class="fas fa-handshake me-2"></i>
+                                {{ __('home.navbar.suppliers') }}
                             </a>
-
-                            <a href="{{ $gallery }}" class="dropdown-item">
+                            <a href="{{ $logisticsUrl }}" class="dropdown-item">
+                                <i class="fas fa-truck me-2"></i>
+                                {{ __('home.navbar.logistics') }}
+                            </a>
+                            <a href="{{ $teamUrl }}" class="dropdown-item">
+                                <i class="fas fa-users-cog me-2"></i>
+                                {{ __('home.navbar.team') }}
+                            </a>
+                            <a href="{{ $galleryUrl }}" class="dropdown-item">
+                                <i class="fas fa-images me-2"></i>
                                 {{ __('home.navbar.gallery') }}
+                            </a>
+                            <a href="{{ $buyerUrl }}" class="dropdown-item">
+                                <i class="fas fa-user-check me-2"></i>
+                                {{ __('home.navbar.buyer') }}
                             </a>
                         </div>
                     </div>
 
                     {{-- تماس با ما --}}
-                    <a
-                        href="{{ $contact }}"
-                        class="nav-item nav-link {{ request()->is($locale . '/contact') ? 'active' : '' }}"
-                    >
+                    <a href="{{ $contactUrl }}"
+                       class="nav-item nav-link {{ request()->is($locale . '/contact') ? 'active' : '' }}">
                         {{ __('home.navbar.contact') }}
                     </a>
 
-                    {{-- همکاری تجاری --}}
+                    {{-- درخواست مشاوره --}}
                     <div class="nav-btn px-2">
-                        <a
-                            href="{{ $contactUrl }}"
-                            class="btn btn-primary py-2 px-4"
-                        >
+                        <a href="{{ $contactUrl }}" class="btn py-2 px-4">
+                            <i class="fas fa-paper-plane me-1"></i>
                             {{ __('home.navbar.cooperation') }}
                         </a>
                     </div>
@@ -1182,159 +1407,77 @@
                     {{-- ======================================== --}}
                     {{-- منوی مدیریت مخصوص ادمین --}}
                     {{-- ======================================== --}}
-
                     @auth
                         @if (auth()->user()->role === 'admin')
-
                             <div class="nav-item dropdown">
-
-                                <a
-                                    href="#"
-                                    class="nav-link dropdown-toggle text-primary fw-bold"
-                                    id="adminDropdown"
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                >
+                                <a href="#" class="nav-link dropdown-toggle text-primary fw-bold" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="fas fa-user-shield me-1"></i>
                                     مدیریت سایت
                                 </a>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
 
-                                <div
-                                    class="dropdown-menu dropdown-menu-end"
-                                    aria-labelledby="adminDropdown"
-                                >
-
-                                    {{-- داشبورد مدیریت --}}
-                                    <a
-                                        href="{{ route('view.panel') }}"
-                                        class="dropdown-item"
-                                    >
+                                    <a href="{{ route('view.panel') }}" class="dropdown-item">
                                         <i class="fas fa-tachometer-alt me-2"></i>
                                         داشبورد مدیریت
                                     </a>
 
                                     <div class="dropdown-divider"></div>
 
-                                    {{-- گروه محصولات --}}
-                                    <a
-                                        href="{{ route('admin.productGroup.index') }}"
-                                        class="dropdown-item"
-                                    >
+                                    <a href="{{ route('admin.productGroup.index') }}" class="dropdown-item">
                                         <i class="fas fa-layer-group me-2"></i>
                                         گروه‌های محصولات
                                     </a>
-
-                                    {{-- دسته‌بندی‌ها --}}
-                                    <a
-                                        href="{{ route('admin.category.index') }}"
-                                        class="dropdown-item"
-                                    >
+                                    <a href="{{ route('admin.category.index') }}" class="dropdown-item">
                                         <i class="fas fa-list me-2"></i>
                                         دسته‌بندی‌ها
                                     </a>
-
-                                    {{-- محصولات --}}
-                                    <a
-                                        href="{{ route('admin.product.index') }}"
-                                        class="dropdown-item"
-                                    >
+                                    <a href="{{ route('admin.product.index') }}" class="dropdown-item">
                                         <i class="fas fa-boxes me-2"></i>
                                         محصولات
                                     </a>
-
-                                    {{-- کاتالوگ‌ها --}}
-                                    <a
-                                        href="{{ route('admin.catalog.index') }}"
-                                        class="dropdown-item"
-                                    >
+                                    <a href="{{ route('admin.catalog.index') }}" class="dropdown-item">
                                         <i class="fas fa-file-pdf me-2"></i>
                                         کاتالوگ‌ها
                                     </a>
-
-                                    {{-- گالری تصاویر --}}
-                                    <a
-                                        href="{{ route('admin.gallery.index') }}"
-                                        class="dropdown-item"
-                                    >
+                                    <a href="{{ route('admin.gallery.index') }}" class="dropdown-item">
                                         <i class="fas fa-images me-2"></i>
                                         گالری تصاویر
                                     </a>
-
-                                    {{-- معاملات --}}
-                                    <a
-                                        href="{{ route('admin.trade-transaction.index') }}"
-                                        class="dropdown-item"
-                                    >
+                                    <a href="{{ route('admin.trade-transaction.index') }}" class="dropdown-item">
                                         <i class="fas fa-handshake me-2"></i>
                                         معاملات انجام‌شده
                                     </a>
-
-                                    {{-- خریداران --}}
-                                    <a
-                                        href="{{ route('admin.buyer.index') }}"
-                                        class="dropdown-item"
-                                    >
+                                    <a href="{{ route('admin.buyer.index') }}" class="dropdown-item">
                                         <i class="fas fa-users me-2"></i>
                                         خریداران
                                     </a>
-
-                                    {{-- پیام‌های تماس --}}
-                                    <a
-                                        href="{{ route('admin.contact.index') }}"
-                                        class="dropdown-item"
-                                    >
+                                    <a href="{{ route('admin.contact.index') }}" class="dropdown-item">
                                         <i class="fas fa-envelope me-2"></i>
                                         پیام‌های تماس
                                     </a>
 
                                     <div class="dropdown-divider"></div>
 
-                                    {{-- مدیریت سوالات متداول --}}
-                                    <a
-                                        href="{{ route('admin.chatbot.faqs.index') }}"
-                                        class="dropdown-item"
-                                    >
+                                    <a href="{{ route('admin.chatbot.faqs.index') }}" class="dropdown-item">
                                         <i class="fas fa-question-circle me-2"></i>
                                         مدیریت سوالات متداول
                                     </a>
-
-                                    {{-- پشتیبانی کاربران --}}
-                                    <a
-                                        href="{{ route('admin.support.index') }}"
-                                        class="dropdown-item"
-                                    >
+                                    <a href="{{ route('admin.support.index') }}" class="dropdown-item">
                                         <i class="fas fa-headset me-2"></i>
                                         پشتیبانی کاربران
                                     </a>
-
                                 </div>
                             </div>
 
-                            {{-- ======================================== --}}
-                            {{-- دکمه خروج از حساب ادمین --}}
-                            {{-- ======================================== --}}
-
                             <div class="nav-item px-2 d-flex align-items-center">
-
-                                <form
-                                    action="{{ route('logout') }}"
-                                    method="POST"
-                                    class="m-0"
-                                >
+                                <form action="{{ route('logout', ['locale' => app()->getLocale()]) }}" method="POST" class="m-0">
                                     @csrf
-
-                                    <button
-                                        type="submit"
-                                        class="btn btn-outline-danger py-2 px-3"
-                                    >
+                                    <button type="submit" class="btn btn-outline-danger py-2 px-3">
                                         <i class="fas fa-sign-out-alt me-1"></i>
-                                        خروج از پنل
+                                        خروج
                                     </button>
                                 </form>
-
                             </div>
-
                         @endif
                     @endauth
 
@@ -1343,53 +1486,36 @@
 
             {{-- اطلاعات تماس --}}
             <div class="d-none d-xl-flex flex-shrink-0 ps-3">
-
-                <a
-                    href="tel:+982188776655"
-                    class="btn btn-light btn-lg-square rounded-circle position-relative"
-                    aria-label="{{ __('home.navbar.call') }}"
-                >
+                <a href="tel:+982188776655" class="btn btn-light btn-lg-square rounded-circle position-relative" aria-label="{{ __('home.navbar.call') }}">
                     <i class="fa fa-phone-alt fa-lg"></i>
-
-                    <span
-                        class="position-absolute"
-                        style="top:3px;right:8px;"
-                    >
+                    <span class="position-absolute" style="top:3px;right:8px;">
                         <i class="fa fa-comment-dots text-secondary"></i>
                     </span>
                 </a>
-
                 <div class="d-flex flex-column ms-3">
-
-                    <span class="small">
-                        {{ __('home.navbar.experts') }}
-                    </span>
-
+                    <span class="small">{{ __('home.navbar.experts') }}</span>
                     <a href="tel:+982188776655" dir="ltr">
-                        <span class="fw-semibold">
-                            {{ __('home.topbar.phone') }}
-                        </span>
+                        <span class="fw-semibold">{{ __('home.topbar.phone') }}</span>
                     </a>
-
                 </div>
             </div>
 
         </nav>
     </div>
 </div>
+
 {{-- MAIN --}}
 <main>
     @yield('content')
 </main>
-{{-- FLOATING CALL BUTTON: فقط زبان فارسی --}}
+
+{{-- FLOATING CALL BUTTON --}}
 @if ($locale === 'fa')
-    <a
-        href="tel:+989150398636"
-        class="floating-call-button"
-        aria-label="تماس با شرکت امیر آفاق گستر"
-        title="تماس با ما"
-        dir="ltr"
-    >
+    <a href="tel:+982188776655"
+       class="floating-call-button"
+       aria-label="تماس با شرکت امیر آفاق گستر"
+       title="تماس با ما"
+       dir="ltr">
         <i class="fas fa-phone-alt"></i>
     </a>
 @endif
@@ -1404,348 +1530,197 @@
             {{-- معرفی شرکت --}}
             <div class="col-xl-4 col-lg-6 col-md-6">
                 <div class="footer-item footer-company">
-
-                    <a href="{{ $homeUrl }}"
-                       class="footer-brand d-inline-flex align-items-center mb-3">
-
+                    <a href="{{ $homeUrl }}" class="footer-brand d-inline-flex align-items-center mb-3">
                         <span class="footer-brand-icon">
-                            <i class="fas fa-seedling"></i>
+                            <i class="fas fa-parachute-box"></i>
                         </span>
-
                         <h3 class="text-white mb-0">
                             {{ __('home.footer.company_name') }}
                         </h3>
                     </a>
-
                     <p class="footer-description text-white mb-4">
                         {{ __('home.footer.description') }}
                     </p>
 
-                    {{-- شبکه‌های اجتماعی --}}
                     <div class="footer-social">
-
-                        <a class="footer-social-link"
-                           href="#"
-                           aria-label="Instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-
-                        <a class="footer-social-link"
-                           href="#"
-                           aria-label="LinkedIn">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-
-                        <a class="footer-social-link"
-                           href="#"
-                           aria-label="Telegram">
-                            <i class="fab fa-telegram-plane"></i>
-                        </a>
-
-                        <a class="footer-social-link"
-                           href="#"
-                           aria-label="WhatsApp">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
-
+                        <a class="footer-social-link" href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a class="footer-social-link" href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a class="footer-social-link" href="#" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+                        <a class="footer-social-link" href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                     </div>
                 </div>
             </div>
 
-
             {{-- لینک‌های سریع --}}
             <div class="col-xl-2 col-lg-6 col-md-6">
                 <div class="footer-item">
-
                     <h4 class="footer-heading">
                         {{ __('home.footer.quick_links_title') }}
                     </h4>
-
-                    <nav class="footer-links"
-                         aria-label="{{ __('home.footer.quick_links_title') }}">
+                    <nav class="footer-links" aria-label="{{ __('home.footer.quick_links_title') }}">
 
                         <a href="{{ $aboutUrl }}">
                             <i class="fas fa-angle-left"></i>
                             <span>{{ __('home.footer.links.about') }}</span>
                         </a>
-
-                        <a href="{{ $productsUrl }}">
+                        <a href="{{ $defenseUrl }}">
                             <i class="fas fa-angle-left"></i>
-                            <span>
-                                {{ __('home.footer.links.agricultural_products') }}
-                            </span>
+                            <span>{{ __('home.footer.links.defense_balloons') }}</span>
                         </a>
-
-                        <a href="{{ $productsUrl }}">
+                        <a href="{{ $advertisingUrl }}">
                             <i class="fas fa-angle-left"></i>
-                            <span>
-                                {{ __('home.footer.links.dairy_products') }}
-                            </span>
+                            <span>{{ __('home.footer.links.advertising_balloons') }}</span>
                         </a>
-
-                        <a href="{{ $exportUrl }}">
+                        <a href="{{ $researchUrl }}">
                             <i class="fas fa-angle-left"></i>
-                            <span>{{ __('home.footer.links.export') }}</span>
+                            <span>{{ __('home.footer.links.research_balloons') }}</span>
                         </a>
-
-                        <a href="{{ $importUrl }}">
+                        <a href="{{ $projectsUrl }}">
                             <i class="fas fa-angle-left"></i>
-                            <span>{{ __('home.footer.links.import') }}</span>
+                            <span>{{ __('home.footer.links.projects') }}</span>
                         </a>
-
                         <a href="{{ $contactUrl }}">
                             <i class="fas fa-angle-left"></i>
                             <span>{{ __('home.footer.links.contact') }}</span>
                         </a>
-
                     </nav>
                 </div>
             </div>
 
-
             {{-- ورود و ثبت‌نام --}}
             <div class="col-xl-3 col-lg-6 col-md-6">
                 <div class="footer-item footer-auth-box">
-
                     <h4 class="footer-heading">
                         {{ __('home.footer.account_title') }}
                     </h4>
-
                     <p class="footer-auth-description">
                         {{ __('home.footer.account_description') }}
                     </p>
-
                     <div class="footer-auth-actions">
-
-                        <a href="{{ route('login', ['locale' => app()->getLocale()]) }}"
-                           class="footer-auth-btn footer-login-btn">
+                        <a href="{{ route('login', ['locale' => app()->getLocale()]) }}" class="footer-auth-btn footer-login-btn">
                             <i class="fas fa-sign-in-alt"></i>
                             <span>{{ __('home.footer.login') }}</span>
                         </a>
-
-                        <a href="{{ route('register', ['locale' => app()->getLocale()]) }}"
-                           class="footer-auth-btn footer-register-btn">
+                        <a href="{{ route('register', ['locale' => app()->getLocale()]) }}" class="footer-auth-btn footer-register-btn">
                             <i class="fas fa-user-plus"></i>
                             <span>{{ __('home.footer.register') }}</span>
                         </a>
-
                     </div>
-
                     <div class="footer-auth-note">
                         <i class="fas fa-shield-alt"></i>
-
-                        <span>
-                            {{ __('home.footer.account_note') }}
-                        </span>
+                        <span>{{ __('home.footer.account_note') }}</span>
                     </div>
-
                 </div>
             </div>
 
-
-            {{-- گالری تصاویر --}}
+            {{-- گالری --}}
             <div class="col-xl-3 col-lg-6 col-md-6">
                 <div class="footer-item">
-
                     <h4 class="footer-heading">
                         {{ __('home.footer.gallery_title') }}
                     </h4>
-
                     <div class="row g-2 footer-gallery">
-
                         @for ($n = 1; $n <= 6; $n++)
-
-                            @php
-                                $galleryImage = asset("img/instagram-footer-$n.jpg");
-                            @endphp
-
+                            @php $galleryImage = asset("img/instagram-footer-$n.jpg"); @endphp
                             <div class="col-4">
-
                                 <div class="footer-gallery-item">
-
-                                    <a href="{{ $galleryImage }}"
-                                       data-lightbox="footerGallery"
-                                       aria-label="{{ __('home.footer.view_image') }}">
-
-                                        <img
-                                            src="{{ $galleryImage }}"
-                                            class="img-fluid"
-                                            loading="lazy"
-                                            decoding="async"
-                                            width="120"
-                                            height="120"
-                                            alt="{{ __('home.footer.gallery_image_alt', ['number' => $n]) }}"
-                                        >
-
+                                    <a href="{{ $galleryImage }}" data-lightbox="footerGallery" aria-label="{{ __('home.footer.view_image') }}">
+                                        <img src="{{ $galleryImage }}" class="img-fluid" loading="lazy" decoding="async" width="120" height="120" alt="{{ __('home.footer.gallery_image_alt', ['number' => $n]) }}">
                                         <span class="footer-gallery-overlay">
                                             <i class="fas fa-search-plus"></i>
                                         </span>
-
                                     </a>
-
                                 </div>
-
                             </div>
-
                         @endfor
-
                     </div>
-
                 </div>
             </div>
 
         </div>
-
 
         {{-- خط جداکننده --}}
         <div class="footer-divider"></div>
 
-
         {{-- اطلاعات تماس و اینماد --}}
         <div class="row g-4 align-items-stretch">
 
-            {{-- آدرس --}}
             <div class="col-lg-3 col-md-6">
                 <div class="footer-contact-item">
-
                     <div class="footer-contact-icon">
                         <i class="fas fa-map-marker-alt"></i>
                     </div>
-
                     <div class="footer-contact-content">
-
-                        <h5>
-                            {{ __('home.footer.address_title') }}
-                        </h5>
-
-                        <p>
-                            {{ __('home.footer.address') }}
-                        </p>
-
+                        <h5>{{ __('home.footer.address_title') }}</h5>
+                        <p>{{ __('home.footer.address') }}</p>
                     </div>
-
                 </div>
             </div>
 
-
-            {{-- ایمیل --}}
             <div class="col-lg-3 col-md-6">
                 <div class="footer-contact-item">
-
                     <div class="footer-contact-icon">
                         <i class="fas fa-envelope"></i>
                     </div>
-
                     <div class="footer-contact-content">
-
-                        <h5>
-                            {{ __('home.footer.email_title') }}
-                        </h5>
-
-                        <a href="mailto:info@keshtavaran.ir"
-                           dir="ltr">
-
-                            info@keshtavaran.ir
-
-                        </a>
-
+                        <h5>{{ __('home.footer.email_title') }}</h5>
+                        <a href="mailto:info@amirafaq.ir" dir="ltr">info@amirafaq.ir</a>
                     </div>
-
                 </div>
             </div>
 
-
-            {{-- تلفن --}}
             <div class="col-lg-3 col-md-6">
                 <div class="footer-contact-item">
-
                     <div class="footer-contact-icon">
                         <i class="fas fa-phone-alt"></i>
                     </div>
-
                     <div class="footer-contact-content">
-
-                        <h5>
-                            {{ __('home.footer.phone_title') }}
-                        </h5>
-
-                        <a href="tel:+982188776655"
-                           dir="ltr">
-
-                            {{ __('home.footer.phone') }}
-
-                        </a>
-
+                        <h5>{{ __('home.footer.phone_title') }}</h5>
+                        <a href="tel:+982188776655" dir="ltr">{{ __('home.footer.phone') }}</a>
                     </div>
-
                 </div>
             </div>
 
-
-            {{-- محل قرارگیری اینماد --}}
             <div class="col-lg-3 col-md-6">
-
                 <div class="footer-enamad-box">
-
-                    <h5 class="footer-enamad-title">
-                        {{ __('home.footer.enamad_title') }}
-                    </h5>
-
-                    <div class="footer-enamad-placeholder"
-                         aria-label="{{ __('home.footer.enamad_placeholder') }}">
-
-                        {{-- تصویر یا کد رسمی اینماد را بعداً اینجا قرار دهید --}}
-
+                    <h5 class="footer-enamad-title">{{ __('home.footer.enamad_title') }}</h5>
+                    <div class="footer-enamad-placeholder" aria-label="{{ __('home.footer.enamad_placeholder') }}">
+                        {{-- تصویر اینماد --}}
                     </div>
-
-                    <p class="footer-enamad-description">
-                        {{ __('home.footer.enamad_description') }}
-                    </p>
-
+                    <p class="footer-enamad-description">{{ __('home.footer.enamad_description') }}</p>
                 </div>
-
             </div>
 
         </div>
 
-
         {{-- کپی‌رایت --}}
         <div class="footer-copyright">
-
             <p class="mb-0">
                 &copy; {{ date('Y') }}
-
-                <span class="footer-copyright-name">
-                    {{ __('home.footer.company_name') }}
-                </span>
-
-                <span>
-                    {{ __('home.footer.copyright') }}
-                </span>
+                <span class="footer-copyright-name">{{ __('home.footer.company_name') }}</span>
+                <span>{{ __('home.footer.copyright') }}</span>
             </p>
-
         </div>
 
     </div>
 </footer>
 
-{{-- COPYRIGHT --}}
+{{-- COPYRIGHT BAR --}}
 <div class="container-fluid copyright py-3">
     <div class="container">
         <div class="row align-items-center g-2">
             <div class="col-md-6 text-center text-md-end">
-                <span class="text-body">
-                    <a href="{{ $homeUrl }}" class="border-bottom text-white">
-                        <i class="fas fa-copyright text-light me-1"></i>
+                <span>
+                    <a href="{{ $homeUrl }}">
+                        <i class="fas fa-copyright me-1"></i>
                         {{ __('home.footer.company_name') }}
                     </a>
-                    ،
-                    {{ __('home.footer.copyright') }}
+                    ، {{ __('home.footer.copyright') }}
                 </span>
             </div>
             <div class="col-md-6 text-center text-md-start">
                 {{ __('home.footer.designed_by') }}
-                <a class="border-bottom text-white" href="https://takhticompany.com" target="_blank" rel="noopener noreferrer">
+                <a href="https://takhticompany.com" target="_blank" rel="noopener noreferrer">
                     {{ __('home.footer.designer') }}
                 </a>
             </div>
@@ -1758,9 +1733,7 @@
     <i class="fa fa-arrow-up"></i>
 </a>
 
-{{-- =========================================================
-     CHAT WIDGET
-========================================================== --}}
+{{-- CHAT WIDGET --}}
 <button type="button" id="jrChatLauncher" class="jr-chat-launcher" aria-label="Open chat" aria-expanded="false">
     <i class="fas fa-comments"></i>
     <span class="jr-badge" id="jrChatBadge">1</span>
@@ -1772,10 +1745,10 @@
             <i class="fas fa-headset"></i>
         </div>
         <div class="jr-titles">
-            <h6>پشتیبانی آنلاین</h6>
+            <h6>مشاوره تخصصی بالن</h6>
             <div class="jr-status">
                 <span class="jr-dot"></span>
-                <span id="jrStatusText">آنلاین — آماده پاسخگویی</span>
+                <span id="jrStatusText">آنلاین — کارشناس فنی آماده پاسخ است</span>
             </div>
         </div>
         <button type="button" class="jr-chat-close" id="jrChatClose" aria-label="Close chat">
@@ -1787,7 +1760,8 @@
         <div class="jr-placeholder" id="jrPlaceholder">
             <i class="fas fa-comments"></i>
             سلام! 👋<br>
-            چطور می‌توانم به شما کمک کنم؟
+            به دنبال چه نوع بالونی هستید؟<br>
+            <strong>نظامی / تبلیغاتی / پژوهشی</strong>
         </div>
     </div>
 
@@ -1800,8 +1774,8 @@
 </div>
 
 {{-- JAVASCRIPT --}}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('lib/wow/wow.min.js') }}"></script>
 <script src="{{ asset('lib/easing/easing.min.js') }}"></script>
 <script src="{{ asset('lib/waypoints/waypoints.min.js') }}"></script>
@@ -1859,16 +1833,11 @@
     })();
 </script>
 
-{{-- =========================================================
-     CHAT WIDGET LOGIC — بدون دوبار ارسال
-========================================================== --}}
+{{-- CHAT WIDGET LOGIC — بدون دوبار ارسال --}}
 <script>
     (function () {
         'use strict';
 
-        /* =====================================================
-           ELEMENTS
-        ===================================================== */
         var launcher    = document.getElementById('jrChatLauncher');
         var panel       = document.getElementById('jrChatPanel');
         var closeBtn    = document.getElementById('jrChatClose');
@@ -1880,26 +1849,19 @@
 
         if (!launcher || !panel || !body || !input || !sendBtn) return;
 
-        /* =====================================================
-           CONFIG
-        ===================================================== */
-        var CSRF     = document.querySelector('meta[name="csrf-token"]').content;
-        var SEND_URL = '{{ route("chatbot.send") }}';
-        var POLL_URL = '{{ route("chatbot.messages") }}';
+        var csrfElement = document.querySelector('meta[name="csrf-token"]');
+        var CSRF        = csrfElement ? csrfElement.getAttribute('content') : '';
 
-        /* =====================================================
-           STATE
-        ===================================================== */
+        var SEND_URL = @json(route('chatbot.send', ['locale' => app()->getLocale()]));
+        var POLL_URL = @json(route('chatbot.messages', ['locale' => app()->getLocale()]));
+
         var isOpen             = false;
         var placeholderRemoved = false;
         var lastMessageId      = 0;
         var pollingTimer       = null;
         var isSending          = false;
-        var renderedIds        = {};   // برای جلوگیری از نمایش تکراری در UI
+        var renderedIds        = {};
 
-        /* =====================================================
-           OPEN / CLOSE
-        ===================================================== */
         function openChat() {
             panel.classList.add('jr-open');
             isOpen = true;
@@ -1929,9 +1891,6 @@
             if (e.key === 'Escape' && isOpen) closeChat();
         });
 
-        /* =====================================================
-           HELPERS
-        ===================================================== */
         function scrollToBottom() {
             requestAnimationFrame(function () {
                 body.scrollTop = body.scrollHeight;
@@ -1956,37 +1915,25 @@
             if (el) el.textContent = text;
         }
 
-        /**
-         * افزودن پیام به UI
-         */
         function addMessage(text, type, time) {
             removePlaceholder();
-
             var cssType = (type === 'user' || type === 'visitor') ? 'user' : 'bot';
-
             var div = document.createElement('div');
             div.className = 'jr-msg jr-msg-' + cssType;
-
             var span = document.createElement('span');
             span.textContent = text;
             div.appendChild(span);
-
             var t = document.createElement('span');
             t.className = 'jr-msg-time';
             t.textContent = time || formatTime();
             div.appendChild(t);
-
             body.appendChild(div);
             scrollToBottom();
         }
 
-        /* =====================================================
-           TYPING INDICATOR
-        ===================================================== */
         function showTyping() {
             if (document.getElementById('jrTypingIndicator')) return;
             removePlaceholder();
-
             var div = document.createElement('div');
             div.className = 'jr-typing';
             div.id = 'jrTypingIndicator';
@@ -2000,41 +1947,24 @@
             if (el) el.remove();
         }
 
-        /* =====================================================
-           RENDER SERVER MESSAGES (بدون تکرار)
-        ===================================================== */
         function renderServerMessages(messages) {
             if (!Array.isArray(messages) || !messages.length) return 0;
-
             var added = 0;
-
             messages.forEach(function (msg) {
                 var id = Number(msg.id);
                 if (!id) return;
-
-                // اگر قبلاً رندر شده، رد کن
                 if (renderedIds[id]) {
                     if (id > lastMessageId) lastMessageId = id;
                     return;
                 }
-
                 renderedIds[id] = true;
                 if (id > lastMessageId) lastMessageId = id;
-
-                addMessage(
-                    msg.content,
-                    msg.sender_type,
-                    formatTime(msg.created_at)
-                );
+                addMessage(msg.content, msg.sender_type, formatTime(msg.created_at));
                 added++;
             });
-
             return added;
         }
 
-        /* =====================================================
-           STATUS
-        ===================================================== */
         function updateStatusFromState(status) {
             if (status === 'waiting_for_agent') {
                 updateStatusText('در انتظار پاسخ کارشناس...');
@@ -2047,21 +1977,13 @@
             }
         }
 
-        /* =====================================================
-           SEND MESSAGE — بدون دوبار نمایش
-        ===================================================== */
         function sendMessage() {
             var text = input.value.trim();
             if (!text || isSending) return;
-
             isSending = true;
             sendBtn.disabled = true;
-
-            // پاک کردن input فوراً
             input.value = '';
             input.focus();
-
-            // فقط typing نشان بده (پیام را فوری نمایش نده)
             showTyping();
 
             fetch(SEND_URL, {
@@ -2081,28 +2003,18 @@
                 })
                 .then(function (data) {
                     hideTyping();
-
-                    // نمایش پیام‌ها از پاسخ سرور (شامل پیام کاربر + پیام bot)
                     if (data && Array.isArray(data.messages)) {
                         renderServerMessages(data.messages);
                     }
-
                     updateStatusFromState(data && data.status);
                 })
                 .catch(function (err) {
                     console.error('[chat] send error:', err);
                     hideTyping();
-
-                    // در صورت خطا، متن را برگردان به input
                     input.value = text;
-
-                    // پیام خطا به‌عنوان bot نمایش بده
                     var errorId = Date.now();
                     renderedIds[errorId] = true;
-                    addMessage(
-                        'خطا در ارسال پیام. لطفاً دوباره تلاش کنید.',
-                        'bot'
-                    );
+                    addMessage('خطا در ارسال پیام. لطفاً دوباره تلاش کنید.', 'bot');
                 })
                 .finally(function () {
                     isSending = false;
@@ -2119,9 +2031,6 @@
             }
         });
 
-        /* =====================================================
-           POLLING — دریافت پیام‌های جدید (کارشناس / bot)
-        ===================================================== */
         function pollMessages() {
             fetch(POLL_URL + '?after_id=' + lastMessageId, {
                 headers: {
@@ -2133,25 +2042,18 @@
                 .then(function (res) { return res.ok ? res.json() : null; })
                 .then(function (data) {
                     if (!data) return;
-
                     var newCount = 0;
-
                     if (Array.isArray(data.messages) && data.messages.length) {
                         newCount = renderServerMessages(data.messages);
                     }
-
-                    // اگر چت بسته است و پیام جدید آمده، badge نشان بده
                     if (!isOpen && newCount > 0 && badge) {
                         var current = parseInt(badge.textContent || '0', 10) || 0;
                         badge.style.display = 'block';
                         badge.textContent = String(current + newCount);
                     }
-
                     updateStatusFromState(data.status);
                 })
-                .catch(function () {
-                    /* silent */
-                });
+                .catch(function () { /* silent */ });
         }
 
         function startPolling() {
@@ -2159,10 +2061,6 @@
             pollingTimer = setInterval(pollMessages, 3000);
         }
 
-        /* =====================================================
-           START
-        ===================================================== */
-        // بارگذاری اولیه: همه پیام‌های قبلی را از سرور بگیر
         (function initialLoad() {
             fetch(POLL_URL + '?after_id=0', {
                 headers: {
@@ -2181,16 +2079,11 @@
                 .catch(function () { /* silent */ });
         })();
 
-        // Polling را همیشه فعال نگه دار (حتی اگر چت بسته باشد)
         startPolling();
 
-        // وقتی تب مخفی شد، polling را کندتر کن
         document.addEventListener('visibilitychange', function () {
             if (document.hidden) {
-                if (pollingTimer) {
-                    clearInterval(pollingTimer);
-                    pollingTimer = null;
-                }
+                if (pollingTimer) { clearInterval(pollingTimer); pollingTimer = null; }
                 pollingTimer = setInterval(pollMessages, 10000);
             } else {
                 if (pollingTimer) clearInterval(pollingTimer);
@@ -2203,7 +2096,6 @@
     })();
 </script>
 @yield('scripts')
-
 
 </body>
 </html>

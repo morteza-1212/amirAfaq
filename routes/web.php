@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\LocalController;
 use App\Http\Controllers\HomeController;
@@ -11,6 +12,13 @@ use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AgentChatController;
 use App\Http\Controllers\Shop\ParentCategoryController;
+use App\Http\Controllers\Shop\CategoryShopController;
+use App\Http\Controllers\Shop\ProductShopController;
+use App\Http\Controllers\Shop\ProductShopImageController;
+use App\Http\Controllers\Cart\CartController;
+use App\Http\Controllers\Cart\CheckoutController;
+use App\Http\Controllers\Shop\PaymentController;
+use App\Http\Controllers\Product\ProductViewController;
 use App\Http\Controllers\panelAdmin\ProductGroupController;
 use App\Http\Controllers\panelAdmin\ProductGroupTranslationController;
 use App\Http\Controllers\panelAdmin\CategoryController;
@@ -30,18 +38,28 @@ use App\Http\Controllers\panelAdmin\SupportController;
 
 /*
 |--------------------------------------------------------------------------
+| Helpers
+|--------------------------------------------------------------------------
+*/
+
+if (! function_exists('resolveLocale')) {
+    function resolveLocale(): string
+    {
+        $locale = session('locale', config('app.locale', 'fa'));
+
+        return in_array($locale, ['fa', 'en', 'ar'], true) ? $locale : 'fa';
+    }
+}
+
+
+/*
+|--------------------------------------------------------------------------
 | Root
 |--------------------------------------------------------------------------
 */
 
 Route::get('/', function () {
-    $locale = session('locale', config('app.locale', 'fa'));
-
-    if (!in_array($locale, ['fa', 'en', 'ar'], true)) {
-        $locale = 'fa';
-    }
-
-    return redirect()->route('home', ['locale' => $locale]);
+    return redirect()->route('home', ['locale' => resolveLocale()]);
 });
 
 
@@ -51,7 +69,30 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/lang/{locale}', [LocalController::class, 'switch'])->whereIn('locale', ['fa', 'en', 'ar'])->name('locale.switch');
+Route::get('/lang/{locale}', [LocalController::class, 'switch'])
+    ->whereIn('locale', ['fa', 'en', 'ar'])
+    ->name('locale.switch');
+
+
+/*
+|--------------------------------------------------------------------------
+| Legacy redirects: /products*  →  /{locale}/products*
+|--------------------------------------------------------------------------
+| این دو مسیر بیرون از گروه {locale} هستند تا اگر کاربر آدرس قدیمی
+| (بدون پیشوند زبان) را باز کند، خودکار به نسخه چندزبانه هدایت شود.
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/products', function () {
+    return redirect()->route('products.index', ['locale' => resolveLocale()]);
+})->name('products.redirect');
+
+Route::get('/products/{slug}', function (string $slug) {
+    return redirect()->route('products.show', [
+        'locale' => resolveLocale(),
+        'slug'   => $slug,
+    ]);
+})->name('products.show.redirect');
 
 
 /*
@@ -60,67 +101,76 @@ Route::get('/lang/{locale}', [LocalController::class, 'switch'])->whereIn('local
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('{locale}')->whereIn('locale', ['fa', 'en', 'ar'])->middleware('setLocale')->group(function () {
+Route::prefix('{locale}')
+    ->whereIn('locale', ['fa', 'en', 'ar'])
+    ->middleware('setLocale')
+    ->group(function () {
 
-    // Home
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+        // Home
+        Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    // Authentication
-    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+        // Authentication
+        Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+        Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 
-    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+        Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+        Route::post('/login', [AuthController::class, 'login'])->name('login.store');
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Public Pages
-    Route::get('/about', [HomeController::class, 'AbouteUs'])->name('about');
-    Route::get('/export', [HomeController::class, 'export'])->name('export');
-    Route::get('/import', [HomeController::class, 'import'])->name('import');
-    Route::get('/logistics', [HomeController::class, 'logistics'])->name('logistics');
-    Route::get('/markets', [HomeController::class, 'markets'])->name('markets');
-    Route::get('/suppliers', [HomeController::class, 'suppliers'])->name('suppliers');
-    Route::get('/buyer', [HomeController::class, 'buyer'])->name('buyer');
-    Route::post('/buyer', [HomeController::class, 'store'])->name('buyer.store');
-    Route::get('/catalogs', [HomeController::class, 'catalogs'])->name('catalogs');
-    Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
-    Route::post('/contact', [HomeController::class, 'storeContact'])->name('contact.store');
-    Route::get('/product-export', [HomeController::class, 'productExport'])->name('productExport');
-    Route::get('/product-export/{productExport}', [HomeController::class, 'productExportShow'])
-        ->name('productExport.show');
-    Route::get('/gallery', [HomeController::class, 'gallery'])->name('gallery');
-    Route::get('/projects', [HomeController::class, 'trads'])->name('trad');
-    Route::get('/services', [HomeController::class, 'services'])->name('services');
+        // Public Pages
+        Route::get('/about', [HomeController::class, 'AbouteUs'])->name('about');
+        Route::get('/export', [HomeController::class, 'export'])->name('export');
+        Route::get('/import', [HomeController::class, 'import'])->name('import');
+        Route::get('/logistics', [HomeController::class, 'logistics'])->name('logistics');
+        Route::get('/markets', [HomeController::class, 'markets'])->name('markets');
+        Route::get('/suppliers', [HomeController::class, 'suppliers'])->name('suppliers');
+        Route::get('/buyer', [HomeController::class, 'buyer'])->name('buyer');
+        Route::post('/buyer', [HomeController::class, 'store'])->name('buyer.store');
+        Route::get('/catalogs', [HomeController::class, 'catalogs'])->name('catalogs');
+        Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+        Route::post('/contact', [HomeController::class, 'storeContact'])->name('contact.store');
+        Route::get('/product-export', [HomeController::class, 'productExport'])->name('productExport');
+        Route::get('/product-export/{productExport}', [HomeController::class, 'productExportShow'])
+            ->name('productExport.show');
+        Route::get('/gallery', [HomeController::class, 'gallery'])->name('gallery');
+        Route::get('/projects', [HomeController::class, 'trads'])->name('trad');
+        Route::get('/services', [HomeController::class, 'services'])->name('services');
 
-    // Blog
-    Route::get('/blog/export', [BlogController::class, 'export'])->name('blog.export');
-    Route::get('/blog/import', [BlogController::class, 'import'])->name('blog.import');
-    Route::get('/blog/markets', [BlogController::class, 'markets'])->name('blog.markets');
-    Route::prefix('chatbot')->name('chatbot.')->middleware('throttle:30,1')->group(function () {
-        Route::post('/start', [ChatbotController::class, 'start'])->name('start');
-        Route::post('/send', [ChatbotController::class, 'send'])->name('send');
-        Route::get('/messages', [ChatbotController::class, 'messages'])->name('messages');
+        // Blog
+        Route::get('/blog/export', [BlogController::class, 'export'])->name('blog.export');
+        Route::get('/blog/import', [BlogController::class, 'import'])->name('blog.import');
+        Route::get('/blog/markets', [BlogController::class, 'markets'])->name('blog.markets');
+
+        // Chatbot
+        Route::prefix('chatbot')->name('chatbot.')->middleware('throttle:30,1')->group(function () {
+            Route::post('/start', [ChatbotController::class, 'start'])->name('start');
+            Route::post('/send', [ChatbotController::class, 'send'])->name('send');
+            Route::get('/messages', [ChatbotController::class, 'messages'])->name('messages');
+        });
+
+        // ✅ محصولات (فقط یک تعریف — داخل گروه {locale})
+        Route::prefix('products')->middleware('throttle:120,1')->group(function () {
+            Route::get('/',              [ProductViewController::class, 'index'])->name('products.index');
+            Route::get('/featured',      [ProductViewController::class, 'featured'])->name('products.featured');
+            Route::get('/{slug}',        [ProductViewController::class, 'show'])->name('products.show');
+            Route::get('/{slug}/related',[ProductViewController::class, 'related'])->name('products.related');
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | Alternative Chat Routes
+        |--------------------------------------------------------------------------
+        | NOTE: Route names changed from `chat.message` / `chat.messages`
+        | to `chat.public.send` / `chat.public.messages` to avoid conflict
+        | with the `chat.messages` route defined in the admin panel section.
+        |--------------------------------------------------------------------------
+        */
+        Route::prefix('chat')->name('chat.public.')->middleware('throttle:30,1')->group(function () {
+            Route::post('/message', [ChatbotController::class, 'send'])->name('send');
+            Route::get('/messages', [ChatbotController::class, 'messages'])->name('messages');
+        });
     });
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Alternative Chat Routes
-    |--------------------------------------------------------------------------
-    | NOTE: Route names changed from `chat.message` / `chat.messages`
-    | to `chat.public.send` / `chat.public.messages` to avoid conflict
-    | with the `chat.messages` route defined in the admin panel section.
-    |--------------------------------------------------------------------------
-    */
-
-    Route::prefix('chat')->name('chat.public.')->middleware('throttle:30,1')->group(function () {
-        Route::post('/message', [ChatbotController::class, 'send'])->name('send');
-        Route::get('/messages', [ChatbotController::class, 'messages'])->name('messages');
-    });
-
-
-});
 
 
 /*
@@ -129,7 +179,7 @@ Route::prefix('{locale}')->whereIn('locale', ['fa', 'en', 'ar'])->middleware('se
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('panelAdmin') ->middleware(['admin'])->group(function () {
+Route::prefix('panelAdmin')->middleware(['admin'])->group(function () {
 
     // Admin Dashboard
     Route::get('/', [CatalogController::class, 'Admin'])->name('view.panel');
@@ -368,6 +418,14 @@ Route::prefix('panelAdmin') ->middleware(['admin'])->group(function () {
         Route::patch('/{conversation}/close', [SupportController::class, 'close'])->name('close');
         Route::patch('/{conversation}/reopen', [SupportController::class, 'reopen'])->name('reopen');
     });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Product Export
+    |--------------------------------------------------------------------------
+    */
+
     Route::prefix('productExport')->group(function () {
         Route::get('/', [ProductExportController::class, 'index'])->name('admin.productExport.index');
         Route::get('/create', [ProductExportController::class, 'create'])->name('admin.productExport.create');
@@ -377,23 +435,180 @@ Route::prefix('panelAdmin') ->middleware(['admin'])->group(function () {
         Route::put('/update/{productExport}', [ProductExportController::class, 'update'])->name('admin.productExport.update');
         Route::delete('/delete/{productExport}', [ProductExportController::class, 'destroy'])->name('admin.productExport.delete');
     });
-    Route::prefix('parentShop')->group(function (){
 
-        Route::get('/',[ParentCategoryController::class,'index'])->name('admin.parentShop.index');
 
-        Route::get('/create',[ParentCategoryController::class,'create'])->name('admin.parentShop.create');
+    /*
+    |--------------------------------------------------------------------------
+    | Shop Management
+    |--------------------------------------------------------------------------
+    */
 
-        Route::post('/',[ParentCategoryController::class,'store'])->name('admin.parentShop.store');
+    Route::prefix('shop')->group(function () {
 
-        Route::get('/{parentCategory}/edit',[ParentCategoryController::class,'edit'])->name('admin.parentShop.edit');
+        Route::prefix('parentShop')->group(function () {
+            Route::get('/', [ParentCategoryController::class, 'index'])->name('admin.parentShop.index');
+            Route::get('/create', [ParentCategoryController::class, 'create'])->name('admin.parentShop.create');
+            Route::post('/', [ParentCategoryController::class, 'store'])->name('admin.parentShop.store');
+            Route::get('/{parentCategory}/edit', [ParentCategoryController::class, 'edit'])->name('admin.parentShop.edit');
+            Route::put('/{parentCategory}', [ParentCategoryController::class, 'update'])->name('admin.parentShop.update');
+            Route::delete('/{parentCategory}', [ParentCategoryController::class, 'destroy'])->name('admin.parentShop.destroy');
+        });
 
-        Route::put('/{parentCategory}',[ParentCategoryController::class,'update'])->name('admin.parentShop.update');
+        Route::prefix('categoryShop')->group(function () {
+            Route::get('/', [CategoryShopController::class, 'index'])->name('admin.categoryShop.index');
+            Route::get('/create', [CategoryShopController::class, 'create'])->name('admin.categoryShop.create');
+            Route::post('/store', [CategoryShopController::class, 'store'])->name('admin.categoryShop.store');
+            Route::get('/{categoryShop}/edit', [CategoryShopController::class, 'edit'])->name('admin.categoryShop.edit');
+            Route::put('/{categoryShop}', [CategoryShopController::class, 'update'])->name('admin.categoryShop.update');
+            Route::delete('/{categoryShop}', [CategoryShopController::class, 'destroy'])->name('admin.categoryShop.destroy');
+        });
 
-        Route::delete('/{parentCategory}',[ParentCategoryController::class,'destroy'])->name('admin.parentShop.destroy');
+        Route::prefix('productShop')->group(function () {
+            Route::get('/', [ProductShopController::class, 'index'])->name('admin.productShop.index');
+            Route::get('/create', [ProductShopController::class, 'create'])->name('admin.productShop.create');
+            Route::post('/store', [ProductShopController::class, 'store'])->name('admin.productShop.store');
+            Route::get('/{productShop}/edit', [ProductShopController::class, 'edit'])->name('admin.productShop.edit');
+            Route::put('/{productShop}', [ProductShopController::class, 'update'])->name('admin.productShop.update');
+            Route::delete('/{productShop}', [ProductShopController::class, 'destroy'])->name('admin.productShop.destroy');
+        });
 
+        Route::prefix('productShopImage')->group(function () {
+            Route::get('/', [ProductShopImageController::class, 'index'])->name('admin.productShopImage.index');
+            Route::get('/create', [ProductShopImageController::class, 'create'])->name('admin.productShopImage.create');
+            Route::post('/', [ProductShopImageController::class, 'store'])->name('admin.productShopImage.store');
+            Route::get('/{productShopImage}/edit', [ProductShopImageController::class, 'edit'])->name('admin.productShopImage.edit');
+            Route::put('/{productShopImage}', [ProductShopImageController::class, 'update'])->name('admin.productShopImage.update');
+            Route::delete('/{productShopImage}', [ProductShopImageController::class, 'destroy'])->name('admin.productShopImage.destroy');
+        });
     });
 
+}); // ← پایان گروه panelAdmin
+
+
+/*
+|--------------------------------------------------------------------------
+| Cart (بدون locale — برای مهمان و کاربر)
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('cart')->middleware('throttle:60,1')->group(function () {
+    Route::get('/',                    [CartController::class, 'index'])->name('cart.show');
+    Route::post('/add',                [CartController::class, 'add'])->name('cart.add');
+    Route::patch('/items/{itemId}',    [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/items/{itemId}',   [CartController::class, 'remove'])->name('cart.remove');
+    Route::delete('/clear',            [CartController::class, 'clear'])->name('cart.clear');
+    Route::post('/guest-contact',      [CartController::class, 'setGuestContact'])->name('cart.guest');
 });
+//Route::prefix('{locale}/checkout')
+//    ->middleware(['web'])
+//    ->group(function () {
+//        Route::get('/',          [CheckoutController::class, 'index'])->name('checkout.index');
+//        Route::post('/',         [CheckoutController::class, 'store'])->name('checkout.store');
+//        Route::get('/success',   [CheckoutController::class, 'success'])->name('checkout.success');
+//    });
+/*
+|--------------------------------------------------------------------------
+| Checkout & Sandbox Payment
+|--------------------------------------------------------------------------
+*/
+
+/*
+|--------------------------------------------------------------------------
+| Checkout Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('{locale}')
+    ->whereIn('locale', ['fa', 'en', 'ar'])
+    ->middleware('setLocale')
+    ->group(function () {
+
+        // صفحه تسویه حساب
+        Route::get('/checkout', [
+            CheckoutController::class,
+            'index'
+        ])->name('checkout.index');
+
+        // ثبت سفارش
+        Route::post('/checkout', [
+            CheckoutController::class,
+            'store'
+        ])->name('checkout.store');
+
+        // نتیجه ثبت سفارش
+        Route::get('/checkout/success/{order}', [
+            CheckoutController::class,
+            'success'
+        ])->name('checkout.success');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Sandbox Payment Gateway
+        |--------------------------------------------------------------------------
+        */
+
+        // صفحه اصلی درگاه پرداخت
+        Route::get('/payment/gateway/{order}', [
+            PaymentController::class,
+            'show'
+        ])->name('payment.gateway');
+
+        // پردازش پرداخت
+        Route::post('/payment/gateway/{order}/process', [
+            PaymentController::class,
+            'process'
+        ])->name('payment.process');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Payment Result Routes
+        |--------------------------------------------------------------------------
+        */
+
+        // پرداخت موفق
+        Route::get('/payment/success/{payment}', [
+            PaymentController::class,
+            'success'
+        ])->name('payment.success');
+
+        // پرداخت ناموفق
+        Route::get('/payment/failed/{payment}', [
+            PaymentController::class,
+            'failed'
+        ])->name('payment.failed');
+
+        // انصراف از پرداخت
+        Route::get('/payment/canceled/{payment}', [
+            PaymentController::class,
+            'canceled'
+        ])->name('payment.canceled');
+
+    });
+/*
+|--------------------------------------------------------------------------
+| Order Tracking
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/orders/track', function (Request $request) {
+    $validated = $request->validate([
+        'tracking_code'  => ['required', 'string'],
+        'customer_phone' => ['required', 'string'],
+    ]);
+
+    $order = \App\Models\Cart\Order::where('tracking_code', $validated['tracking_code'])
+        ->where('customer_phone', $validated['customer_phone'])
+        ->with('items')
+        ->first();
+
+    if (! $order) {
+        return response()->json(['message' => 'سفارشی با این مشخصات یافت نشد.'], 404);
+    }
+
+    return response()->json(['data' => $order]);
+})->name('orders.track');
 
 
 /*
@@ -401,5 +616,3 @@ Route::prefix('panelAdmin') ->middleware(['admin'])->group(function () {
 | Public Chatbot Routes
 |--------------------------------------------------------------------------
 */
-
-

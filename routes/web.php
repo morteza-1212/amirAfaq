@@ -1,15 +1,24 @@
 <?php
 
+<<<<<<< HEAD
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\LocalController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BlogController;
+=======
+use App\Http\Controllers\AgentChatController;
+>>>>>>> a96f8e3 (complateforCartshoping)
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BuyerController;
+use App\Http\Controllers\Cart\CartController;
+use App\Http\Controllers\Cart\CheckoutController;
+use App\Http\Controllers\Cart\PaymentController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ChatController;
+<<<<<<< HEAD
 use App\Http\Controllers\AgentChatController;
 use App\Http\Controllers\Shop\ParentCategoryController;
 use App\Http\Controllers\Shop\CategoryShopController;
@@ -25,15 +34,52 @@ use App\Http\Controllers\panelAdmin\CategoryController;
 use App\Http\Controllers\panelAdmin\CategoryTranslationController;
 use App\Http\Controllers\panelAdmin\ProductController;
 use App\Http\Controllers\panelAdmin\ProductTranlationController;
+=======
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LocalController;
+>>>>>>> a96f8e3 (complateforCartshoping)
 use App\Http\Controllers\panelAdmin\CatalogController;
 use App\Http\Controllers\panelAdmin\CatalogTranslationController;
-use App\Http\Controllers\panelAdmin\GalleryController;
-use App\Http\Controllers\panelAdmin\GalleryTranslationController;
-use App\Http\Controllers\panelAdmin\ProductExportController;
-use App\Http\Controllers\panelAdmin\TradeTransactionController;
+use App\Http\Controllers\panelAdmin\CategoryController;
+use App\Http\Controllers\panelAdmin\CategoryTranslationController;
 use App\Http\Controllers\panelAdmin\ContactController;
 use App\Http\Controllers\panelAdmin\FaqController;
+use App\Http\Controllers\panelAdmin\GalleryController;
+use App\Http\Controllers\panelAdmin\GalleryTranslationController;
+use App\Http\Controllers\panelAdmin\DashboardPanelController;
+use App\Http\Controllers\panelAdmin\OrderPanelController;
+use App\Http\Controllers\panelAdmin\PaymentPanelController;
+
+use App\Http\Controllers\panelAdmin\ProductController;
+use App\Http\Controllers\panelAdmin\ProductExportController;
+use App\Http\Controllers\panelAdmin\ProductGroupController;
+use App\Http\Controllers\panelAdmin\ProductGroupTranslationController;
+use App\Http\Controllers\panelAdmin\ProductTranlationController;
 use App\Http\Controllers\panelAdmin\SupportController;
+use App\Http\Controllers\panelAdmin\TradeTransactionController;
+use App\Http\Controllers\Product\ProductViewController;
+use App\Http\Controllers\Shop\CategoryShopController;
+use App\Http\Controllers\Shop\ParentCategoryController;
+use App\Http\Controllers\Shop\ProductShopController;
+use App\Http\Controllers\Shop\ProductShopImageController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+
+/*
+|--------------------------------------------------------------------------
+| Helpers
+|--------------------------------------------------------------------------
+*/
+
+if (! function_exists('resolveLocale')) {
+    function resolveLocale(): string
+    {
+        $locale = session('locale', config('app.locale', 'fa'));
+
+        return in_array($locale, ['fa', 'en', 'ar'], true) ? $locale : 'fa';
+    }
+}
 
 
 /*
@@ -480,8 +526,75 @@ Route::prefix('panelAdmin')->middleware(['admin'])->group(function () {
             Route::put('/{productShopImage}', [ProductShopImageController::class, 'update'])->name('admin.productShopImage.update');
             Route::delete('/{productShopImage}', [ProductShopImageController::class, 'destroy'])->name('admin.productShopImage.destroy');
         });
+<<<<<<< HEAD
     });
 
+=======
+    });
+    Route::get('/dashboard', [DashboardPanelController::class, 'index'])->name('admin.dashboard');
+
+    /*
+    |----------------------------------------------------------------------
+    | Orders
+    |----------------------------------------------------------------------
+    */
+    Route::prefix('orders')->name('admin.orders.')->group(function () {
+
+        // لیست سفارش‌ها
+        Route::get('/', [OrderPanelController::class, 'index'])->name('index');
+
+        // خروجی CSV (باید قبل از /{order} تعریف شود تا با آن تداخل نکند)
+        Route::get('/export', [OrderPanelController::class, 'export'])->name('export');
+
+        // سفارش‌های حذف‌شده
+        Route::get('/trashed', [OrderPanelController::class, 'trashed'])->name('trashed');
+
+        // نمایش جزئیات سفارش
+        Route::get('/{order}', [OrderPanelController::class, 'show'])->name('show');
+
+        // فرم ویرایش
+        Route::get('/{order}/edit', [OrderPanelController::class, 'edit'])->name('edit');
+
+        // به‌روزرسانی کامل سفارش
+        Route::patch('/{order}', [OrderPanelController::class, 'update'])->name('update');
+
+        // تغییر سریع وضعیت (AJAX)
+        Route::patch('/{order}/status', [OrderPanelController::class, 'updateStatus'])->name('status');
+
+        // حذف (Soft Delete)
+        Route::delete('/{order}', [OrderPanelController::class, 'destroy'])->name('destroy');
+
+        // بازگردانی سفارش حذف‌شده
+        Route::post('/{order}/restore', [OrderPanelController::class, 'restore'])->name('restore');
+
+        // حذف دائمی
+        Route::delete('/{order}/force-delete', [OrderPanelController::class, 'forceDelete'])->name('forceDelete');
+    });
+
+    /*
+    |----------------------------------------------------------------------
+    | Payments
+    |----------------------------------------------------------------------
+    */
+    Route::prefix('payments')->name('admin.payments.')->group(function () {
+
+        // لیست پرداخت‌ها
+        Route::get('/', [PaymentPanelController::class, 'index'])->name('index');
+
+        // نمایش جزئیات پرداخت
+        Route::get('/{payment}', [PaymentPanelController::class, 'show'])->name('show');
+
+        // تایید دستی پرداخت
+        Route::patch('/{payment}/verify', [PaymentPanelController::class, 'verify'])->name('verify');
+
+        // بازگشت وجه
+        Route::post('/{payment}/refund', [PaymentPanelController::class, 'refund'])->name('refund');
+
+        // حذف پرداخت
+        Route::delete('/{payment}', [PaymentPanelController::class, 'destroy'])->name('destroy');
+    });
+
+>>>>>>> a96f8e3 (complateforCartshoping)
 }); // ← پایان گروه panelAdmin
 
 
@@ -540,6 +653,12 @@ Route::prefix('{locale}')
             CheckoutController::class,
             'success'
         ])->name('checkout.success');
+<<<<<<< HEAD
+=======
+        Route::get('checkout/invoice/{order}', [CheckoutController::class, 'invoice'])
+            ->name('checkout.invoice');
+        Route::get('/checkout/invoice/{order}/download', [CheckoutController::class, 'downloadInvoice']);
+>>>>>>> a96f8e3 (complateforCartshoping)
 
 
         /*

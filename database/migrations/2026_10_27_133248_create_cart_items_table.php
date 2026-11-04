@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cart_items', function (Blueprint $table) {
+
             $table->id();
 
             $table->foreignId('cart_id')
@@ -19,18 +20,30 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->foreignId('product_shop_id')
+                ->nullable()
                 ->constrained('product_shops')
-                ->cascadeOnDelete();
+                ->nullOnDelete();
 
+            // تعداد محصول
             $table->unsignedInteger('quantity')->default(1);
 
-            // snapshot قیمت
-            $table->unsignedBigInteger('unit_price');
-            $table->unsignedBigInteger('total_price');
+            // قیمت محصول در زمان اضافه شدن به سبد
+            $table->unsignedBigInteger('unit_price')->default(0);
+
+            // قیمت کل محصول در زمان اضافه شدن به سبد
+            $table->unsignedBigInteger('total_price')->default(0);
+
+            // نام محصول در زمان خرید (Snapshot)
+            $table->string('product_name', 255)->nullable();
 
             $table->timestamps();
 
-            $table->unique(['cart_id', 'product_shop_id']);
+            // جلوگیری از ثبت تکراری یک محصول در یک سبد
+            $table->unique(
+                ['cart_id', 'product_shop_id'],
+                'cart_items_cart_product_unique'
+            );
+
             $table->index('cart_id');
             $table->index('product_shop_id');
         });

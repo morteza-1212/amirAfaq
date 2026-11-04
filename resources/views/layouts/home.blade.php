@@ -91,6 +91,11 @@
     {{-- Local JS --}}
     <script src="{{ asset('vendor/neshan/index.js') }}" defer></script>
     <script src="{{ asset('vendor/leaflet/leaflet.js') }}" defer></script>
+<<<<<<< HEAD
+=======
+
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+>>>>>>> a96f8e3 (complateforCartshoping)
 
     <style>
         /* =========================================================
@@ -1470,7 +1475,16 @@
                             </div>
 
                             <div class="nav-item px-2 d-flex align-items-center">
+<<<<<<< HEAD
                                 <form action="{{ route('logout', ['locale' => app()->getLocale()]) }}" method="POST" class="m-0">
+=======
+
+                                <form
+                                    action="{{ route('logout', ['locale' => app()->getLocale()]) }}"
+                                    method="POST"
+                                    class="m-0"
+                                >
+>>>>>>> a96f8e3 (complateforCartshoping)
                                     @csrf
                                     <button type="submit" class="btn btn-outline-danger py-2 px-3">
                                         <i class="fas fa-sign-out-alt me-1"></i>
@@ -1774,14 +1788,45 @@
 </div>
 
 {{-- JAVASCRIPT --}}
+<<<<<<< HEAD
 <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+=======
+{{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>--}}
+{{--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>--}}
+>>>>>>> a96f8e3 (complateforCartshoping)
 <script src="{{ asset('lib/wow/wow.min.js') }}"></script>
 <script src="{{ asset('lib/easing/easing.min.js') }}"></script>
+{{--<script src="{{ asset('lib/waypoints/waypoints.min.js') }}"></script>--}}
+{{--<script src="{{ asset('lib/counterup/counterup.min.js') }}"></script>--}}
+{{--<script src="{{ asset('lib/lightbox/js/lightbox.min.js') }}"></script>--}}
+{{--<script src="{{ asset('lib/owlcarousel/owl.carousel.min.js') }}"></script>--}}
+{{--<script src="{{ asset('js/main.js') }}"></script>--}}
+{{-- jQuery Local --}}
+<script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
+
+{{-- Bootstrap Local --}}
+<script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+{{-- WOW Animation --}}
+<script src="{{ asset('lib/wow/wow.min.js') }}"></script>
+
+{{-- Easing --}}
+<script src="{{ asset('lib/easing/easing.min.js') }}"></script>
+
+{{-- Waypoints --}}
 <script src="{{ asset('lib/waypoints/waypoints.min.js') }}"></script>
+
+{{-- CounterUp --}}
 <script src="{{ asset('lib/counterup/counterup.min.js') }}"></script>
+
+{{-- Lightbox --}}
 <script src="{{ asset('lib/lightbox/js/lightbox.min.js') }}"></script>
+
+{{-- Owl Carousel --}}
 <script src="{{ asset('lib/owlcarousel/owl.carousel.min.js') }}"></script>
+
+{{-- Main JavaScript --}}
 <script src="{{ asset('js/main.js') }}"></script>
 
 {{-- LANGUAGE DROPDOWN --}}
@@ -1849,11 +1894,48 @@
 
         if (!launcher || !panel || !body || !input || !sendBtn) return;
 
+<<<<<<< HEAD
         var csrfElement = document.querySelector('meta[name="csrf-token"]');
         var CSRF        = csrfElement ? csrfElement.getAttribute('content') : '';
 
         var SEND_URL = @json(route('chatbot.send', ['locale' => app()->getLocale()]));
         var POLL_URL = @json(route('chatbot.messages', ['locale' => app()->getLocale()]));
+=======
+        /* =====================================================
+           CONFIG
+        ==============================
+
+
+
+
+
+
+            {{--var CSRF     = document.querySelector('meta[name="csrf-token"]').content;--}}
+            {{--var SEND_URL = '{{ route("chatbot.send",     ["locale" => app()->getLocale()]) }}';--}}
+            {{--var POLL_URL = '{{ route("chatbot.messages", ["locale" => app()->getLocale()]) }}';--}}
+        /* =====================================================
+   CONFIG
+===================================================== */
+
+        var csrfElement = document.querySelector('meta[name="csrf-token"]');
+
+        var CSRF = csrfElement
+            ? csrfElement.getAttribute('content')
+            : '';
+
+        var SEND_URL = @json(route('chatbot.send', [
+    'locale' => app()->getLocale()
+]));
+
+        var POLL_URL = @json(route('chatbot.messages', [
+    'locale' => app()->getLocale()
+]));
+
+        /* =====================================================
+           STATE
+        ===================================================== */
+
+>>>>>>> a96f8e3 (complateforCartshoping)
 
         var isOpen             = false;
         var placeholderRemoved = false;

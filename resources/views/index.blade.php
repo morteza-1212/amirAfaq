@@ -526,11 +526,16 @@
 @endsection
 
 @section('scripts')
+<<<<<<< HEAD
+=======
+
+>>>>>>> a96f8e3 (complateforCartshoping)
     <script src="{{ asset('vendor/leaflet/leaflet.js') }}"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
 
+<<<<<<< HEAD
             const companyLocation = { lat: 35.2383, lng: 58.4656 };
             const mapElement = document.getElementById('company-map');
 
@@ -574,6 +579,160 @@
                 text-align:center; width:85%; max-width:350px;
                 direction:rtl; display:none;
             `;
+=======
+            const companyLocation = {
+                lat: 35.2383,
+                lng: 58.4656
+            };
+
+            const mapElement = document.getElementById('company-map');
+
+            if (!mapElement || typeof L === 'undefined') {
+                console.error('Leaflet یا عنصر نقشه بارگذاری نشده است.');
+                return;
+            }
+
+            // ایجاد نقشه
+            const map = L.map('company-map', {
+                zoomControl: true
+            }).setView(
+                [companyLocation.lat, companyLocation.lng],
+                16
+            );
+
+            // نشانگر شرکت
+            const companyMarker = L.marker([
+                companyLocation.lat,
+                companyLocation.lng
+            ]).addTo(map);
+
+            companyMarker.bindPopup(`
+                <div style="direction:rtl;text-align:right">
+                    <strong>شرکت امیر آفاق گستر پارس</strong>
+                    <br>
+                    شرکت صادرات و واردات
+                    <br>
+                    کاشمر، خیابان سلمان فارسی
+                    <br><br>
+                    <a href="https://balad.ir/p/4t19XkOaUFLTdg"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                       مشاهده موقعیت در بلد
+                    </a>
+                </div>
+            `).openPopup();
+
+            // پیام وضعیت نقشه
+            const offlineMessage = document.createElement('div');
+
+            offlineMessage.style.cssText = `
+                position:absolute;
+                z-index:1000;
+                top:50%;
+                left:50%;
+                transform:translate(-50%,-50%);
+                background:white;
+                padding:20px;
+                border-radius:12px;
+                box-shadow:0 2px 15px rgba(0,0,0,.15);
+                text-align:center;
+                width:85%;
+                max-width:350px;
+                direction:rtl;
+                display:none;
+            `;
+
+            offlineMessage.innerHTML = `
+                <i class="fa fa-map-marked-alt fa-2x text-success mb-3"></i>
+                <h5>موقعیت شرکت</h5>
+                <p class="mb-0">
+                    برای نمایش تصاویر نقشه، اتصال به سرویس نقشه موردنیاز است.
+                    موقعیت و اطلاعات شرکت در دسترس هستند.
+                </p>
+            `;
+
+            mapElement.style.position = 'relative';
+            mapElement.appendChild(offlineMessage);
+
+            function showOfflineMessage() {
+                offlineMessage.style.display = 'block';
+            }
+
+            function hideOfflineMessage() {
+                offlineMessage.style.display = 'none';
+            }
+
+            let tileLoaded = false;
+
+            // فقط در صورت وجود اینترنت، درخواست نقشه ارسال شود
+            if (navigator.onLine) {
+
+                const tiles = L.tileLayer(
+                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    {
+                        maxZoom: 19,
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }
+                );
+
+                tiles.on('tileload', function () {
+                    tileLoaded = true;
+                    hideOfflineMessage();
+                });
+
+                tiles.on('tileerror', function () {
+                    if (!tileLoaded) {
+                        showOfflineMessage();
+                    }
+                });
+
+                tiles.addTo(map);
+
+            } else {
+                showOfflineMessage();
+            }
+
+            // بررسی اتصال مجدد اینترنت
+            window.addEventListener('online', function () {
+                hideOfflineMessage();
+                map.eachLayer(function (layer) {
+                    if (layer instanceof L.TileLayer) {
+                        map.removeLayer(layer);
+                    }
+                });
+
+                tileLoaded = false;
+
+                L.tileLayer(
+                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    {
+                        maxZoom: 19,
+                        attribution: '&copy; OpenStreetMap contributors'
+                    }
+                ).on('tileload', function () {
+                    tileLoaded = true;
+                    hideOfflineMessage();
+                }).on('tileerror', function () {
+                    if (!tileLoaded) {
+                        showOfflineMessage();
+                    }
+                }).addTo(map);
+            });
+
+            window.addEventListener('offline', function () {
+                map.eachLayer(function (layer) {
+                    if (layer instanceof L.TileLayer) {
+                        map.removeLayer(layer);
+                    }
+                });
+
+                showOfflineMessage();
+            });
+
+            setTimeout(function () {
+                map.invalidateSize();
+            }, 300);
+>>>>>>> a96f8e3 (complateforCartshoping)
 
             offlineMessage.innerHTML = `
                 <i class="fa fa-map-marked-alt fa-2x text-primary mb-3"></i>
@@ -624,4 +783,5 @@
             setTimeout(() => map.invalidateSize(), 300);
         });
     </script>
+
 @endsection

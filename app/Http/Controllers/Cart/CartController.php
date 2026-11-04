@@ -17,15 +17,21 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
+<<<<<<< HEAD
         $cart = $this->cartService->resolveCart($request)->load('items.product');
 
         // اگر درخواست AJAX بود، JSON برگردان
+=======
+        $cart = $this->cartService->resolveCart($request)->load('items.productShop');
+
+>>>>>>> a96f8e3 (complateforCartshoping)
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
                 'data' => $this->formatCart($cart),
             ]);
         }
 
+<<<<<<< HEAD
         // در غیر این صورت، ویو را رندر کن
         // داده‌ها در ویو با AJAX از همین endpoint دریافت می‌شوند
         return view('cart.index');
@@ -34,6 +40,11 @@ class CartController extends Controller
     /**
      * افزودن محصول به سبد
      */
+=======
+        return view('cart.index');
+    }
+
+>>>>>>> a96f8e3 (complateforCartshoping)
     public function add(Request $request)
     {
         $validated = $request->validate([
@@ -71,9 +82,12 @@ class CartController extends Controller
         }
     }
 
+<<<<<<< HEAD
     /**
      * به‌روزرسانی تعداد یک آیتم
      */
+=======
+>>>>>>> a96f8e3 (complateforCartshoping)
     public function update(Request $request, int $itemId)
     {
         $validated = $request->validate([
@@ -103,9 +117,12 @@ class CartController extends Controller
         }
     }
 
+<<<<<<< HEAD
     /**
      * حذف یک آیتم از سبد
      */
+=======
+>>>>>>> a96f8e3 (complateforCartshoping)
     public function remove(Request $request, int $itemId)
     {
         try {
@@ -131,9 +148,12 @@ class CartController extends Controller
         }
     }
 
+<<<<<<< HEAD
     /**
      * خالی کردن سبد
      */
+=======
+>>>>>>> a96f8e3 (complateforCartshoping)
     public function clear(Request $request)
     {
         try {
@@ -157,9 +177,12 @@ class CartController extends Controller
         }
     }
 
+<<<<<<< HEAD
     /**
      * ذخیره اطلاعات تماس مهمان
      */
+=======
+>>>>>>> a96f8e3 (complateforCartshoping)
     public function setGuestContact(Request $request)
     {
         $validated = $request->validate([
@@ -223,6 +246,7 @@ class CartController extends Controller
                 'email' => $cart->guest_email,
             ],
             'items' => $cart->items->map(fn ($item) => [
+<<<<<<< HEAD
                 'id'          => $item->id,
                 'product_id'  => $item->product_shop_id,
                 'name'        => $item->product?->name ?? 'محصول حذف شده',
@@ -231,6 +255,19 @@ class CartController extends Controller
                 'quantity'    => (int) $item->quantity,
                 'unit_price'  => (int) $item->unit_price,
                 'total_price' => (int) $item->total_price,
+=======
+                'id'           => $item->id,
+                'product_id'   => $item->product_shop_id,
+                'name'         => $item->product_name ?? $item->productShop?->name ?? 'محصول حذف شده',
+                'image'        => $item->productShop?->image
+                    ? asset('storage/' . $item->productShop->image)  // ← مسیر کامل
+                    : null,
+                'slug'         => $item->productShop?->slug,
+                'quantity'     => (int) $item->quantity,
+                'unit_price'   => (int) $item->unit_price,
+                'total_price'  => (int) $item->total_price,
+                'is_available' => ! is_null($item->productShop),
+>>>>>>> a96f8e3 (complateforCartshoping)
             ])->values()->toArray(),
         ];
     }
